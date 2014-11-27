@@ -154,6 +154,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="CheckRuntime.aspx" />
+    <Content Include="Content\fineuploader.css" />
+    <Content Include="Content\images\btn-cancel.png" />
+    <Content Include="Content\images\btn-left.png" />
+    <Content Include="Content\images\btn-right.png" />
+    <Content Include="Content\images\btn-save.png" />
+    <Content Include="Content\images\img-upload.png" />
+    <Content Include="Content\images\Jcrop.gif" />
+    <Content Include="Content\jquery.Jcrop.css" />
+    <Content Include="Content\jquery.Jcrop.min.css" />
     <Content Include="Controllers\JsonErrorResult.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -161,6 +170,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\HeadEditController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TestFormController.cs" />
     <Compile Include="Global.asax.cs">
@@ -184,6 +194,13 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <None Include="Scripts\jquery-1.7.1-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.7.1.js" />
+    <Content Include="Scripts\jquery-1.7.1.min.js" />
+    <Content Include="Scripts\jquery.fineuploader-3.0.js" />
+    <Content Include="Scripts\jquery.fineuploader-3.0.min.js" />
+    <Content Include="Scripts\jquery.Jcrop.js" />
+    <Content Include="Scripts\jquery.Jcrop.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-justjson.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
@@ -226,6 +243,7 @@
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\TestForm\Index.cshtml" />
+    <Content Include="Views\HeadEdit\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Code\" />
