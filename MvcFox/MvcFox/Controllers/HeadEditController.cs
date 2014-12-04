@@ -12,13 +12,25 @@ namespace MvcFox.Controllers
 {
     public class HeadEditController : Controller
     {
-        // GET: HeadEdit
         public ActionResult Index()
         {
             return View();
         }
 
-        //image document upload
+        [HttpPost]
+        [ActionName("Index")]
+        public ActionResult IndexPost()
+        {
+            string headFileId = Request.Form["headFileId"];
+            string headFolderId = Request.Form["headFolderId"];
+            if (!string.IsNullOrEmpty(headFileId) && !string.IsNullOrEmpty(headFolderId))
+            {
+                string filename = ImageHelper.GetFile(new Guid(headFolderId), new Guid(headFileId));
+                byte[] fs = ImageHelper.FileToByteArray(filename);
+            }
+            return View();
+        }
+
         [HttpPost]
         public ActionResult Upload(Guid folder, float maxWidth, float maxHeight, int sizeLimit)
         {
@@ -78,16 +90,6 @@ namespace MvcFox.Controllers
                     {
                         Directory.CreateDirectory(folderPath);
                     }
-                    else
-                    {
-                        //删除旧文件
-                        DirectoryInfo dif = new DirectoryInfo(folderPath);
-                        FileInfo[] tmps = dif.GetFiles();
-                        for (int i = 0; i < tmps.Count(); i++)
-                        {
-                            tmps[i].Delete();
-                        }
-                    }
 
                     string rawingPath = Path.Combine(folderPath, rawingFileName);
 
@@ -121,8 +123,8 @@ namespace MvcFox.Controllers
 
                             //if (hResolution > 96.0f && vResolution > 96.0f)
                             //{
-                                Bitmap thumbnail = ImageHelper.ResizeImage(rawImage, nPercent, hResolution, vResolution);
-                                string thumbnailPath = Path.Combine(folderPath, "_thumbnail_" + fileId.ToString() + ext);
+                            Bitmap thumbnail = ImageHelper.ResizeImage(rawImage, nPercent, hResolution, vResolution);
+                            string thumbnailPath = Path.Combine(folderPath, "_thumbnail_" + fileId.ToString() + ext);
 
                             //关键质量控制
                             //获取系统编码类型数组,包含了jpeg,bmp,png,gif,tiff
@@ -137,8 +139,6 @@ namespace MvcFox.Controllers
                             }
                             EncoderParameters ep = new EncoderParameters(1);
                             ep.Param[0] = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, (long)100);
-
-
 
                             thumbnail.Save(thumbnailPath, ici, ep);
                             //}
@@ -178,7 +178,7 @@ namespace MvcFox.Controllers
                     return Json(new { success = false, error = "图片处理错误，请稍候再试！" }, "text/html");
                 }
             }
-            return Json(new { success = true, fileid=fileId.ToString(), percent = nPercent, spercent = snPercent, hResolution = hResolution, vResolution = vResolution, width = newImageWidth, height = newImageHeight }, "text/html");
+            return Json(new { success = true, fileid = fileId.ToString(), percent = nPercent, spercent = snPercent, hResolution = hResolution, vResolution = vResolution, width = newImageWidth, height = newImageHeight }, "text/html");
         }
 
         /// <summary>
@@ -189,7 +189,7 @@ namespace MvcFox.Controllers
             string savePath = Request.MapPath("~/App_Data/UploadFiles/");
             savePath = Path.Combine(savePath, folder.ToString());
             DirectoryInfo dif = new DirectoryInfo(savePath);
-            FileInfo[] files = dif.GetFiles("_thumbnail_*", SearchOption.TopDirectoryOnly);
+            FileInfo[] files = dif.GetFiles("_thumbnail_" + fileid.ToString() + "*", SearchOption.TopDirectoryOnly);
 
             if (files.Count() == 1)
             {
@@ -202,12 +202,12 @@ namespace MvcFox.Controllers
         /// <summary>
         /// 保存草稿
         /// </summary>
-        public ActionResult SaveImage(Guid fileid, Guid folder, double percent, double x, double y, double w, double h, float maxWidth, float maxHeight)
+        public ActionResult SaveImage(Guid fileid, Guid folder, double percent, double x, double y, double w, double h, int angle, float maxWidth, float maxHeight)
         {
             string savePath = Request.MapPath("~/App_Data/UploadFiles/");
             savePath = Path.Combine(savePath, folder.ToString());
             DirectoryInfo dif = new DirectoryInfo(savePath);
-            FileInfo[] files = dif.GetFiles("_raw_*", SearchOption.TopDirectoryOnly);
+            FileInfo[] files = dif.GetFiles("_raw_" + fileid.ToString() + "*", SearchOption.TopDirectoryOnly);
 
             if (x < 0)
             {
@@ -233,22 +233,30 @@ namespace MvcFox.Controllers
                 //string filename = Path.GetFileName(files[0].FullName).Substring(36 + 8);
 
                 //删除旧文件               
-                var tmp_new = dif.GetFiles("_new_*", SearchOption.TopDirectoryOnly);
-                foreach (var item in tmp_new)
-                {
-                    item.Delete();
-                }
+                //var tmp_new = dif.GetFiles("_new_" + fileid.ToString() + "*", SearchOption.TopDirectoryOnly);
+                //foreach (var item in tmp_new)
+                //{
+                //    item.Delete();
+                //}
 
                 //{formatid}_raw_{filename}.ext
                 string raw_filename = "_rawing_" + fileid + ext;
-                string raw_filepath = Path.Combine(savePath, raw_filename);
-                files[0].CopyTo(raw_filepath);
+                string raw_filepath = Path.Combine(savePath, string.Format("_rawing_{0}{1}", fileid, ext)); // raw_filename);
+                //
 
                 //{formatid}_new_{filename}.ext
                 string newName = "_new_" + fileid + ext;
                 string newpath = Path.Combine(savePath, newName);
 
-                using (Bitmap oldimg = new Bitmap(files[0].FullName))
+                if (angle != 0)
+                {
+                    ImageHelper.Rotate(files[0].FullName, angle, raw_filepath);
+                }
+                else
+                {
+                    files[0].CopyTo(raw_filepath);
+                }
+                using (Bitmap oldimg = new Bitmap(raw_filepath))//files[0].FullName
                 {
                     int sourceWidth = oldimg.Width;
                     int sourceHeight = oldimg.Height;
@@ -291,33 +299,35 @@ namespace MvcFox.Controllers
                             g.DrawImage(oldimg, new Rectangle(0, 0, (int)w, (int)h), rect, GraphicsUnit.Pixel);
                         }
 
-                        EncoderParameters encoderParams = new EncoderParameters();
-                        long[] quality = new long[1];
-                        quality[0] = 92; //压缩比例，决定图片大小的重要因素。
-                        EncoderParameter encoderParam = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, quality);
-                        encoderParams.Param[0] = encoderParam;
+                        ImageHelper.Resize(bmp, (int)maxWidth, (int)maxHeight, newpath);
 
-                        int targetWidth = (int)maxWidth;
-                        int targetHeight = (int)maxHeight;
+                        //EncoderParameters encoderParams = new EncoderParameters();
+                        //long[] quality = new long[1];
+                        //quality[0] = 92; //压缩比例，决定图片大小的重要因素。
+                        //EncoderParameter encoderParam = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, quality);
+                        //encoderParams.Param[0] = encoderParam;
 
-                        using (Bitmap newBmp = new Bitmap(targetWidth, targetHeight))
-                        {
-                            newBmp.SetResolution(oldimg.HorizontalResolution, oldimg.VerticalResolution);
-                            using (Graphics ng = Graphics.FromImage(newBmp))
-                            {
-                                // 用白色清空 
-                                ng.Clear(Color.White);
-                                // 指定高质量的双三次插值法。执行预筛选以确保高质量的收缩。此模式可产生质量最高的转换图像。 
-                                ng.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                                // 指定高质量、低速度呈现。 
-                                ng.SmoothingMode = SmoothingMode.HighQuality;
+                        //int targetWidth = (int)maxWidth;
+                        //int targetHeight = (int)maxHeight;
 
-                                // 在指定位置并且按指定大小绘制指定的 Image 的指定部分。 
-                                ng.DrawImage(bmp, new Rectangle(0, 0, targetWidth, targetHeight), new Rectangle(0, 0, bmp.Width, bmp.Height), GraphicsUnit.Pixel);
-                            }
+                        //using (Bitmap newBmp = new Bitmap(targetWidth, targetHeight))
+                        //{
+                        //    newBmp.SetResolution(oldimg.HorizontalResolution, oldimg.VerticalResolution);
+                        //    using (Graphics ng = Graphics.FromImage(newBmp))
+                        //    {
+                        //        // 用白色清空 
+                        //        ng.Clear(Color.White);
+                        //        // 指定高质量的双三次插值法。执行预筛选以确保高质量的收缩。此模式可产生质量最高的转换图像。 
+                        //        ng.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                        //        // 指定高质量、低速度呈现。 
+                        //        ng.SmoothingMode = SmoothingMode.HighQuality;
 
-                            newBmp.Save(newpath, GetCodecInfo("image/jpeg"), encoderParams);
-                        }
+                        //        // 在指定位置并且按指定大小绘制指定的 Image 的指定部分。 
+                        //        ng.DrawImage(bmp, new Rectangle(0, 0, targetWidth, targetHeight), new Rectangle(0, 0, bmp.Width, bmp.Height), GraphicsUnit.Pixel);
+                        //    }
+
+                        //    newBmp.Save(newpath, GetCodecInfo("image/jpeg"), encoderParams);
+                        //}
 
                         //bmp.Save(newpath, GetCodecInfo("image/jpeg"), encoderParams);
                     }
@@ -391,7 +401,7 @@ namespace MvcFox.Controllers
             DirectoryInfo dif = new DirectoryInfo(savePath);
             if (dif.Exists)
             {
-                FileInfo[] files = dif.GetFiles("_new_*", SearchOption.TopDirectoryOnly);
+                FileInfo[] files = dif.GetFiles("_new_" + fileid.ToString() + "*", SearchOption.TopDirectoryOnly);
 
                 if (files.Count() == 1)
                 {
@@ -408,155 +418,75 @@ namespace MvcFox.Controllers
             return Content("");
         }
 
-        public ActionResult ShowImageRotateLeft(Guid folder, Guid openid)
+        public ActionResult Rotate(Guid folder, Guid fileid, int angle, int maxWidth, int maxHeight)
         {
-            int angle = 90;
             string savePath = Request.MapPath("~/App_Data/UploadFiles/");
-            savePath = Path.Combine(savePath, folder.ToString());
-            DirectoryInfo dif = new DirectoryInfo(savePath);
-            if (!dif.Exists)
-            {
-                dif.Create();
-            }
+            DirectoryInfo dif = new DirectoryInfo(Path.Combine(savePath, folder.ToString()));
+            FileInfo[] files = dif.GetFiles("_raw_" + fileid.ToString() + "*", SearchOption.TopDirectoryOnly);
 
-            FileInfo[] files = dif.GetFiles("_tmp_*", SearchOption.TopDirectoryOnly);
-            string fp = "";
-            if (files.Count() == 0)
+            int up_width = 0;
+            int up_height = 0;
+            float nPercent = 0;
+            if (files.Count() == 1)
             {
-                //ImageDocumentDTO doc = imageDocumentService.GetByOpenID(openid, formatid);
-                //fp = Path.Combine(savePath, formatid + "_tmp_" + doc.ExtentionName);
-                //using (MemoryStream ms = new MemoryStream(doc.FileBody))
-                //{
-                //    System.Drawing.Image img = System.Drawing.Bitmap.FromStream(ms);
-                //    RotateImg(img, angle, fp);
-                //}
-            }
-            else
-            {
-                fp = files[0].FullName;
-                RotateImg(fp, angle, fp);
-            }
+                string rawPath = files[0].FullName;
+                string spath = string.Format("{0}\\{1}\\_thumbnail_{2}{3}", savePath, folder, fileid, files[0].Extension);
+                string tmp = string.Format("{0}\\{1}\\_tmp_{2}{3}", savePath, folder, fileid, files[0].Extension);
 
-            if (!string.IsNullOrEmpty(fp))
-            {
-                return File(fp, "application/octet-stream", "show");
-            }
+                if (System.IO.File.Exists(spath))
+                {
+                    System.IO.File.Delete(spath);
+                }
 
-            return Content("");
+                ImageHelper.Rotate(rawPath, angle, tmp);
+
+                using (Bitmap tbmp = new Bitmap(tmp))
+                {
+                    float sourceWidth = tbmp.Width;
+                    float sourceHeight = tbmp.Height;
+
+                    float nPercentW = (maxWidth / (float)sourceWidth);
+                    float nPercentH = (maxHeight / (float)sourceHeight);
+
+                    if (nPercentH < nPercentW)
+                        nPercent = nPercentH;
+                    else
+                        nPercent = nPercentW;
+                }
+
+                ImageHelper.Resize(tmp, maxWidth, maxHeight, spath);
+
+                System.IO.File.Delete(tmp);
+
+                using (Bitmap bmp = new Bitmap(spath))
+                {
+                    up_width = bmp.Width;
+                    up_height = bmp.Height;
+                }
+            }
+            return Json(new { success = true, width = up_width, height = up_height, percent = nPercent });
         }
-
-        public ActionResult ShowImageRotateRight(Guid folder, Guid openid)
-        {
-            int angle = -90;
-            string savePath = Request.MapPath("~/App_Data/UploadFiles/");
-            savePath = Path.Combine(savePath, folder.ToString());
-            DirectoryInfo dif = new DirectoryInfo(savePath);
-            if (!dif.Exists)
-            {
-                dif.Create();
-            }
-
-            FileInfo[] files = dif.GetFiles("_tmp_*", SearchOption.TopDirectoryOnly);
-            string fp = "";
-            if (files.Count() == 0)
-            {
-                //ImageDocumentDTO doc = imageDocumentService.GetByOpenID(openid, formatid);
-                //fp = Path.Combine(savePath, formatid + "_tmp_" + doc.ExtentionName);
-                //using (MemoryStream ms = new MemoryStream(doc.FileBody))
-                //{
-                //    System.Drawing.Image img = System.Drawing.Bitmap.FromStream(ms);
-                //    RotateImg(img, angle, fp);
-                //}
-            }
-            else
-            {
-                fp = files[0].FullName;
-                RotateImg(fp, angle, fp);
-            }
-
-            if (!string.IsNullOrEmpty(fp))
-            {
-                return File(fp, "application/octet-stream", "show");
-            }
-
-            return Content("");
-        }
-
-        /// <summary>
-        /// 以逆时针为方向对图像进行旋转
-        /// </summary>
-        /// <param name="b">位图流</param>
-        /// <param name="angle">旋转角度[0,360](前台给的)</param>
-        /// <returns></returns>
-        public System.Drawing.Image RotateImg(System.Drawing.Image b, int angle, string imageTmpFile)
-        {
-            angle = angle % 360;
-
-            //弧度转换
-            double radian = angle * Math.PI / 180.0;
-            double cos = Math.Cos(radian);
-            double sin = Math.Sin(radian);
-
-            //原图的宽和高
-            int w = b.Width;
-            int h = b.Height;
-            int W = (int)(Math.Max(Math.Abs(w * cos - h * sin), Math.Abs(w * cos + h * sin)));
-            int H = (int)(Math.Max(Math.Abs(w * sin - h * cos), Math.Abs(w * sin + h * cos)));
-
-            //目标位图
-            System.Drawing.Bitmap dsImage = new System.Drawing.Bitmap(W, H);
-            System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(dsImage);
-            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Bilinear;
-            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-
-            //计算偏移量
-            System.Drawing.Point Offset = new System.Drawing.Point((W - w) / 2, (H - h) / 2);
-
-            //构造图像显示区域：让图像的中心与窗口的中心点一致
-            System.Drawing.Rectangle rect = new System.Drawing.Rectangle(Offset.X, Offset.Y, w, h);
-            System.Drawing.Point center = new System.Drawing.Point(rect.X + rect.Width / 2, rect.Y + rect.Height / 2);
-
-            g.TranslateTransform(center.X, center.Y);
-            g.RotateTransform(360 - angle);
-
-            //恢复图像在水平和垂直方向的平移
-            g.TranslateTransform(-center.X, -center.Y);
-            g.DrawImage(b, rect);
-
-            //重至绘图的所有变换
-            g.ResetTransform();
-
-            g.Save();
-            g.Dispose();
-
-            //保存旋转后的图片
-            b.Dispose();
-            dsImage.Save(imageTmpFile, System.Drawing.Imaging.ImageFormat.Jpeg);
-
-            return dsImage;
-        }
-
-        public System.Drawing.Image RotateImg(string filename, int angle, string imageTmpFile)
-        {
-            return RotateImg(GetSourceImg(filename), angle, imageTmpFile);
-        }
-
-        public System.Drawing.Image GetSourceImg(string filename)
-        {
-            System.Drawing.Image img = System.Drawing.Bitmap.FromFile(filename);
-            return img;
-        }
-
-
     }
 
     public class ImageHelper
     {
-        /// <summary>
-        /// Function to get byte array from a file
-        /// </summary>
-        /// <param name="_FileName">File name to get byte array</param>
-        /// <returns>Byte Array</returns>
+        public static string GetFile(Guid folder, Guid fileid)
+        {
+            string savePath = HttpContext.Current.Server.MapPath("~/App_Data/UploadFiles/");
+            savePath = Path.Combine(savePath, folder.ToString());
+            DirectoryInfo dif = new DirectoryInfo(savePath);
+            if (dif.Exists)
+            {
+                FileInfo[] files = dif.GetFiles("_new_" + fileid.ToString() + "*", SearchOption.TopDirectoryOnly);
+
+                if (files.Count() == 1)
+                {
+                    return files[0].FullName;
+                }
+            }
+            return "";
+        }
+
         public static byte[] FileToByteArray(string fileName)
         {
             byte[] _Buffer = null;
@@ -602,7 +532,7 @@ namespace MvcFox.Controllers
             RectangleF destRect = new RectangleF(0, 0, destWidth, destHeight);
             RectangleF srcRect = new RectangleF(0, 0, imgToResize.Width, imgToResize.Height);
 
-            g.DrawImage(imgToResize,destRect, srcRect, GraphicsUnit.Pixel);
+            g.DrawImage(imgToResize, destRect, srcRect, GraphicsUnit.Pixel);
             g.Dispose();
 
             return b;
@@ -652,6 +582,154 @@ namespace MvcFox.Controllers
             }
 
             return bm;//返回经过翻转后的图片
+        }
+
+        public static void Resize(string filename, int width, int height, string savepath)
+        {
+            using (Bitmap rawImage = new Bitmap(filename))
+            {
+                float sourceWidth = rawImage.Width;
+                float sourceHeight = rawImage.Height;
+
+                float nPercent = 0;
+                float nPercentW = (width / (float)sourceWidth);
+                float nPercentH = (height / (float)sourceHeight);
+
+                if (nPercentH < nPercentW)
+                    nPercent = nPercentH;
+                else
+                    nPercent = nPercentW;
+
+                //newImageWidth = sourceWidth * nPercent;
+                //newImageHeight = sourceHeight * nPercent;
+                float hResolution = rawImage.HorizontalResolution;
+                float vResolution = rawImage.VerticalResolution;
+
+                //if (hResolution > 96.0f && vResolution > 96.0f)
+                //{
+                Bitmap thumbnail = ImageHelper.ResizeImage(rawImage, nPercent, hResolution, vResolution);
+                //string thumbnailPath = Path.Combine(folderPath, "_thumbnail_" + fileId.ToString() + ext);
+
+                //关键质量控制
+                //获取系统编码类型数组,包含了jpeg,bmp,png,gif,tiff
+                ImageCodecInfo[] icis = ImageCodecInfo.GetImageEncoders();
+                ImageCodecInfo ici = null;
+                foreach (ImageCodecInfo i in icis)
+                {
+                    if (i.MimeType == "image/jpeg" || i.MimeType == "image/bmp" || i.MimeType == "image/png" || i.MimeType == "image/gif")
+                    {
+                        ici = i;
+                    }
+                }
+                EncoderParameters ep = new EncoderParameters(1);
+                ep.Param[0] = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, (long)100);
+
+                thumbnail.Save(savepath, ici, ep);
+            }
+        }
+
+        public static void Resize(Bitmap rawImage, int width, int height, string savepath)
+        {
+            float sourceWidth = rawImage.Width;
+            float sourceHeight = rawImage.Height;
+
+            float nPercent = 0;
+            float nPercentW = (width / (float)sourceWidth);
+            float nPercentH = (height / (float)sourceHeight);
+
+            if (nPercentH < nPercentW)
+                nPercent = nPercentH;
+            else
+                nPercent = nPercentW;
+
+            //newImageWidth = sourceWidth * nPercent;
+            //newImageHeight = sourceHeight * nPercent;
+            float hResolution = rawImage.HorizontalResolution;
+            float vResolution = rawImage.VerticalResolution;
+
+            //if (hResolution > 96.0f && vResolution > 96.0f)
+            //{
+            Bitmap thumbnail = ImageHelper.ResizeImage(rawImage, nPercent, hResolution, vResolution);
+            //string thumbnailPath = Path.Combine(folderPath, "_thumbnail_" + fileId.ToString() + ext);
+
+            //关键质量控制
+            //获取系统编码类型数组,包含了jpeg,bmp,png,gif,tiff
+            ImageCodecInfo[] icis = ImageCodecInfo.GetImageEncoders();
+            ImageCodecInfo ici = null;
+            foreach (ImageCodecInfo i in icis)
+            {
+                if (i.MimeType == "image/jpeg" || i.MimeType == "image/bmp" || i.MimeType == "image/png" || i.MimeType == "image/gif")
+                {
+                    ici = i;
+                }
+            }
+            EncoderParameters ep = new EncoderParameters(1);
+            ep.Param[0] = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, (long)100);
+
+            thumbnail.Save(savepath, ici, ep);
+        }
+
+        /// <summary>
+        /// 对图像进行旋转
+        /// </summary>
+        /// <param name="img">图片</param>
+        /// <param name="angle">旋转角度</param>
+        /// <param name="savepath">存储路径</param>
+        /// <returns></returns>
+        public static System.Drawing.Image Rotate(System.Drawing.Image img, int angle, string savepath)
+        {
+            angle = angle % 360;
+
+            //弧度转换
+            double radian = angle * Math.PI / 180.0;
+            double cos = Math.Cos(radian);
+            double sin = Math.Sin(radian);
+
+            //原图的宽和高
+            int w = img.Width;
+            int h = img.Height;
+            int W = (int)(Math.Max(Math.Abs(w * cos - h * sin), Math.Abs(w * cos + h * sin)));
+            int H = (int)(Math.Max(Math.Abs(w * sin - h * cos), Math.Abs(w * sin + h * cos)));
+
+            //目标位图
+            System.Drawing.Bitmap dsImage = new System.Drawing.Bitmap(W, H);
+            System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(dsImage);
+            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Bilinear;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+
+            //计算偏移量
+            System.Drawing.Point Offset = new System.Drawing.Point((W - w) / 2, (H - h) / 2);
+
+            //构造图像显示区域：让图像的中心与窗口的中心点一致
+            System.Drawing.Rectangle rect = new System.Drawing.Rectangle(Offset.X, Offset.Y, w, h);
+            System.Drawing.Point center = new System.Drawing.Point(rect.X + rect.Width / 2, rect.Y + rect.Height / 2);
+
+            g.TranslateTransform(center.X, center.Y);
+            g.RotateTransform(360 - angle);
+
+            //恢复图像在水平和垂直方向的平移
+            g.TranslateTransform(-center.X, -center.Y);
+            g.DrawImage(img, rect);
+
+            //重至绘图的所有变换
+            g.ResetTransform();
+
+            g.Save();
+            g.Dispose();
+
+            //保存旋转后的图片
+            img.Dispose();
+            dsImage.Save(savepath, System.Drawing.Imaging.ImageFormat.Jpeg);
+
+            return dsImage;
+        }
+
+        public static System.Drawing.Image Rotate(string filename, int angle, string savepath)
+        {
+            using (System.Drawing.Image img = System.Drawing.Bitmap.FromFile(filename))
+            {
+                return Rotate(img, angle, savepath);
+            }
         }
     }
 }
