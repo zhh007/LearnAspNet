@@ -1,0 +1,104 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>图片截取 - 大小不固定</h2>
+
+<div class="message-main">
+    <ul>
+        <li class="messge-title">成果展示</li>
+        <li class="messge-tip" style=" margin-left:10px;">
+            <div id="divOrgAreaGainPhoto">
+            </div>
+            <div class='clear'></div>
+            <div id="btnGainPUpload_btn" style="float:left; color:#fff; cursor:pointer; width:105px; height:30px;line-height:30px;border:1px solid #e6b650; text-align:center; background:#e99138 ">上传图片</div>
+            <div style="float:left; margin-left:15px; color:#bbb; height:30px;line-height:30px;">（最多上传9张图片，请珍惜）</div>
+            <div class='clear'></div>
+            @*@if (Model.GainPhotos != null)
+            {
+                foreach (var item in Model.GainPhotos)
+                {
+                    <script type="text/javascript">
+                        $(function () {
+                            buildPicRow('divOrgAreaGainPhoto', '@item.ID', '@item.Url', '@item.Remark');
+                        });
+                    </script>
+                }
+            }*@
+        </li>
+        <li class="help-inline">
+        </li>
+    </ul>
+</div>
+
+
+
+@{Html.RenderPartial("_UnfixedImageEditView", new MvcFox.Models.ImageEditViewModel { ButtonId = "btnGainPUpload", JSCallback = "gainPhotoImgCallback", ImageWidth = 542, ImageHeight = 220, MaxCount = 9 });}
+
+<script>
+    function btnGainPUpload_Count() {
+        return $("#divOrgAreaGainPhoto > .picrow").length;
+    }
+    function gainPhotoImgCallback(folder, fileid, imgUrl) {
+        if (folder == null) return;
+        $("input[name='GainPhotoFolderId']").val(folder);
+        buildPicRow("divOrgAreaGainPhoto", fileid, imgUrl, "");
+    }
+
+
+    function moveUp(elm) {
+        var thisRow = $(elm).parents("table.picrow");
+        thisRow.insertBefore(thisRow.prev(".picrow"));
+        buildPicRowInputName(thisRow.parent().attr("id"));
+    }
+
+    function moveDown(elm) {
+        var thisRow = $(elm).parents("table.picrow");
+        thisRow.insertAfter(thisRow.next(".picrow"));
+        buildPicRowInputName(thisRow.parent().attr("id"));
+    }
+
+    function deletePicRow(elm) {
+        var thisRow = $(elm).parents("table.picrow");
+        var boxId = thisRow.parent().attr("id");
+        thisRow.remove();
+        buildPicRowInputName(boxId);
+    }
+
+    function buildPicRowInputName(elId) {
+        $("#" + elId).find("table.picrow").each(function (i, o) {
+            $(this).find("input[class*='fileid']").attr("name", elId + "FileId" + i);
+            $(this).find("input[class*='spath']").attr("name", elId + "StorePath" + i);
+            $(this).find("textarea[class*='fileremark']").attr("name", elId + "FileRemark" + i);
+        });
+    }
+
+    function buildPicRow(elId, fileid, imgurl, txt, spath) {
+        if (!spath) {
+            spath = '';
+        }
+        var html = "<table class='picrow'>";
+        html += "<tr>";
+        html += "<td style='padding:10px;' align='center'>";
+        html += "<img src='/images/up.png' onclick='moveUp(this)' style='cursor:pointer' title='上移' />";
+        html += "<br />";
+        html += "<img src='/images/down.png' onclick='moveDown(this)' style='cursor:pointer' title='下移' />";
+        html += "</td>";
+        html += "<td style='padding:10px; padding-left:0'>";
+        html += "<input type='hidden' name='FileId' class='fileid' value='" + fileid + "' />";
+        html += "<input type='hidden' name='StorePath' class='spath' value='" + spath + "' />";
+        html += "<img src='" + imgurl + "' style='width:271px; height:110px' />";
+        html += "</td>";
+        html += "<td style='padding:0px'><div style='margin-top:0px;margin-bottom:0px; height:20px; line-height:20px'>简介:</div>";
+        html += "<textarea name='FileRemark' class='fileremark' style='width:300px; height:90px; margin-top:0px' title='图片说明'>" + txt + "</textarea>";
+        html += "</td>";
+        html += "<td style='paddding:10px; padding-left:15px'>";
+        html += "<img onclick='deletePicRow(this)' src='/images/bin.png' style='width:24px; height:25px; cursor:pointer' title='删除' />";
+        html += "</td>";
+        html += "</tr>";
+        html += "</table>";
+        $("#" + elId).append(html);
+        buildPicRowInputName(elId);
+    }
+</script>

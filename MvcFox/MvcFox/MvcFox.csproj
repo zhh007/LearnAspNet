@@ -232,6 +232,7 @@
     <Compile Include="Controllers\HeadEdit2Controller.cs" />
     <Compile Include="Controllers\HeadEditController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ImageEditController.cs" />
     <Compile Include="Controllers\TestFormController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -249,6 +250,9 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\bin.png" />
+    <Content Include="Images\down.png" />
+    <Content Include="Images\up.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -310,6 +314,8 @@
     <Content Include="Views\HeadEdit\HeadImageEditView.cshtml" />
     <Content Include="Views\HeadEdit2\Index.cshtml" />
     <Content Include="Views\HeadEdit2\HeadImage2EditView.cshtml" />
+    <Content Include="Views\Shared\_UnfixedImageEditView.cshtml" />
+    <Content Include="Views\ImageEdit\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Code\" />
