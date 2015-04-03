@@ -699,5 +699,12 @@ namespace MvcFox.Controllers
                 return Rotate(img, angle, savepath);
             }
         }
+
+        public static string GetFile(Guid folder, string filename)
+        {
+            string savePath = HttpContext.Current.Server.MapPath("~/App_Data/UploadFiles/");
+            savePath = Path.Combine(savePath, folder.ToString(), filename);
+            return savePath;
+        }
     }
 }

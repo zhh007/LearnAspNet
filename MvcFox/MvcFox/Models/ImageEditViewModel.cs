@@ -11,5 +11,6 @@ namespace MvcFox.Models
         public string JSCallback { get; set; }
         public int ImageWidth { get; set; }
         public int ImageHeight { get; set; }
+        public int MaxCount { get; set; }
     }
 }

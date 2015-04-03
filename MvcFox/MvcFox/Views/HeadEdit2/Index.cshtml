@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<div class="message-main">
+    <ul>
+        <li class="messge-title">头&#12288;&#12288;像<span style="color: #F00">*</span></li>
+        <li class="messge-tip" style=" margin-left:10px;">
+            <div id="imgHead" style="width: 145px; height: 145px; overflow: hidden;float:left;">
+                <img src="~/Content/images/qw.png" style="width: 145px; height: 145px;" />
+            </div>
+            <div id="imgHead_btn" style="float:left; margin-top:60px; margin-left:30px; color:#fff; cursor:pointer; width:105px; height:30px;line-height:30px;border:1px solid #e6b650; text-align:center; background:#e99138 ">修改头像</div>
+        </li>
+        <li class="help-inline">
+            <input name="headFileId" value="" type="hidden" />
+            <input name="headFolderId" value="" type="hidden" />
+        </li>
+    </ul>
+</div>   
+
+@{Html.RenderPartial("HeadImage2EditView", new MvcFox.Models.ImageEditViewModel { ButtonId = "imgHead", JSCallback = "imgHeadCallback", ImageWidth = 145, ImageHeight = 145 });}
+
+<script type="text/javascript">
+    function imgHeadCallback(folder, fileid, imgUrl) {
+        if (folder == null) return;
+        $("input[name='headFileId']").val(fileid);
+        $("input[name='headFolderId']").val(folder);
+        $("#imgHead").html("<img id='target' src=" + imgUrl + " />");
+    }
+</script>

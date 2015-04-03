@@ -229,6 +229,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\HeadEdit2Controller.cs" />
     <Compile Include="Controllers\HeadEditController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TestFormController.cs" />
@@ -307,6 +308,8 @@
     <Content Include="Views\TestForm\Index.cshtml" />
     <Content Include="Views\HeadEdit\Index.cshtml" />
     <Content Include="Views\HeadEdit\HeadImageEditView.cshtml" />
+    <Content Include="Views\HeadEdit2\Index.cshtml" />
+    <Content Include="Views\HeadEdit2\HeadImage2EditView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Code\" />
