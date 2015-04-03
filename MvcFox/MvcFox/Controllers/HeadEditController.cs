@@ -10,6 +10,9 @@ using System.Web.Mvc;
 
 namespace MvcFox.Controllers
 {
+    /// <summary>
+    /// 头像编辑，截图框在原始图片内
+    /// </summary>
     public class HeadEditController : Controller
     {
         public ActionResult Index()

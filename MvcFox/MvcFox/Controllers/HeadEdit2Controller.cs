@@ -10,6 +10,9 @@ using System.IO;
 
 namespace MvcFox.Controllers
 {
+    /// <summary>
+    /// 比例固定,头像编辑，上传后添加空白内容
+    /// </summary>
     public class HeadEdit2Controller : Controller
     {
         public ActionResult Index()
