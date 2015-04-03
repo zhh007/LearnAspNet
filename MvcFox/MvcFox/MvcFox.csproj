@@ -306,7 +306,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\TestForm\Index.cshtml" />
     <Content Include="Views\HeadEdit\Index.cshtml" />
-    <Content Include="Views\HeadEdit\AreaTopImageEditView.cshtml" />
+    <Content Include="Views\HeadEdit\HeadImageEditView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Code\" />

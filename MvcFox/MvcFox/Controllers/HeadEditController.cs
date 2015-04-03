@@ -182,7 +182,60 @@ namespace MvcFox.Controllers
         }
 
         /// <summary>
-        /// 上传后下载缩略图
+        /// 图片旋转
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Rotate(Guid folder, Guid fileid, int angle, int maxWidth, int maxHeight)
+        {
+            string savePath = Request.MapPath("~/App_Data/UploadFiles/");
+            DirectoryInfo dif = new DirectoryInfo(Path.Combine(savePath, folder.ToString()));
+            FileInfo[] files = dif.GetFiles("_raw_" + fileid.ToString() + "*", SearchOption.TopDirectoryOnly);
+
+            int up_width = 0;
+            int up_height = 0;
+            float nPercent = 0;
+            if (files.Count() == 1)
+            {
+                string rawPath = files[0].FullName;
+                string spath = string.Format("{0}\\{1}\\_thumbnail_{2}{3}", savePath, folder, fileid, files[0].Extension);
+                string tmp = string.Format("{0}\\{1}\\_tmp_{2}{3}", savePath, folder, fileid, files[0].Extension);
+
+                if (System.IO.File.Exists(spath))
+                {
+                    System.IO.File.Delete(spath);
+                }
+
+                ImageHelper.Rotate(rawPath, angle, tmp);
+
+                using (Bitmap tbmp = new Bitmap(tmp))
+                {
+                    float sourceWidth = tbmp.Width;
+                    float sourceHeight = tbmp.Height;
+
+                    float nPercentW = (maxWidth / (float)sourceWidth);
+                    float nPercentH = (maxHeight / (float)sourceHeight);
+
+                    if (nPercentH < nPercentW)
+                        nPercent = nPercentH;
+                    else
+                        nPercent = nPercentW;
+                }
+
+                ImageHelper.Resize(tmp, maxWidth, maxHeight, spath);
+
+                System.IO.File.Delete(tmp);
+
+                using (Bitmap bmp = new Bitmap(spath))
+                {
+                    up_width = bmp.Width;
+                    up_height = bmp.Height;
+                }
+            }
+            return Json(new { success = true, width = up_width, height = up_height, percent = nPercent });
+        }
+
+        /// <summary>
+        /// 显示缩略图
         /// </summary>
         public ActionResult DownloadThumbnail(Guid folder, Guid fileid)
         {
@@ -355,44 +408,8 @@ namespace MvcFox.Controllers
             return Json(new { success = false });
         }
 
-        private ImageCodecInfo GetCodecInfo(string mimeType)
-        {
-            ImageCodecInfo[] CodecInfo = ImageCodecInfo.GetImageEncoders();
-            foreach (ImageCodecInfo ici in CodecInfo)
-            {
-                if (ici.MimeType == mimeType) return ici;
-            }
-            return null;
-        }
-
-        public ActionResult ClearImage(Guid openid, Guid folder, int count)
-        {
-            string savePath = Request.MapPath("~/App_Data/UploadFiles/");
-            savePath = Path.Combine(savePath, folder.ToString());
-            DirectoryInfo dif = new DirectoryInfo(savePath);
-            if (!dif.Exists)
-            {
-                dif.Create();
-            }
-
-            FileInfo[] files = dif.GetFiles("_*", SearchOption.TopDirectoryOnly);
-            foreach (var item in files)
-            {
-                item.Delete();
-            }
-
-            if (count > 0)
-            {
-                string clearfile = Path.Combine(savePath, "_clear.txt");
-                System.IO.File.AppendAllText(clearfile, "abc");
-            }
-
-            //imageDocumentService.DeleteByOpenID(openid, formatid);
-            return Json(new { success = true });
-        }
-
         /// <summary>
-        /// 显示草稿图，或真实图片
+        /// 显示新图片
         /// </summary>
         public ActionResult ShowImage(Guid folder, Guid fileid)
         {
@@ -416,55 +433,6 @@ namespace MvcFox.Controllers
             //}
 
             return Content("");
-        }
-
-        public ActionResult Rotate(Guid folder, Guid fileid, int angle, int maxWidth, int maxHeight)
-        {
-            string savePath = Request.MapPath("~/App_Data/UploadFiles/");
-            DirectoryInfo dif = new DirectoryInfo(Path.Combine(savePath, folder.ToString()));
-            FileInfo[] files = dif.GetFiles("_raw_" + fileid.ToString() + "*", SearchOption.TopDirectoryOnly);
-
-            int up_width = 0;
-            int up_height = 0;
-            float nPercent = 0;
-            if (files.Count() == 1)
-            {
-                string rawPath = files[0].FullName;
-                string spath = string.Format("{0}\\{1}\\_thumbnail_{2}{3}", savePath, folder, fileid, files[0].Extension);
-                string tmp = string.Format("{0}\\{1}\\_tmp_{2}{3}", savePath, folder, fileid, files[0].Extension);
-
-                if (System.IO.File.Exists(spath))
-                {
-                    System.IO.File.Delete(spath);
-                }
-
-                ImageHelper.Rotate(rawPath, angle, tmp);
-
-                using (Bitmap tbmp = new Bitmap(tmp))
-                {
-                    float sourceWidth = tbmp.Width;
-                    float sourceHeight = tbmp.Height;
-
-                    float nPercentW = (maxWidth / (float)sourceWidth);
-                    float nPercentH = (maxHeight / (float)sourceHeight);
-
-                    if (nPercentH < nPercentW)
-                        nPercent = nPercentH;
-                    else
-                        nPercent = nPercentW;
-                }
-
-                ImageHelper.Resize(tmp, maxWidth, maxHeight, spath);
-
-                System.IO.File.Delete(tmp);
-
-                using (Bitmap bmp = new Bitmap(spath))
-                {
-                    up_width = bmp.Width;
-                    up_height = bmp.Height;
-                }
-            }
-            return Json(new { success = true, width = up_width, height = up_height, percent = nPercent });
         }
     }
 
