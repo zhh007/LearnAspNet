@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<div style="margin:60px">
+    <div id="imgHead" style="display:inline-block;cursor:pointer; border: 1px solid #b2b2b2;width: 145px; height: 145px; overflow: hidden;">
+        <img src="~/Content/images/qw.png" style="width: 145px; height: 145px;" />
+    </div>
+    <input name="headFileId" value="" type="hidden" />
+    <input name="headFolderId" value="" type="hidden" />
+</div>
+
+@{Html.RenderPartial("HeadImageEditView", new MvcFox.Models.ImageEditViewModel { ButtonId = "imgHead", JSCallback = "imgHeadCallback", ImageWidth = 145, ImageHeight = 145 });}
+
+
+<script type="text/javascript">
+    function imgHeadCallback(folder, fileid, imgUrl) {
+        if (folder == null) return;
+        $("input[name='headFileId']").val(fileid);
+        $("input[name='headFolderId']").val(folder);
+        $("#imgHead").html("<img id='target' src=" + imgUrl + " />");
+    }
+</script>
+
