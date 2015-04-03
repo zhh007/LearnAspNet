@@ -1,0 +1,388 @@
+﻿@model MvcFox.Models.ImageEditViewModel
+@{
+    //封面图片上传，比例固定
+    Layout = null;
+    Guid folder = Guid.NewGuid();
+    string CurrentFolder = Guid.NewGuid().ToString();
+    string postfix = "_" + folder.GetHashCode().ToString("x");
+    string fnCountStr = Model.ButtonId + "_Count";
+}
+
+<style type="text/css">
+    .imgContainer .qq-upload-button {background-color:transparent}
+    #btnUpload_@postfix
+    {
+        background: url("@Href("~/Content/images/img-upload.png")");
+        width: 112px;
+        height: 24px;
+        border: 0;
+    }
+    #btnLeft_@postfix
+    {
+        background: url("@Href("~/Content/images/btn-left.png")");
+        width: 80px;
+        height: 25px;
+        border: 0;
+        float: left;
+        margin-left: 46px;
+        margin-top: 5px;
+    }
+    #btnRight_@postfix
+    {
+        background: url("@Href("~/Content/images/btn-right.png")");
+        width: 80px;
+        height: 25px;
+        border: 0;
+        float: right;
+        margin-right: 46px;
+        margin-top: 5px;
+    }
+    #btnSave_@postfix
+    {
+        background: url("@Href("~/Content/images/btn-save.png")");
+        width: 67px;
+        height: 27px;
+        border: 0;
+        margin-top: 10px;
+    }
+    #btnCancel_@postfix
+    {
+        background: url("@Href("~/Content/images/btn-cancel.png")");
+        width: 67px;
+        height: 27px;
+        border: 0;
+        margin-top: 10px;
+        margin-left: 15px;
+    }
+
+    .qq-upload-list
+    {
+        display: none;
+    }
+
+    .imgContainer
+    {
+        width:960px;
+        padding:0 10px;
+        height:600px;
+    }
+
+</style>
+@*<link href="@Url.Content("~/Content/fineuploader.css")" rel="stylesheet" type="text/css" />*@
+<link href="@Url.Content("~/Content/jquery.Jcrop.min.css")" rel="stylesheet" type="text/css" />
+@*<script src="~/Scripts/jquery-1.7.1.min.js" type="text/javascript"></script>*@
+<script src="@Url.Content("~/Scripts/jquery.fineuploader-3.0.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.Jcrop.js?v=1")" type="text/javascript"></script>
+
+<div id="uploadBox_@postfix" class="imgContainer" title="图片上传" style="display:none">
+    <table style="width: 770px">
+        <tr>
+            <td colspan="2" style="padding-left: 48px">
+                <div id="btnUpload_@postfix">
+                    <input type="hidden" name="test" value="1" />
+                </div>
+                <div style="color: #999">
+                    仅支持JPG、GIF、PNG，文件小于<span class='filesize'>5M</span>。
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="border-right: 1px solid #e5e5e5;width:60%" align="center" valign="middle">
+                <div id="imageBox1_@postfix" style="width: 300px; height: 300px; border: 1px solid #b2b2b2;
+                        margin: 0px auto; overflow: hidden">
+                </div>
+            </td>
+            <td align="center" valign="middle" style="width:40%">
+                <div id="imageBox2_@postfix" style="border: 1px solid #b2b2b2;width: 145px; height: 145px; overflow: hidden;">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding-left: 48px">
+                <input type="button" id="btnSave_@postfix" />
+                <input type="button" id="btnCancel_@postfix" />
+            </td>
+            <td></td>
+        </tr>
+    </table>
+</div>
+
+<script type="text/javascript">
+    (function(){
+        var showMaxWidth = 500, showMaxHeight = 400;
+        var owidth, oheight;//数据库定义的尺寸，单位毫米
+        var x, y, w, h;
+        var jcrop_api;
+
+        var cur_folder = '@Guid.NewGuid()';
+
+
+        var cur_fileid = null;
+        var nPercent = 1;
+        var sPercent = 0;
+        var cur_filename = null;
+        var openid = '@Guid.NewGuid()';
+        var cur_need_width = 0;//毫米
+        var cur_need_height = 0;//毫米
+        var lImageBox_width = 400;//px
+        var lImageBox_height = 400; //px
+        var rImageBox_width = 200;
+        var rImageBox_height = 200;
+        var vResolution = 0; //垂直分辨率（以“像素/英寸”为单位）
+        var hResolution = 0; //水平分辨率（以“像素/英寸”为单位）
+        //截图框大小
+        var cut_width = 0;
+        var cut_height = 0;
+        //动画
+        var lbox_w = 0,rbox_w = 0;
+        var tagggleFlag = false;
+        var cur_limitfilesize = 5*1024*1024;// 5 MB = 5 * 1024 * 1024 bytes
+
+        var btnId = '@Model.ButtonId' + '_btn';
+        var maxCount = @Model.MaxCount;
+        var dlg = null;
+        var angle = 0;
+        $(function () {
+            $("#" + btnId).click(function(){
+                try {
+                    var fn_Count = @fnCountStr;
+                    if(maxCount > 0 && typeof(fn_Count) == "function") {
+                        if(fn_Count() >= maxCount) {
+                            showErrorMsg("最多上传" + maxCount + "张图片。");
+                            return;
+                        }
+                    }
+                } catch(e) {}
+
+                dlg = $( "#uploadBox_@postfix" ).dialog({
+                    height: 600, width: 800, modal: true
+                    ,close: function( event, ui ) {
+                        clearUploadBox();
+                        dlg = null;
+                    }});
+            });
+
+            $("#imageBox1_@postfix").width(lImageBox_width).height(lImageBox_height);
+            $("#imageBox2_@postfix").width(rImageBox_width).height(rImageBox_height);
+
+
+            $("#btnSave_@postfix").click(function(){
+                btnImageSave_Click();
+            });
+            $("#btnCancel_@postfix").click(function(){
+                btnImageCancel();
+            });
+            initUploader();
+
+        });
+
+        function initJcrop(targetid) {
+            jcrop_api = $('#' + targetid).Jcrop({
+                onChange: updatePreview,
+                onSelect: updatePreview,
+                aspectRatio: (542/220),
+                bgFade: true,
+                bgOpacity: .3,
+                setSelect: [0, 0, 271, 110],
+                allowResize: true//,
+                //maxSize: [cut_width, cut_height],
+                //minSize: [cut_width, cut_height]
+            }, function () {
+                jcrop_api = this;
+            });
+        }
+
+        function updatePreview(coords, boundx, boundy) {//参数c表示截图框的大小
+            if (parseInt(coords.w) > 0) {
+                if(boundx == undefined || boundy == undefined){
+                    return;
+                }
+
+                //log("2, boundx:" + boundx + ", boundy:" + boundy);
+
+                x = coords.x;
+                y = coords.y;
+                w = coords.w;
+                h = coords.h;
+
+                rImageBox_width = w / 2;
+                rImageBox_height = h / 2;
+
+                $("#imageBox2_@postfix").width(rImageBox_width).height(rImageBox_height);
+
+                var rx = rImageBox_width / coords.w;
+                var ry = rImageBox_height / coords.h;
+
+                $('#preview').css({
+                    width: Math.round(rx * cut_width) + 'px',
+                    height: Math.round(ry * cut_height) + 'px',
+                    marginLeft: '-' + Math.round(rx * coords.x) + 'px',
+                    marginTop: '-' + Math.round(ry * coords.y) + 'px'
+                });
+            }
+        }
+        var targetid = "";
+        var image1url = "";
+        var image2url = "";
+        var uploader = null;
+        function initUploader() {
+            uploader = new qq.FineUploader({
+                element: document.getElementById('btnUpload_@postfix'),
+                text: {
+                    uploadButton: '　'
+                },
+                multiple: false,
+                validation: {
+                    allowedExtensions: ['jpeg', 'jpg', 'gif', 'png'],
+                    sizeLimit: cur_limitfilesize //5 * 1024 * 1024 // 5 MB = 5 * 1024 * 1024 bytes
+                },
+                request: {
+                    endpoint: '@Href("~/HeadEdit2/Upload")',
+                    params: { "folder": cur_folder, "maxWidth": lImageBox_width
+                        , "maxHeight": lImageBox_height, "sizeLimit": cur_limitfilesize },
+                    forceMultipart: true
+                },
+                showMessage : function(){},
+                callbacks: {
+                    onSubmit: function (id, fileName) {
+                        this._options.request.params.sizeLimit = cur_limitfilesize;
+                    },
+                    onError: function (id, fileName, reason) {
+                        alert(reason);
+                    },
+                    onComplete: function (id, fileName, responseJSON) {
+                        if (responseJSON.success) {
+                            cur_filename = fileName;
+                            $("#imageBox1_@postfix").empty();
+                            $("#imageBox2_@postfix").empty();
+                            cur_fileid = responseJSON.fileid;
+                            targetid = "_" + Math.random();
+                            targetid = targetid.replace(".", "");
+
+                            image1url = '@Href("~/HeadEdit2/DownloadThumbnail?folder=")' + cur_folder + '&fileid=' + cur_fileid + '&d=' + Math.random();
+                            image2url = '@Href("~/HeadEdit2/DownloadThumbnail?folder=")' + cur_folder + '&fileid=' + cur_fileid + '&d=' + Math.random();
+
+                            $("#imageBox1_@postfix").html("<img id='" + targetid + "' src='" + image1url + "' />");
+                            $("#imageBox2_@postfix").html("<img src='" + image2url + "' id='preview' alt='Preview' class='jcrop-preview' />");
+
+                            nPercent = responseJSON.percent;
+                            sPercent = responseJSON.spercent;
+                            hResolution = responseJSON.hResolution;
+                            vResolution = responseJSON.vResolution;
+
+                            //1 厘米＝0.3937 英寸
+                            //96像素/英寸
+                            //计算图片实际大小，单位px
+                            /*
+                            if(hResolution > 1 && vResolution > 1) {
+                                cur_need_width = owidth * 0.1 * 0.3937 * hResolution;
+                                cur_need_height = oheight * 0.1 * 0.3937 * vResolution;
+                                cut_width = cur_need_width * nPercent;
+                                cut_height = cur_need_height * nPercent;
+                            }else{
+                                cur_need_width = owidth * 0.1;
+                                cur_need_height = oheight * 0.1;
+                            }
+
+                            if (cut_width > responseJSON.width) {
+                                cut_width = responseJSON.width;
+                            }
+                            if (cut_height > responseJSON.height) {
+                                cut_height = responseJSON.height;
+                            }*/
+                            cut_width = responseJSON.width;
+                            cut_height = responseJSON.height;
+
+                            log("nPercent:" + nPercent + ", hResolution:" + hResolution + ", vResolution:" + vResolution);
+                            log("cut_width:" + cut_width + ", cut_height:" + cut_height);
+
+                            setTimeout(function(){
+                                initJcrop(targetid);
+                            }, 1000);
+
+                        }
+                    }
+                },
+                messages: {
+                    typeError: "{file} 支持的文件扩展名: {extensions}.",
+                    sizeError: "{file} 文件太大, 最大支持 {sizeLimit}.",
+                    minSizeError: "{file} 文件太小, 最小支持 {minSizeLimit}.",
+                    emptyError: "{file} 文件不能为空.",
+                    noFilesError: "请选择文件.",
+                    onLeave: "正在上传文件，如果离开，上传将取消."
+                },
+                debug: false
+            });
+
+            $(".qq-upload-button > div").height("24px").width("112px");
+        }
+
+        function btnImageSave_Click() {
+            if(cur_fileid == null) {
+                clearUploadBox();
+                var callback = @Model.JSCallback;
+                if(typeof(callback) == "function") {
+                    callback(null, null, null);
+                }
+                dlg.dialog( "close" );
+                return;
+            }
+            var param = {
+                "fileid": cur_fileid, "folder": cur_folder, "percent": sPercent,
+                "x": x / sPercent, "y": y / sPercent, "w": w / sPercent, "h": h / sPercent, "maxWidth": rImageBox_width, "maxHeight": rImageBox_height
+            };
+            $.post("@Href("~/HeadEdit2/SaveImage")", param, function (data) {
+                if (data.success) {
+                    $("input[name='headFileId']").val(cur_fileid);
+                    $("input[name='headFolderId']").val(cur_folder);
+                    showImage("imgHead", cur_fileid, cur_folder);
+                    clearUploadBox();
+                    dlg.dialog( "close" );
+                }
+            }, "json");
+        }
+
+        function clearUploadBox() {
+            cur_fileid = null;
+            angle = 0;
+            $(".qq-upload-list").empty();
+            $("#imageBox1_@postfix").empty();
+            $("#imageBox2_@postfix").empty();
+        }
+
+        function showImage(imgEId, fileid, folder) {
+            var imgUrl = "@Href("~/HeadEdit2/ShowImage?fileid=")" + fileid + "&folder=" + folder + "&d=" + Math.random();
+            var rawImg = new Image();
+            rawImg.onload = function () {
+                var raw_height = rawImg.height;
+                var raw_width = rawImg.width;
+                var callback = @Model.JSCallback;
+                if(typeof(callback) == "function") {
+                    callback(folder, fileid, imgUrl);
+                }
+                //$("#" + imgEId).html("<img id='target' width='" + raw_width + "px' height='" + raw_height + "px' src=" + imgUrl + " />");
+            }
+
+            rawImg.src = imgUrl; // this must be done AFTER setting onload
+        }
+
+        function btnImageCancel() {
+            clearUploadBox();
+            var callback = @Model.JSCallback;
+            if(typeof(callback) == "function") {
+                callback(null, null, null);
+            }
+            dlg.dialog( "close" );
+        }
+
+        function log(v){
+            try {
+                console.log(v);
+            } catch (e) {
+
+            }
+        }
+    })();
+</script>
+
+

@@ -316,6 +316,7 @@
     <Content Include="Views\HeadEdit2\HeadImage2EditView.cshtml" />
     <Content Include="Views\Shared\_UnfixedImageEditView.cshtml" />
     <Content Include="Views\ImageEdit\Index.cshtml" />
+    <Content Include="Views\Shared\_CoverImageEditView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Code\" />
