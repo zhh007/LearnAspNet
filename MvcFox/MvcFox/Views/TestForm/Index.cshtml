@@ -4,7 +4,7 @@
 }
 
 @section scripts {
-    <script src="~/Scripts/knockout-3.2.0.js"></script>
+    @*<script src="~/Scripts/knockout-3.2.0.js"></script>*@
     @Scripts.Render("~/bundles/jqueryval")
     <script src="~/Scripts/jquery.unobtrusive-justjson.js"></script>
 }
@@ -38,28 +38,15 @@
 </div>
 <script type="text/javascript">
     $(function () {
-        $('form.use-justjson')
-        .bind('before-submit', function (ev, form, args) {
+        //$('form.use-justjson').bind('ajax-success', function () {
+        //    // do something.
+        //    alert("保存成功2。");
+        //}).bind('ajax-failed', function () {
+        //    // maybe do something.
+        //    alert("发生错误2。");
+        //});
 
-        })
-        .bind('ajax-success', function () {
-            // do something.
-            alert("保存成功。");
-        })
-        .bind('ajax-failed', function () {
-            // maybe do something.
-        })
-        .bind('field-validated', function (ev, args) {
-            // add or remove errors to error summary using args.errors.
-        })
-        .bind('field-valid', function (ev, el) {
-            // do your own custom field error processing
-            // (this here integrates for bootstrap style HTML errors).
-            $(el).parents('div.control-group').removeClass('error');
-        })
-        .bind('field-invalid', function (ev, el) {
-            $(el).parents('div.control-group').addClass('error');
-        });
+        
     });
 
 </script>

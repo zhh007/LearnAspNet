@@ -8,33 +8,26 @@ using MvcFox.Models;
 using System.Web.Script.Serialization;
 using System.Net;
 
-public class JsonErrorResult : JsonResult
+public class JsonFormResult : JsonResult
 {
-    public JsonErrorResult(ModelStateDictionary modelStates)
+    public JsonFormResult(ModelStateDictionary modelStates)
     {
         _modelStates = modelStates;
     }
 
     private ModelStateDictionary _modelStates = null;
 
-    private const string JSONREQUEST_GETNOTALLOWED = "This request has been blocked because sensitive information could be disclosed to third party web sites when this is used in a GET request.To allow GET requests, set JsonRequestBehavior to AllowGet.";
+    //private const string JSONREQUEST_GETNOTALLOWED = "This request has been blocked because sensitive information could be disclosed to third party web sites when this is used in a GET request.To allow GET requests, set JsonRequestBehavior to AllowGet.";
 
     public override void ExecuteResult(ControllerContext context)
     {
-        if (context == null)
-        {
-            throw new ArgumentNullException("context");
-        }
-
-        if (JsonRequestBehavior == JsonRequestBehavior.DenyGet &&
-            String.Equals(context.HttpContext.Request.HttpMethod, "GET", StringComparison.OrdinalIgnoreCase))
-        {
-            throw new InvalidOperationException(JSONREQUEST_GETNOTALLOWED);
-        }
+        //if (JsonRequestBehavior == JsonRequestBehavior.DenyGet &&
+        //    String.Equals(context.HttpContext.Request.HttpMethod, "GET", StringComparison.OrdinalIgnoreCase))
+        //{
+        //    throw new InvalidOperationException(JSONREQUEST_GETNOTALLOWED);
+        //}
 
         HttpResponseBase response = context.HttpContext.Response;
-
-        response.StatusCode = (int)HttpStatusCode.BadRequest;
 
         if (!String.IsNullOrEmpty(ContentType))
         {
@@ -50,13 +43,24 @@ public class JsonErrorResult : JsonResult
             response.ContentEncoding = ContentEncoding;
         }
 
-        var errors = new Dictionary<string, IEnumerable<string>>();
-        foreach (var keyValue in _modelStates)
+        if (_modelStates.IsValid == false)
         {
-            errors[keyValue.Key] = keyValue.Value.Errors.Select(e => e.ErrorMessage);
-        }
+            response.StatusCode = (int)HttpStatusCode.BadRequest;
+            var errors = new Dictionary<string, IEnumerable<string>>();
+            foreach (var keyValue in _modelStates)
+            {
+                if (keyValue.Value.Errors != null && keyValue.Value.Errors.Count > 0)
+                {
+                    errors[keyValue.Key] = keyValue.Value.Errors.Select(e => e.ErrorMessage);
+                }
+            }
 
-        response.Write(new JavaScriptSerializer().Serialize(errors));
+            response.Write(new JavaScriptSerializer().Serialize(new { success = false, errors = errors }));
+        }
+        else
+        {
+            response.Write(new JavaScriptSerializer().Serialize(new { success = true }));
+        }
     }
 }
 
@@ -76,23 +80,15 @@ namespace MvcFox.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
-                {
-                    // do command processing etc
-                    return Json(new { Success = true });
-                }
-                else
-                {
-                    // validation failed
-                    return new JsonErrorResult(ModelState);
-                }
+                ModelState.AddModelError("Name", "该姓名无法注册。");
+                throw new Exception("发生异常，程序开小差了。");
             }
             catch (Exception ex)
             {
                 // unexpected exception thrown.
                 ModelState.AddModelError(string.Empty, ex.Message);
-                return new JsonErrorResult(ModelState);
             }
+            return new JsonFormResult(ModelState);
         }
     }
 }

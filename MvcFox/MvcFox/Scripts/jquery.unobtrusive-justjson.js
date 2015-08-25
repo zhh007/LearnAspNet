@@ -2,7 +2,7 @@
     var $jQval = $.validator,
         form_selector = 'form.use-justjson',
         form_data_key = 'unobtrusiveJson',
-        beforesubmit_event = 'before-submit',
+        //beforesubmit_event = 'before-submit',
         success_event = 'ajax-success',
         failed_event = 'ajax-failed',
         field_failed = 'field-invalid',
@@ -25,6 +25,14 @@
         }
     }
 
+    function default_ajaxsuccess() {
+        alert("保存成功。");
+    }
+
+    function default_ajaxfailed() {
+        alert("发生错误。");
+    }
+
     $jQval.unobtrusive.justjson = {
         parse: function () {
 
@@ -32,6 +40,30 @@
             // find all forms that are are to post back via AJAX and return JSON.
             $(form_selector).each(function (i, form) {
                 var f$ = $(form);
+
+                f$
+                //.bind('before-submit', function (ev, form, args) {
+
+                //})
+                //.bind('ajax-success', function () {
+                //    // do something.
+                //    alert("保存成功。");
+                //})
+                //.bind('ajax-failed', function () {
+                //    // maybe do something.
+                //    alert("发生错误。");
+                //})
+                //.bind('field-validated', function (ev, args) {
+                //    // add or remove errors to error summary using args.errors.
+                //})
+                .bind('field-valid', function (ev, el) {
+                    // do your own custom field error processing
+                    // (this here integrates for bootstrap style HTML errors).
+                    $(el).parents('div.control-group').removeClass('error');
+                })
+                .bind('field-invalid', function (ev, el) {
+                    $(el).parents('div.control-group').addClass('error');
+                });
 
                 // store extra state info in form.data item. if already exists then skip over as we 
                 // have already wired-up this form.
@@ -97,29 +129,33 @@
                     return false;
 
                 // extract values to submit         
-                var data = {};
-                f$.find(':input').each(function (i, el) {
-                    // TODO: enhance to handle array values.    
-                    if (el.name)
-                        data[el.name] = $(el).val();
-                });
+                //var data = {};
+                //f$.find(':input').each(function (i, el) {
+                //    // TODO: enhance to handle array values.    
+                //    if (el.name)
+                //        data[el.name] = $(el).val();
+                //});
 
                 // notify any external listeners that we are about to submit the form. 
-                f$.triggerHandler(beforesubmit_event, [f$, data]);
+                //f$.triggerHandler(beforesubmit_event, [f$, data]);
 
                 $.ajax({
                     url: f$.attr('action'),
-                    data: ko.toJSON(data),
-                    type: 'post',
-                    contentType: 'application/json; charset=utf-8'
+                    data: f$.serialize(),//ko.toJSON(data),
+                    type: 'post'//,
+                    //contentType: 'application/json; charset=utf-8'
                 })
                 .done(function (result) { // success callback...        
                     f$.data(form_data_key).errors = [];
                     f$.triggerHandler("invalid-form", [f$.validate()]);
-                    f$.triggerHandler(success_event, [result]);
+                    if ($._data(f$[0], "events")[success_event] != null) {
+                        f$.triggerHandler(success_event, [result]);
+                    } else {
+                        default_ajaxsuccess();
+                    }
                 })
                 .fail(function (err) {
-                    var errorData = $.parseJSON(err.responseText);
+                    var errorData = $.parseJSON(err.responseText).errors;
 
                     var fld = {};
                     for (var p in errorData) {
@@ -135,7 +171,11 @@
                     }
                     // displayed field errors.
                     f$.validate().showErrors(fld);
-                    f$.triggerHandler(failed_event, [err]);
+                    if ($._data(f$[0], "events")[failed_event] != null) {
+                        f$.triggerHandler(failed_event, [err]);
+                    } else {
+                        default_ajaxfailed();
+                    }
                 });
 
                 // stop form submitting
