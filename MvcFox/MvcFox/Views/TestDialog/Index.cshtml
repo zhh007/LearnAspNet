@@ -1,16 +1,54 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Index";
 }
 
 <h2>Jquery UI Dialog</h2>
 
-<div id="dialog" title="Basic dialog">
-    <p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
+<div style="display:none">
+    <div id="dialog" title="Basic dialog">
+        <p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
+    </div>
+</div>
+
+<div id="dialog-message" title="Download complete">
+    <p>
+        <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
+        Your files have downloaded successfully into the My Downloads folder.
+    </p>
+    <p>
+        Currently using <b>36% of your storage space</b>.
+    </p>
+</div>
+
+<div>
+    <button class="btn btn-primary" id="test">测试</button>
 </div>
 
 <script>
-  $(function() {
-    $( "#dialog" ).dialog();
-  });
+    $(function () {
+        $("#test").click(function () {
+            $("#dialog").dialog();
+        });
+
+        $("#dialog-message").dialog({
+            modal: true,
+            buttons: [
+                {
+                    text: "确定",
+                    click: function () {
+                        $(this).dialog("close");
+                    },
+                    'class': "btn btn-primary"
+                },
+                {
+                    text: "取消",
+                    click: function () {
+                        $(this).dialog("close");
+                    }
+                }
+            ]
+        });
+    });
+
+
 </script>

@@ -153,6 +153,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assets\jquery-ui-ext.js" />
     <Content Include="assets\jquery-ui-1.11.4\external\jquery\jquery.js" />
     <Content Include="assets\jquery-ui-1.11.4\images\ui-bg_diagonals-thick_18_b81900_40x40.png" />
     <Content Include="assets\jquery-ui-1.11.4\images\ui-bg_diagonals-thick_20_666666_40x40.png" />
