@@ -3,11 +3,6 @@
     ViewBag.Title = "Index";
 }
 
-@section scripts {
-    @*<script src="~/Scripts/knockout-3.2.0.js"></script>*@
-    @Scripts.Render("~/bundles/jqueryval")
-    <script src="~/Scripts/jquery.unobtrusive-justjson.js"></script>
-}
 <h2>@ViewBag.Title.</h2>
 <hr />
 <div class="row">
@@ -36,8 +31,56 @@
         }
     </div>
 </div>
+@section scripts {
+    @*<script src="~/Scripts/knockout-3.2.0.js"></script>*@
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery.unobtrusive-justjson.js"></script>
 <script type="text/javascript">
     $(function () {
+
+        //$("#myform").validate({
+        //    submitHandler: function (form) {
+        //        var success = true;
+
+        //        if ($("#Name").val() == "test1") {
+        //            success = false;
+        //            alert("无法注册test1");
+        //        }
+
+        //        if(success){
+        //            $(form).submit();
+        //        }
+        //    }
+        //});
+
+        $.validator.addMethod("validTest", function (value, element) {
+            return value != 'test';
+        }, " 无法注册 by client");
+
+        $("#Name").rules("add", {
+            validTest: true, messages: {validTest:"test 不能注册。"}
+        });
+
+        $("#Name").rules("remove", "required");//"required validTest"
+
+
+
+
+        //$("#Name").attr("data-val-validTest", "该姓名 无法注册 by client");
+
+        //var validator = $(".use-justjson").validate({
+        //    rules: {
+        //        Name: {
+        //            validTest: true
+        //        }
+        //    },
+        //    errorPlacement: function () {
+        //        debugger;
+        //        console.log("errorPlacement", this, arguments);
+        //    },
+        //    //errorElement: $("span[data-valmsg-for='Name']")
+        //});
+
         //$('form.use-justjson').bind('ajax-success', function () {
         //    // do something.
         //    alert("保存成功2。");
@@ -46,10 +89,13 @@
         //    alert("发生错误2。");
         //});
 
-        
+
     });
 
 </script>
+
+}
+
 
 <!--
 参考资料：

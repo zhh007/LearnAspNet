@@ -9,6 +9,35 @@
         field_passed = 'field-valid',
         error_event = 'field-validated';
 
+    var _form = $.validator.prototype.form;
+    $.validator.prototype.form = function () {
+        var that = this;
+        this.checkForm();
+
+        if (this.errorMap["Email"] == null) {
+            this.errorList.push({
+                message: "Email测试失败",
+                element: $("#Email")[0],
+                method: "test"
+            });
+
+            this.errorMap["Email"] = "Email测试失败";
+        }
+
+        // remove items from success list
+        this.successList = $.grep(this.successList, function (element) {
+            return !(element.name in that.errorMap);
+        });
+
+        $.extend(this.submitted, this.errorMap);
+        this.invalid = $.extend({}, this.errorMap);
+        if (!this.valid()) {
+            $(this.currentForm).triggerHandler("invalid-form", [this]);
+        }
+        this.showErrors();
+        return this.valid();
+    };
+
     function onValidated(form, validator) {  // 'this' is the form element
         var f$ = $(this),
             data = f$.data(form_data_key);
