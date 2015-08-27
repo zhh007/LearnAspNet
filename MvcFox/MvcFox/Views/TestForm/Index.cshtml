@@ -3,12 +3,12 @@
     ViewBag.Title = "Index";
 }
 
-<h2>@ViewBag.Title.</h2>
+<h2>@ViewBag.Title</h2>
 <hr />
 <div class="row">
     <div class="col-md-8">
         @using (Html.BeginForm("Index", "TestForm", FormMethod.Post, new { @class = "form-horizontal use-justjson", role = "form" }))
-            {
+        {
             <div class="form-group">
                 @Html.LabelFor(model => model.Name, new { @class = "col-md-2 control-label" })
                 <div class="col-md-10">
