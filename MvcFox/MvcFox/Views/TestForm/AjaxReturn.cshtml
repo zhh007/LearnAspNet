@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewBag.Title = "AjaxReturn";
+}
+
+<h2>AjaxReturn</h2>
+<script type="text/javascript">
+    @*function a() {
+        return $.ajax({
+            method: "POST",
+            url: '@Href("~/TestForm/RemoteValidTest")',
+            dataType: "json",
+            data: { name: $("#Name").val() },
+            success: function (data) {
+                return data;
+            },
+            error: function (error) {
+                return "Error!";
+            }
+        });
+    }*@
+
+        //remote rule
+        //$.validator.addMethod("remoteValidTest", function (value, element) {
+        //    var ajaxResult = null;
+
+        //    $.when(a()).then(function (data) {
+        //        ajaxResult = data;
+        //    });
+        //    debugger;
+        //    return ajaxResult.success;
+        //}, "远程测试失败。");
+</script>

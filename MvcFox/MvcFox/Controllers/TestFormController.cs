@@ -90,6 +90,18 @@ namespace MvcFox.Controllers
             }
             return new JsonFormResult(ModelState);
         }
+
+        [HttpPost]
+        public ActionResult RemoteValidTest(string name)
+        {
+            string[] invalidName = new string[] { "test", "admin" };
+            return Json(!invalidName.Contains(name));
+        }
+
+        public ActionResult AjaxReturn()
+        {
+            return View();
+        }
     }
 }
 

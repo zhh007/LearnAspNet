@@ -286,6 +286,7 @@
     <Content Include="Views\ImageEdit\Index.cshtml" />
     <Content Include="Views\Shared\_CoverImageEditView.cshtml" />
     <Content Include="Views\TestDialog\Index.cshtml" />
+    <Content Include="Views\TestForm\AjaxReturn.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Code\" />

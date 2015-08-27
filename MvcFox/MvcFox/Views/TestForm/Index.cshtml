@@ -32,54 +32,31 @@
     </div>
 </div>
 @section scripts {
-    @*<script src="~/Scripts/knockout-3.2.0.js"></script>*@
-    @Scripts.Render("~/bundles/jqueryval")
-    <script src="~/Scripts/jquery.unobtrusive-justjson.js"></script>
+@Scripts.Render("~/bundles/jqueryval")
+<script src="~/Scripts/jquery.unobtrusive-justjson.js"></script>
 <script type="text/javascript">
     $(function () {
+        //定义验证方法
+        //$.validator.addMethod("validTest", function (value, element) {
+        //    return value != 'test';
+        //}, "test不能注册。");
 
-        //$("#myform").validate({
-        //    submitHandler: function (form) {
-        //        var success = true;
-
-        //        if ($("#Name").val() == "test1") {
-        //            success = false;
-        //            alert("无法注册test1");
-        //        }
-
-        //        if(success){
-        //            $(form).submit();
-        //        }
-        //    }
+        //添加验证规则
+        //$("#Name").rules("add", {
+        //    validTest: true//, messages: {validTest:"“test”不能注册。"}
         //});
 
-        $.validator.addMethod("validTest", function (value, element) {
-            return value != 'test';
-        }, " 无法注册 by client");
+        //删除验证规则，多个请用空格分隔，入"required validTest"
+        //$("#Name").rules("remove", "required");
 
+        //add remote rule
         $("#Name").rules("add", {
-            validTest: true, messages: {validTest:"test 不能注册。"}
+            "remote":{
+                url: '@Href("~/TestForm/RemoteValidTest")',
+                type: "post",
+                data: { name: $("#Name").val() }
+            }, messages: { "remote": "不能注册。" }
         });
-
-        $("#Name").rules("remove", "required");//"required validTest"
-
-
-
-
-        //$("#Name").attr("data-val-validTest", "该姓名 无法注册 by client");
-
-        //var validator = $(".use-justjson").validate({
-        //    rules: {
-        //        Name: {
-        //            validTest: true
-        //        }
-        //    },
-        //    errorPlacement: function () {
-        //        debugger;
-        //        console.log("errorPlacement", this, arguments);
-        //    },
-        //    //errorElement: $("span[data-valmsg-for='Name']")
-        //});
 
         //$('form.use-justjson').bind('ajax-success', function () {
         //    // do something.
