@@ -290,7 +290,7 @@
     <Content Include="Views\TestDialog\Index.cshtml" />
     <Content Include="Views\TestForm\AjaxReturn.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
-    <Content Include="Views\Error\InternalServerError.cshtml" />
+    <Content Include="Views\Error\ServerError.cshtml" />
     <Content Include="Views\TestError\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>

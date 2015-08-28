@@ -11,7 +11,7 @@ namespace MvcFox.Controllers
     {
         public ActionResult Index()
         {
-            return InternalServerError();
+            return ServerError();
         }
 
         public ActionResult NotFound()
@@ -21,11 +21,11 @@ namespace MvcFox.Controllers
             return View("NotFound");
         }
 
-        public ActionResult InternalServerError()
+        public ActionResult ServerError()
         {
             Response.TrySkipIisCustomErrors = true;
             Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            return View("InternalServerError");
+            return View("ServerError");
         }
     }
 }
