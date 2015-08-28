@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Test Error</h2>
+<hr />
+
+<script type="text/javascript">
+    $(function () {
+        $("a.ajax").click(function (event) {
+            event.preventDefault();
+            $.ajax({
+                url: $(this).attr('href'),
+            });
+        });
+    });
+</script>
+
+<ul>
+    <li>@Html.ActionLink("Error 404 (Not Found)", "Error404")</li>
+    <li>@Html.ActionLink("Error 404 (Not Found) [AJAX]", "Error404", new { }, new { Class = "ajax" })</li>
+    <li>@Html.ActionLink("Error 500 (Internal Server Error)", "Error500")</li>
+    <li>@Html.ActionLink("Error 500 (Internal Server Error) [AJAX]", "Error500", new { }, new { Class = "ajax" })</li>
+</ul>

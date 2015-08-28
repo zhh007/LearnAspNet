@@ -1,4 +1,7 @@
-﻿/* TorchUI dialog button fix */
+﻿/*
+1.修改jqueryui dialog 按钮为bootstrap button样式
+2.修复对话框拉伸后的样式bug
+*/
 (function ($) {
     var _createButtons = $.ui.dialog.prototype._createButtons;
     $.ui.dialog.prototype._createButtons = function () {
@@ -49,3 +52,34 @@
         _create.apply(this);
     };
 })(jQuery);
+
+/*
+处理ajax错误
+*/
+$(function () {
+    var dialogOptions = {
+        autoOpen: false,
+        draggable: false,
+        modal: true,
+        resizable: false,
+        title: "Error",
+        closeOnEscape: false,
+        open: function () { $(".ui-dialog-titlebar-close").hide(); },
+        buttons: [{
+            text: "Close",
+            click: function () { $(this).dialog("close"); }
+        }]
+    };
+    var dlg404 = $("<div>页面不存在。</div>").dialog(dialogOptions);
+    var dlg500 = $("<div>服务器处理时发生错误。</div>").dialog(dialogOptions);
+
+    $(document).ajaxError(function (event, jqXHR, ajaxSettings, thrownError) {
+        if (jqXHR.status == 404) {
+            dlg404.dialog("open");
+        } else if (jqXHR.status == 500) {
+            dlg500.dialog("open");
+        } else {
+            alert("发生错误。");
+        }
+    });
+});
