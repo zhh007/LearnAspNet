@@ -29,8 +29,38 @@
         alert("保存成功。");
     }
 
-    function default_ajaxfailed() {
-        alert("发生错误。");
+    function default_ajaxfailed(errorData) {
+        var result = "";
+        result += '<div class="row">';
+        result += '<div class="col-md-12">';
+        result += '<div class="alert alert-danger">';
+        result += '<span class="glyphicon glyphicon-exclamation-sign"></span>请处理以下错误：';
+        result += '</div>';
+        result += '</div>';
+        result += '</div>';
+        result += '<div><ul>';
+        $.each(errorData, function (k, v) {
+            result += '<li>' + v + '</li>';
+        });
+        result += '</ul></div>'
+        
+        $('<div></div>').html(result).dialog({
+            title: "错误提示",
+            resizable: false,
+            draggable: false,
+            modal: true,
+            minHeight: 300,
+            minWidth: 500,
+            buttons: [
+                {
+                    text: "确定",
+                    click: function () {
+                        $(this).dialog("close");
+                    },
+                    'class': "btn btn-primary"
+                }
+            ]
+        });
     }
 
     $jQval.unobtrusive.justjson = {
@@ -174,7 +204,7 @@
                     if ($._data(f$[0], "events")[failed_event] != null) {
                         f$.triggerHandler(failed_event, [err]);
                     } else {
-                        default_ajaxfailed();
+                        default_ajaxfailed(errorData);
                     }
                 });
 
