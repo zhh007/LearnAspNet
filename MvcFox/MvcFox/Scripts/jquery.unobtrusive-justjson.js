@@ -51,15 +51,13 @@
             modal: true,
             minHeight: 300,
             minWidth: 500,
-            buttons: [
-                {
+            closeOnEscape: false,
+            open: function () { $(".ui-dialog-titlebar-close").hide(); },
+            buttons: [{
                     text: "确定",
-                    click: function () {
-                        $(this).dialog("close");
-                    },
+                    click: function () { $(this).dialog("close"); },
                     'class': "btn btn-primary"
-                }
-            ]
+            }]
         });
     }
 

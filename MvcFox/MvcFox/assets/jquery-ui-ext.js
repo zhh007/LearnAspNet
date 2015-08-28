@@ -62,12 +62,15 @@ $(function () {
         draggable: false,
         modal: true,
         resizable: false,
-        title: "Error",
+        minHeight: 200,
+        minWidth: 400,
+        title: "错误",
         closeOnEscape: false,
         open: function () { $(".ui-dialog-titlebar-close").hide(); },
         buttons: [{
-            text: "Close",
-            click: function () { $(this).dialog("close"); }
+            text: "确定",
+            click: function () { $(this).dialog("close"); },
+            'class': "btn btn-primary"
         }]
     };
     var dlg404 = $("<div>页面不存在。</div>").dialog(dialogOptions);
