@@ -81,6 +81,8 @@ $(function () {
             dlg404.dialog("open");
         } else if (jqXHR.status == 500) {
             dlg500.dialog("open");
+        } else if (jqXHR.status == 400) {
+            //不处理ajax表单验证错误
         } else {
             alert("发生错误。");
         }
