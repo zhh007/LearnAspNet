@@ -102,6 +102,11 @@ namespace MvcFox.Controllers
         {
             return View();
         }
+
+        public ActionResult TestErrorMsg()
+        {
+            return View();
+        }
     }
 }
 

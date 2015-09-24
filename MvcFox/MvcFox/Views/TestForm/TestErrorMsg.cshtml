@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewBag.Title = "TestErrorMsg";
+}
+<style type="text/css">
+/* alert */
+.alert-top-wrapper {
+  z-index: 10000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  display: inline-block !important;
+  -webkit-transition: -webkit-transform .5s, opacity .5s;
+          transition: transform .5s, opacity .5s;
+  -webkit-transition: -webkit-transform cubic-bezier(0.19, 1, 0.22, 1) 0.5s, opacity cubic-bezier(0.19, 1, 0.22, 1) 0.5s;
+          transition: transform cubic-bezier(0.19, 1, 0.22, 1) 0.5s, opacity cubic-bezier(0.19, 1, 0.22, 1) 0.5s;
+  pointer-events: none;
+  text-align: center;
+}
+.alert-top-wrapper.ng-hide {
+  /* -webkit-transform: translateY(-100%); */
+  -ms-transform: translateY(-100%);
+  /* transform: translateY(-100%); */
+  /* opacity: 0; */
+}
+.alert-top-wrapper * {
+  pointer-events: auto;
+  pointer-events: initial;
+  text-align: left;
+  text-align: initial;
+}
+.alert-top-wrapper .alert {
+  display: inline-block;
+  min-width: 400px;
+  margin-bottom: 0;
+}
+@@media (max-width: 767px) {
+  .alert-top-wrapper .alert {
+    min-width: 80%;
+  }
+}
+</style>
+
+<h2>TestErrorMsg</h2>
+
+<div ng-show="alertShown" class="alert-top-wrapper">
+    <div class="alert alert alert-workaround alert-dismissable alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+            <span class="sr-only">Close</span>
+        </button>
+        <div ng-transclude=""><span class="glyphicon glyphicon-remove"></span><span class="ng-binding ng-scope"> 请更正这个页面中的错误。</span></div>
+    </div>
+</div>
+
+<div ng-show="alertShown" class="alert-top-wrapper ng-hide">
+    <div class="alert alert alert-workaround alert-dismissable alert-success" role="alert" alert="" type="workaround" close="hideAlert()">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+            <span class="sr-only">Close</span>
+        </button>
+        <div ng-transclude=""><span class="glyphicon glyphicon-ok"></span><span class="ng-binding ng-scope"> 保存选项成功！</span></div>
+    </div>
+</div>
+
