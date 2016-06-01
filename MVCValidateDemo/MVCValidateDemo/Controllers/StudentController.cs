@@ -13,5 +13,15 @@ namespace MVCValidateDemo.Controllers
         {
             return View();
         }
+
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        public ActionResult Create2()
+        {
+            return View();
+        }
     }
 }
