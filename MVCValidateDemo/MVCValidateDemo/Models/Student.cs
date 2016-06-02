@@ -19,7 +19,7 @@ namespace MVCValidateDemo.Models
         [DisplayName("年龄")]
         public int Age { get; set; }
 
-        [ZipCode]
+        [ZipCode(ErrorMessage = "请输入正确的{0}！")]
         [DisplayName("收件人邮编")]
         public string ZipCode { get; set; }
     }
