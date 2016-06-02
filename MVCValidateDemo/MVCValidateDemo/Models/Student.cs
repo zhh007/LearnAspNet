@@ -22,5 +22,12 @@ namespace MVCValidateDemo.Models
         [ZipCode(ErrorMessage = "请输入正确的{0}！")]
         [DisplayName("收件人邮编")]
         public string ZipCode { get; set; }
+
+        [DisplayName("生日")]
+        [Date(DataCompare.LT, "BaomingTime", "{0}必须小于{1}。")]
+        public DateTime Birthday { get; set; }
+
+        [DisplayName("报名时间")]
+        public DateTime BaomingTime { get; set; }
     }
 }

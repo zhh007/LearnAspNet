@@ -14,5 +14,70 @@ if ($.validator && $.validator.unobtrusive) {
         return checkZipcode(value);
     });
     $.validator.unobtrusive.adapters.addBool("zipcode");
-
+    /*日期比较 - 小于*/
+    $.validator.unobtrusive.adapters.addSingleVal("datelt", "toid");
+    $.validator.addMethod("datelt", function (value, element, toid) {
+        var str2 = $("#"+toid).val();
+        if (value == '' || str2 == '') {
+            return true;
+        }
+        var d1 = new Date(value);
+        var d2 = new Date(str2);
+        return d1 < d2;
+    });
+    /*日期比较 - 小于等于*/
+    $.validator.unobtrusive.adapters.addSingleVal("datele", "toid");
+    $.validator.addMethod("datele", function (value, element, toid) {
+        var str2 = $("#" + toid).val();
+        if (value == '' || str2 == '') {
+            return true;
+        }
+        var d1 = new Date(value);
+        var d2 = new Date(str2);
+        return d1 <= d2;
+    });
+    /*日期比较 - 大于*/
+    $.validator.unobtrusive.adapters.addSingleVal("dategt", "toid");
+    $.validator.addMethod("dategt", function (value, element, toid) {
+        var str2 = $("#" + toid).val();
+        if (value == '' || str2 == '') {
+            return true;
+        }
+        var d1 = new Date(value);
+        var d2 = new Date(str2);
+        return d1 > d2;
+    });
+    /*日期比较 - 大于等于*/
+    $.validator.unobtrusive.adapters.addSingleVal("datege", "toid");
+    $.validator.addMethod("datege", function (value, element, toid) {
+        var str2 = $("#" + toid).val();
+        if (value == '' || str2 == '') {
+            return true;
+        }
+        var d1 = new Date(value);
+        var d2 = new Date(str2);
+        return d1 >= d2;
+    });
+    /*日期比较 - 等于*/
+    $.validator.unobtrusive.adapters.addSingleVal("dateeq", "toid");
+    $.validator.addMethod("dateeq", function (value, element, toid) {
+        var str2 = $("#" + toid).val();
+        if (value == '' || str2 == '') {
+            return true;
+        }
+        var d1 = new Date(value);
+        var d2 = new Date(str2);
+        return d1.getTime() === d2.getTime();
+    });
+    /*日期比较 - 不等于*/
+    $.validator.unobtrusive.adapters.addSingleVal("datene", "toid");
+    $.validator.addMethod("datene", function (value, element, toid) {
+        var str2 = $("#" + toid).val();
+        if (value == '' || str2 == '') {
+            return true;
+        }
+        var d1 = new Date(value);
+        var d2 = new Date(str2);
+        return d1.getTime() !== d2.getTime();
+    });
 }

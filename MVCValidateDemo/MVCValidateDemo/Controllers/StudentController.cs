@@ -33,5 +33,10 @@ namespace MVCValidateDemo.Controllers
         {
             return View();
         }
+
+        public ActionResult Create5()
+        {
+            return View();
+        }
     }
 }

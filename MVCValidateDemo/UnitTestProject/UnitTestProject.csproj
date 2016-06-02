@@ -51,6 +51,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="TestDateAttribute.cs" />
     <Compile Include="TestZipCode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
