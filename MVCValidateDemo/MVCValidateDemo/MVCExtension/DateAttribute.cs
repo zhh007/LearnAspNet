@@ -67,6 +67,10 @@ namespace MVCValidateDemo.MVCExtension
             {
                 return new ValidationResult(string.Format("属性{0}不存在。", this.otherProperty));
             }
+            //if(!property.PropertyType.Equals(typeof(DateTime)))
+            //{
+            //    throw new ArgumentException("otherProperty参数不是DateTime类型。", otherProperty);
+            //}
             this.otherPropertyDisplayName = GetDisplayNameForProperty(validationContext.ObjectType, this.otherProperty);
 
             object value2 = property.GetValue(validationContext.ObjectInstance, null);
