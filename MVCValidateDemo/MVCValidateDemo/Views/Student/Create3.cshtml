@@ -1,0 +1,60 @@
+﻿@model MVCValidateDemo.Models.Student
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>新增学生</h2>
+<p>
+    添加自定义验证
+</p>
+@using (Html.BeginForm("index", "Student", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Age, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Age, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Age, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="保存" />
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+    $(function () {
+        //custom validation rule - checkAge
+        $.validator.addMethod("checkAge",
+           function (value, element) {
+               var age = parseInt(value, 10);
+               return age > 5 && age < 10;
+           });
+        $("#Age").rules("add", {
+            checkAge: true,
+            messages: {
+                checkAge: "年龄必须在5~10岁之间。"
+            }
+        });
+
+        //移除所有验证
+        //$("#myinput").rules("remove");
+        //移除多个验证
+        //$("#myinput").rules("remove", "min max");
+    });
+    </script>
+}
+
