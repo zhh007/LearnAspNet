@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MVCValidateDemo.MVCExtension;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -17,5 +18,9 @@ namespace MVCValidateDemo.Models
         [Required]
         [DisplayName("年龄")]
         public int Age { get; set; }
+
+        [ZipCode]
+        [DisplayName("收件人邮编")]
+        public string ZipCode { get; set; }
     }
 }

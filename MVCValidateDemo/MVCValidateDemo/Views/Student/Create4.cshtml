@@ -5,7 +5,7 @@
 
 <h2>新增学生</h2>
 <p>
-    动态增加和删除验证规则
+    验证邮政编码
 </p>
 @using (Html.BeginForm("index", "Student", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
@@ -26,6 +26,13 @@
         </div>
     </div>
     <div class="form-group">
+        @Html.LabelFor(m => m.ZipCode, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.ZipCode, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.ZipCode, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <input type="submit" class="btn btn-default" value="保存" />
         </div>
@@ -35,20 +42,7 @@
 @section Scripts {
 <script>
     $(function () {
-        $("#Age").rules("remove", "required");
-        $("#Age").rules("add", {
-            minlength: 2,
-            maxlength:2,
-            messages: {
-                minlength: "至少2个字符。",
-                minlength: "最多2个字符。"
-            }
-        });
 
-        //移除所有验证
-        //$("#myinput").rules("remove");
-        //移除多个验证
-        //$("#myinput").rules("remove", "min max");
     });
 </script>
 }

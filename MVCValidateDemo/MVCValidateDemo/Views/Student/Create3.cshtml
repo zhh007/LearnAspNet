@@ -33,9 +33,7 @@
 }
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-
-    <script>
+<script>
     $(function () {
         //custom validation rule - checkAge
         $.validator.addMethod("checkAge",
@@ -55,6 +53,6 @@
         //移除多个验证
         //$("#myinput").rules("remove", "min max");
     });
-    </script>
+</script>
 }
 

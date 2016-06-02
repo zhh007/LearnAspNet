@@ -28,5 +28,10 @@ namespace MVCValidateDemo.Controllers
         {
             return View();
         }
+
+        public ActionResult Create4()
+        {
+            return View();
+        }
     }
 }
