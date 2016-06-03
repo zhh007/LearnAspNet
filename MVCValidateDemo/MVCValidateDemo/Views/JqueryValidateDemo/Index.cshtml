@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<form id="form1">
+    <input id="something" type="text" name="userEmail" />
+    <input id="submit" type="submit" value="submit" />
+</form> 
+
+@section scripts {
+<script>
+    $(function () {
+        $('#form1').validate({
+            rules: {
+                userEmail: {
+                    email: true,
+                    required: true
+                }
+            }
+        });
+
+        //Adding rules
+        $('input[name=userEmail]').rules('add', {
+            required: true,
+            messages: {
+                required: true
+            }
+        });
+
+        //Removing rules
+        $('input[name=userEmail]').rules('remove', 'min max');
+
+        //manual approach
+        var validator = $('#form1').data('validator');
+        validator.settings.rules.userEmail = {
+            required: true
+        };
+        //or
+        $.extend(validator.settings, {
+            rules: {
+                userEmail: {
+                    email: true,
+                    required: true
+                }
+            },
+            messages: {
+                userEmail: {
+                    email: "必须是email格式",
+                    required: "请输入email"
+                }
+            }
+        });
+
+        //
+        //getting the validator
+        var validator = $(".selector").data("validator");
+        //or
+        var validator = $(".selector").validate(/* rules will be omitted */)
+    });
+</script>
+}
