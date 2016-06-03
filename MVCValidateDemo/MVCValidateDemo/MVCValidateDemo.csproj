@@ -206,6 +206,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Student.cs" />
+    <Compile Include="MVCExtension\ControllerExtensions.cs" />
     <Compile Include="MVCExtension\DateAttribute.cs" />
     <Compile Include="MVCExtension\ZipCodeAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

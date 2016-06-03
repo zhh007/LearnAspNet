@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MVCValidateDemo.Models;
+using MVCValidateDemo.MVCExtension;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -37,6 +39,32 @@ namespace MVCValidateDemo.Controllers
         public ActionResult Create5()
         {
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult Create(Student stu)
+        {
+            IEnumerable<ValidateResult> resultList = CanAdd(stu);
+            ModelState.AddModelErrors(resultList);
+
+            if(User.Identity.IsAuthenticated)
+            {
+                ModelState.Remove("Name");
+            }
+
+            if (ModelState.IsValid)
+            {
+                //save to db
+            }
+            return View();
+        }
+
+        public IEnumerable<ValidateResult> CanAdd(Student dto)
+        {
+            if (dto.Name == "NULL")
+            {
+                yield return new ValidateResult("Name", "姓名不能为NULL。");
+            }
         }
     }
 }
