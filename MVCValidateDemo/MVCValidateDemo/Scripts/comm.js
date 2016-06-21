@@ -121,7 +121,7 @@ if ($.validator && $.validator.unobtrusive) {
     /*非负整数*/
     $.validator.addMethod("nonnegint", function (value, element, param) {
         if (value == null || value == '') return true;
-        return /^\d+$/g.test(value);
+        return /^[1-9]?[1-9]+[0-9]*|0$/g.test(value);
     });
     $.validator.unobtrusive.adapters.addBool("nonnegint");
 }

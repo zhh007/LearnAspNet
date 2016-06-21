@@ -6,7 +6,7 @@ using System.Web.Mvc;
 namespace Aspnet.Mvc.Extension.AttributeExtensions
 {
     /// <summary>
-    /// 非负整数
+    /// 非负整数（正整数，零）
     /// </summary>
     public class NonNegIntegerAttribute : ValidationAttribute, IClientValidatable
     {
@@ -20,7 +20,7 @@ namespace Aspnet.Mvc.Extension.AttributeExtensions
             if (value == null) return true;
             if (string.IsNullOrEmpty(value.ToString())) return true;
 
-            string idCardReg = @"^\d+*$";
+            string idCardReg = @"^[1-9]?[1-9]+[0-9]*|0$";
             if (!Regex.IsMatch(value.ToString(), idCardReg))
             {
                 return false;
