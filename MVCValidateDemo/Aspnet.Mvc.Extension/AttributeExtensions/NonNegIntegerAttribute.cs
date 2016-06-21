@@ -6,11 +6,11 @@ using System.Web.Mvc;
 namespace Aspnet.Mvc.Extension.AttributeExtensions
 {
     /// <summary>
-    /// 有效的数字（整数，小数，零）
+    /// 非负整数
     /// </summary>
-    public class NumericAttribute : ValidationAttribute, IClientValidatable
+    public class NonNegIntegerAttribute : ValidationAttribute, IClientValidatable
     {
-        public NumericAttribute()
+        public NonNegIntegerAttribute()
         {
             ErrorMessage = "请输入正确的{0}！";
         }
@@ -20,7 +20,7 @@ namespace Aspnet.Mvc.Extension.AttributeExtensions
             if (value == null) return true;
             if (string.IsNullOrEmpty(value.ToString())) return true;
 
-            string idCardReg = @"^[+-]?(([1-9]\d*)|0)(.[0-9]+)?$";
+            string idCardReg = @"^\d+*$";
             if (!Regex.IsMatch(value.ToString(), idCardReg))
             {
                 return false;
@@ -31,7 +31,8 @@ namespace Aspnet.Mvc.Extension.AttributeExtensions
 
         public IEnumerable<ModelClientValidationRule> GetClientValidationRules(ModelMetadata metadata, ControllerContext context)
         {
-            yield return new ModelClientValidationRule { ValidationType = "numeric", ErrorMessage = this.FormatErrorMessage(metadata.DisplayName) };
+            yield return new ModelClientValidationRule { ValidationType = "nonnegint", ErrorMessage = this.FormatErrorMessage(metadata.DisplayName) };
         }
     }
 }
+

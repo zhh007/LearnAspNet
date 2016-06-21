@@ -73,8 +73,11 @@
     <Compile Include="AttributeExtensions\DateAttribute.cs" />
     <Compile Include="AttributeExtensions\IDCardAttribute.cs" />
     <Compile Include="AttributeExtensions\MobileAttribute.cs" />
+    <Compile Include="AttributeExtensions\NegIntegerAttribute.cs" />
     <Compile Include="AttributeExtensions\NoCacheAttribute.cs" />
+    <Compile Include="AttributeExtensions\NonNegIntegerAttribute.cs" />
     <Compile Include="AttributeExtensions\NumericAttribute.cs" />
+    <Compile Include="AttributeExtensions\PosIntegerAttribute.cs" />
     <Compile Include="AttributeExtensions\ZipCodeAttribute.cs" />
     <Compile Include="ControllerExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

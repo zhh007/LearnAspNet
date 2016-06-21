@@ -102,7 +102,26 @@ if ($.validator && $.validator.unobtrusive) {
 
     /*数字*/
     $.validator.addMethod("numeric", function (value, element, param) {
-        return TestRegExp(value, /^[+-]?(([1-9]\d*)|0)(.[0-9]+)?$/g);
+        if (value == null || value == '') return true;
+        return /^[+-]?(([1-9]\d*)|0)(.[0-9]+)?$/g.test(value);
     });
     $.validator.unobtrusive.adapters.addBool("numeric");
+    /*正整数*/
+    $.validator.addMethod("posint", function (value, element, param) {
+        if (value == null || value == '') return true;
+        return /^[0-9]*[1-9][0-9]*$/g.test(value);
+    });
+    $.validator.unobtrusive.adapters.addBool("posint");
+    /*负整数*/
+    $.validator.addMethod("negint", function (value, element, param) {
+        if (value == null || value == '') return true;
+        return /^-[0-9]*[1-9][0-9]*$/g.test(value);
+    });
+    $.validator.unobtrusive.adapters.addBool("negint");
+    /*非负整数*/
+    $.validator.addMethod("nonnegint", function (value, element, param) {
+        if (value == null || value == '') return true;
+        return /^\d+$/g.test(value);
+    });
+    $.validator.unobtrusive.adapters.addBool("nonnegint");
 }
