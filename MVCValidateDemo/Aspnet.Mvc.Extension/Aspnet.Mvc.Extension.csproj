@@ -71,14 +71,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttributeExtensions\DateAttribute.cs" />
-    <Compile Include="AttributeExtensions\DigitsAttribute.cs" />
+    <Compile Include="AttributeExtensions\Number\DecimalAttribute.cs" />
+    <Compile Include="AttributeExtensions\Number\DigitsAttribute.cs" />
     <Compile Include="AttributeExtensions\IDCardAttribute.cs" />
     <Compile Include="AttributeExtensions\MobileAttribute.cs" />
-    <Compile Include="AttributeExtensions\NegIntegerAttribute.cs" />
+    <Compile Include="AttributeExtensions\Number\NegDecimalAttribute.cs" />
+    <Compile Include="AttributeExtensions\Number\NegIntegerAttribute.cs" />
+    <Compile Include="AttributeExtensions\Number\NegNumericAttribute.cs" />
     <Compile Include="AttributeExtensions\NoCacheAttribute.cs" />
-    <Compile Include="AttributeExtensions\NonNegIntegerAttribute.cs" />
-    <Compile Include="AttributeExtensions\NumericAttribute.cs" />
-    <Compile Include="AttributeExtensions\PosIntegerAttribute.cs" />
+    <Compile Include="AttributeExtensions\Number\NonNegIntegerAttribute.cs" />
+    <Compile Include="AttributeExtensions\Number\NonNegNumericAttribute.cs" />
+    <Compile Include="AttributeExtensions\Number\NumericAttribute.cs" />
+    <Compile Include="AttributeExtensions\Number\PosIntegerAttribute.cs" />
     <Compile Include="AttributeExtensions\ZipCodeAttribute.cs" />
     <Compile Include="ControllerExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
