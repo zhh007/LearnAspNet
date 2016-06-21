@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttributeExtensions\DateAttribute.cs" />
+    <Compile Include="AttributeExtensions\DigitsAttribute.cs" />
     <Compile Include="AttributeExtensions\IDCardAttribute.cs" />
     <Compile Include="AttributeExtensions\MobileAttribute.cs" />
     <Compile Include="AttributeExtensions\NegIntegerAttribute.cs" />

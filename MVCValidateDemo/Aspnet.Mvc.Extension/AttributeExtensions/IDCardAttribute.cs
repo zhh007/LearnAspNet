@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
@@ -8,6 +9,7 @@ namespace Aspnet.Mvc.Extension
     /// <summary>
     /// 身份证验证
     /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
     public class IDCardAttribute : ValidationAttribute, IClientValidatable
     {
         public IDCardAttribute()

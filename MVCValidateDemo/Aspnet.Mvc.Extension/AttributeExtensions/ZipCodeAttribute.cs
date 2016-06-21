@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
@@ -8,6 +9,7 @@ namespace Aspnet.Mvc.Extension
     /// <summary>
     /// 邮编验证
     /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
     public class ZipCodeAttribute : ValidationAttribute, IClientValidatable
     {
         private readonly static Regex ZipcodeReg = new Regex("^[1-9][0-9]{5}$");

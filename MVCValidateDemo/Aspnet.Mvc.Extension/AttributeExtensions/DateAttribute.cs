@@ -12,6 +12,7 @@ namespace Aspnet.Mvc.Extension
     /// <summary>
     /// 日期比较验证
     /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
     public class DateAttribute : ValidationAttribute, IClientValidatable
     {
         private string otherProperty;

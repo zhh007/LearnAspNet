@@ -7,12 +7,12 @@ using System.Web.Mvc;
 namespace Aspnet.Mvc.Extension
 {
     /// <summary>
-    /// 非负整数（正整数，零）
+    /// 数字
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
-    public class NonNegIntegerAttribute : ValidationAttribute, IClientValidatable
+    public class DigitsAttribute : ValidationAttribute, IClientValidatable
     {
-        public NonNegIntegerAttribute()
+        public DigitsAttribute()
         {
             ErrorMessage = "请输入正确的{0}！";
         }
@@ -22,7 +22,7 @@ namespace Aspnet.Mvc.Extension
             if (value == null) return true;
             if (string.IsNullOrEmpty(value.ToString())) return true;
 
-            string idCardReg = @"^[1-9]?[1-9]+[0-9]*|0$";
+            string idCardReg = @"^\d+$";
             if (!Regex.IsMatch(value.ToString(), idCardReg))
             {
                 return false;
@@ -33,8 +33,8 @@ namespace Aspnet.Mvc.Extension
 
         public IEnumerable<ModelClientValidationRule> GetClientValidationRules(ModelMetadata metadata, ControllerContext context)
         {
-            yield return new ModelClientValidationRule { ValidationType = "nonnegint", ErrorMessage = this.FormatErrorMessage(metadata.DisplayName) };
+            //jquery.validate.js 自带验证
+            yield return new ModelClientValidationRule { ValidationType = "digits", ErrorMessage = this.FormatErrorMessage(metadata.DisplayName) };
         }
     }
 }
-
