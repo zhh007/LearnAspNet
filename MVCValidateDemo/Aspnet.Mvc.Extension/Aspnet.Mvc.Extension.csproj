@@ -70,8 +70,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttributeExtensions\DateAttribute.cs" />
     <Compile Include="AttributeExtensions\IDCardAttribute.cs" />
+    <Compile Include="AttributeExtensions\MobileAttribute.cs" />
     <Compile Include="AttributeExtensions\NoCacheAttribute.cs" />
+    <Compile Include="AttributeExtensions\ZipCodeAttribute.cs" />
+    <Compile Include="ControllerExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

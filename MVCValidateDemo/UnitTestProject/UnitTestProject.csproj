@@ -56,9 +56,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MVCValidateDemo\MVCValidateDemo.csproj">
-      <Project>{080e0a75-bc3a-42dc-b88b-1ecb0e1f4da8}</Project>
-      <Name>MVCValidateDemo</Name>
+    <ProjectReference Include="..\Aspnet.Mvc.Extension\Aspnet.Mvc.Extension.csproj">
+      <Project>{9a1af276-ef8e-4319-a60f-2acb052e8b51}</Project>
+      <Name>Aspnet.Mvc.Extension</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

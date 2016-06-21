@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace MVCValidateDemo.MVCExtension
+namespace Aspnet.Mvc.Extension
 {
     public class ValidateResult
     {

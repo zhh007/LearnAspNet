@@ -7,8 +7,11 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 
-namespace MVCValidateDemo.MVCExtension
+namespace Aspnet.Mvc.Extension
 {
+    /// <summary>
+    /// 邮编验证
+    /// </summary>
     public class ZipCodeAttribute : ValidationAttribute, IClientValidatable
     {
         private readonly static Regex ZipcodeReg = new Regex("^[1-9][0-9]{5}$");

@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MVCValidateDemo.MVCExtension;
 using System.ComponentModel.DataAnnotations;
+using Aspnet.Mvc.Extension;
 
 namespace UnitTestProject
 {

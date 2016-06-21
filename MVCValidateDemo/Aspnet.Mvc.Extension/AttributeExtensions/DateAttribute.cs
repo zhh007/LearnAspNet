@@ -5,12 +5,13 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
-using System.Web;
 using System.Web.Mvc;
 
-namespace MVCValidateDemo.MVCExtension
+namespace Aspnet.Mvc.Extension
 {
+    /// <summary>
+    /// 日期比较验证
+    /// </summary>
     public class DateAttribute : ValidationAttribute, IClientValidatable
     {
         private string otherProperty;

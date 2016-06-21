@@ -10,24 +10,33 @@ function checkIdcard(str) {
     return /^[1-9]([0-9]{16}|[0-9]{13})[xX0-9]$/.test(str);
 }
 
+function checkMobile(str) {
+    return /^((\+86)|(86))?(1)\d{10}$/.test(str);
+}
+
 if ($.validator && $.validator.unobtrusive) {
     /*身份证*/
     $.validator.addMethod("idcard", function (value, element, param) {
-        if (value == "") return true;
+        if (value == null || value == '') return true;
         return checkIdcard(value);
     });
     $.validator.unobtrusive.adapters.addBool("idcard");
     /*邮编*/
     $.validator.addMethod("zipcode", function (value, element, param) {
-        if (value == null || value == '')
-            return true;
+        if (value == null || value == '') return true;
         return checkZipcode(value);
     });
     $.validator.unobtrusive.adapters.addBool("zipcode");
+    /*手机*/
+    $.validator.addMethod("mobile", function (value, element, param) {
+        if (value == null || value == '') return true;
+        return checkMobile(value);
+    });
+    $.validator.unobtrusive.adapters.addBool("mobile");
     /*日期比较 - 小于*/
     $.validator.unobtrusive.adapters.addSingleVal("datelt", "toid");
     $.validator.addMethod("datelt", function (value, element, toid) {
-        var str2 = $("#"+toid).val();
+        var str2 = $("#" + toid).val();
         if (value == '' || str2 == '') {
             return true;
         }

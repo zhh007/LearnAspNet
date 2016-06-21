@@ -207,9 +207,6 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Student.cs" />
-    <Compile Include="MVCExtension\ControllerExtensions.cs" />
-    <Compile Include="MVCExtension\DateAttribute.cs" />
-    <Compile Include="MVCExtension\ZipCodeAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -292,6 +289,12 @@
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Aspnet.Mvc.Extension\Aspnet.Mvc.Extension.csproj">
+      <Project>{9a1af276-ef8e-4319-a60f-2acb052e8b51}</Project>
+      <Name>Aspnet.Mvc.Extension</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
