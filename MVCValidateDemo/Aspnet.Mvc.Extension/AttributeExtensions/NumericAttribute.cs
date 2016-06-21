@@ -3,13 +3,16 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
 
-namespace Aspnet.Mvc.Extension
+namespace Aspnet.Mvc.Extension.AttributeExtensions
 {
-    public class MobileAttribute : ValidationAttribute, IClientValidatable
+    /// <summary>
+    /// 数字验证
+    /// </summary>
+    public class NumericAttribute : ValidationAttribute, IClientValidatable
     {
-        public MobileAttribute()
+        public NumericAttribute()
         {
-            ErrorMessage = "{0}输入错误，格式为+861xxxxxxxxxx，其中\"+86\"为可选，x表示数字！";
+            ErrorMessage = "请输入正确的{0}！";
         }
 
         public override bool IsValid(object value)
@@ -17,7 +20,7 @@ namespace Aspnet.Mvc.Extension
             if (value == null) return true;
             if (string.IsNullOrEmpty(value.ToString())) return true;
 
-            string idCardReg = @"^((\+86)|(86))?(1)\d{10}$";
+            string idCardReg = @"^[+-]?(([1-9]\d*)|0)(.[0-9]+)?$";
             if (!Regex.IsMatch(value.ToString(), idCardReg))
             {
                 return false;
@@ -28,7 +31,7 @@ namespace Aspnet.Mvc.Extension
 
         public IEnumerable<ModelClientValidationRule> GetClientValidationRules(ModelMetadata metadata, ControllerContext context)
         {
-            yield return new ModelClientValidationRule { ValidationType = "mobile", ErrorMessage = this.FormatErrorMessage(metadata.DisplayName) };
+            yield return new ModelClientValidationRule { ValidationType = "numeric", ErrorMessage = this.FormatErrorMessage(metadata.DisplayName) };
         }
     }
 }

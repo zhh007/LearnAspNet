@@ -99,4 +99,10 @@ if ($.validator && $.validator.unobtrusive) {
         var d2 = new Date(str2);
         return d1.getTime() !== d2.getTime();
     });
+
+    /*数字*/
+    $.validator.addMethod("numeric", function (value, element, param) {
+        return TestRegExp(value, /^[+-]?(([1-9]\d*)|0)(.[0-9]+)?$/g);
+    });
+    $.validator.unobtrusive.adapters.addBool("numeric");
 }
