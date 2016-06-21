@@ -2,11 +2,21 @@
 /// <reference path="jquery.validate.js" />
 /// <reference path="jquery.validate.unobtrusive.js" />
 
-function checkZipcode(value) {
-    return /^[1-9][0-9]{5}$/g.test(value);
+function checkZipcode(str) {
+    return /^[1-9][0-9]{5}$/g.test(str);
+}
+
+function checkIdcard(str) {
+    return /^[1-9]([0-9]{16}|[0-9]{13})[xX0-9]$/.test(str);
 }
 
 if ($.validator && $.validator.unobtrusive) {
+    /*身份证*/
+    $.validator.addMethod("idcard", function (value, element, param) {
+        if (value == "") return true;
+        return checkIdcard(value);
+    });
+    $.validator.unobtrusive.adapters.addBool("idcard");
     /*邮编*/
     $.validator.addMethod("zipcode", function (value, element, param) {
         if (value == null || value == '')
