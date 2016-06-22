@@ -65,5 +65,15 @@ namespace Aspnet.Mvc.Extension
                 return false;
             return RegNegNumeric.IsMatch(str);
         }
+
+        /// <summary>
+        /// 非负数（正整数，正小数，零）
+        /// </summary>
+        public static bool CheckNonNegNumeric(string str)
+        {
+            if (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str))
+                return false;
+            return RegNonNegNumeric.IsMatch(str);
+        }
     }
 }
