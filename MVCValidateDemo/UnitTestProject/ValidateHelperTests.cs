@@ -142,7 +142,7 @@ namespace Aspnet.Mvc.Extension.Tests
         public void CheckNegNumericTest()
         {
             var fails = new List<string>();
-            var list = new string[] { "-123", "-12.3", "-0.01", "-0.00100" };
+            var list = new string[] { "-123", "-12.3", "-0.01", "-0.00100", "-1.00" };
             foreach (var item in list)
             {
                 if (!ValidateHelper.CheckNegNumeric(item))
@@ -151,7 +151,7 @@ namespace Aspnet.Mvc.Extension.Tests
                 }
             }
 
-            var list2 = new string[] { "-1.2.3", "-001354566", "-00", "-00.00", "123", "1.23", "+123", "+1.23" };
+            var list2 = new string[] { "-1.2.3", "-001354566", "-00", "0", "-00.00", "-0.00", "123", "1.23", "+123", "+1.23" };
             foreach (var item in list2)
             {
                 if (ValidateHelper.CheckNegNumeric(item))
@@ -170,7 +170,7 @@ namespace Aspnet.Mvc.Extension.Tests
         public void CheckNonNegNumericTest()
         {
             var fails = new List<string>();
-            var list = new string[] { "123", "12.3", "0", "+123", "+12.3", "0.01", "0.00100" };
+            var list = new string[] { "123", "12.3", "0", "+123", "+12.3", "0.01", "0.00100", "1.00", "+1.00" };
             foreach (var item in list)
             {
                 if (!ValidateHelper.CheckNonNegNumeric(item))
@@ -183,6 +183,62 @@ namespace Aspnet.Mvc.Extension.Tests
             foreach (var item in list2)
             {
                 if (ValidateHelper.CheckNonNegNumeric(item))
+                {
+                    fails.Add(item);
+                }
+            }
+
+            if (fails.Count > 0)
+            {
+                Assert.Fail("测试失败：" + string.Join(", ", fails.ToArray()));
+            }
+        }
+
+        [TestMethod()]
+        public void CheckPosNumericTest()
+        {
+            var fails = new List<string>();
+            var list = new string[] { "123000", "12.3", "0.01", "0.00100", "1.00", "+123000", "+12.3", "+0.01", "+0.00100", "+1.00" };
+            foreach (var item in list)
+            {
+                if (!ValidateHelper.CheckPosNumeric(item))
+                {
+                    fails.Add(item);
+                }
+            }
+
+            var list2 = new string[] { "1.2.3", "001354566", "00", "00.00", "0", "0.00000", "-123000", "-12.3", "-0.01", "-0.00100" };
+            foreach (var item in list2)
+            {
+                if (ValidateHelper.CheckPosNumeric(item))
+                {
+                    fails.Add(item);
+                }
+            }
+
+            if (fails.Count > 0)
+            {
+                Assert.Fail("测试失败：" + string.Join(", ", fails.ToArray()));
+            }
+        }
+
+        [TestMethod()]
+        public void CheckNonPosNumericTest()
+        {
+            var fails = new List<string>();
+            var list = new string[] { "-123", "-12.3", "0", "-0.01", "-0.00100", "-1.00" };
+            foreach (var item in list)
+            {
+                if (!ValidateHelper.CheckNonPosNumeric(item))
+                {
+                    fails.Add(item);
+                }
+            }
+
+            var list2 = new string[] { "-1.2.3", "-001354566", "-00", "-00.00", "123", "1.23", "1.00" };
+            foreach (var item in list2)
+            {
+                if (ValidateHelper.CheckNonPosNumeric(item))
                 {
                     fails.Add(item);
                 }
