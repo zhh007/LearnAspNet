@@ -17,6 +17,11 @@ namespace Aspnet.Mvc.Extension
         private readonly static Regex RegNegNumeric = new Regex(@"^(-[1-9]+\d*(\.\d*[1-9]?\d*)?)$|^(-0\.\d*[1-9]\d*)$");
         private readonly static Regex RegNonPosNumeric = new Regex(@"^(-[1-9]+\d*(\.\d*[1-9]?\d*)?)$|^(-0\.\d*[1-9]\d*)$|^0$");
         private readonly static Regex RegNonNegNumeric = new Regex(@"^([+]?[1-9]+\d*(\.\d*[1-9]?\d*)?)$|^([+]?0\.\d*[1-9]\d*)$|^0$");
+        private readonly static Regex RegInteger = new Regex(@"^[+-]?[1-9][0-9]*$|^0$");
+        private readonly static Regex RegPosInteger = new Regex(@"");
+        private readonly static Regex RegNegInteger = new Regex(@"");
+        private readonly static Regex RegNonPosInteger = new Regex(@"");
+        private readonly static Regex RegNonNegInteger = new Regex(@"");
 
         /// <summary>
         /// 邮政编码
@@ -98,7 +103,44 @@ namespace Aspnet.Mvc.Extension
             return RegNonNegNumeric.IsMatch(str);
         }
 
+        /// <summary>
+        /// 整数（正整数，负整数，零）
+        /// </summary>
         public static bool CheckInteger(string str)
+        {
+            if (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str))
+                return false;
+            return RegInteger.IsMatch(str);
+        }
+
+        /// <summary>
+        /// 正整数
+        /// </summary>
+        public static bool CheckPosInteger(string str)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 负整数
+        /// </summary>
+        public static bool CheckNegInteger(string str)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 非正整数（负整数，零）
+        /// </summary>
+        public static bool CheckNonPosInteger(string str)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 非负整数（正整数，零）
+        /// </summary>
+        public static bool CheckNonNegInteger(string str)
         {
             throw new NotImplementedException();
         }

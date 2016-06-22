@@ -249,5 +249,33 @@ namespace Aspnet.Mvc.Extension.Tests
                 Assert.Fail("测试失败：" + string.Join(", ", fails.ToArray()));
             }
         }
+
+        [TestMethod()]
+        public void CheckIntegerTest()
+        {
+            var fails = new List<string>();
+            var list = new string[] { "12300", "0", "+12300", "-12300", };
+            foreach (var item in list)
+            {
+                if (!ValidateHelper.CheckInteger(item))
+                {
+                    fails.Add(item);
+                }
+            }
+
+            var list2 = new string[] { "1.2.3", "001", "00", "-1.0", "+1.0", "+0", "-0" };
+            foreach (var item in list2)
+            {
+                if (ValidateHelper.CheckInteger(item))
+                {
+                    fails.Add(item);
+                }
+            }
+
+            if (fails.Count > 0)
+            {
+                Assert.Fail("测试失败：" + string.Join(", ", fails.ToArray()));
+            }
+        }
     }
 }
