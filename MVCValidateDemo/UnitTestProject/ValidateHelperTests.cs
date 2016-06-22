@@ -113,85 +113,30 @@ namespace Aspnet.Mvc.Extension.Tests
         [TestMethod()]
         public void CheckNumericTest()
         {
-            var r = ValidateHelper.CheckNumeric("123");
-            Assert.IsTrue(r);
+            var fails = new List<string>();
+            var list = new string[] { "123", "12.3", "0", "+123", "+12.3", "-123", "-12.3", "0.01", "0.00100" };
+            foreach (var item in list)
+            {
+                if(!ValidateHelper.CheckNumeric(item))
+                {
+                    fails.Add(item);
+                }
+            }
+
+            var list2 = new string[] { "1.2.3", "001354566", "00", "00.00" };
+            foreach (var item in list2)
+            {
+                if (ValidateHelper.CheckNumeric(item))
+                {
+                    fails.Add(item);
+                }
+            }
+
+            if (fails.Count > 0)
+            {
+                Assert.Fail("测试失败：" + string.Join(", ", fails.ToArray()));
+            }
         }
 
-        [TestMethod()]
-        public void CheckNumericTest2()
-        {
-            var r = ValidateHelper.CheckNumeric("12.3");
-            Assert.IsTrue(r);
-        }
-
-        [TestMethod()]
-        public void CheckNumericTest3()
-        {
-            var r = ValidateHelper.CheckNumeric("0");
-            Assert.IsTrue(r);
-        }
-
-        [TestMethod()]
-        public void CheckNumericTest4()
-        {
-            var r = ValidateHelper.CheckNumeric("+123");
-            Assert.IsTrue(r);
-        }
-
-        [TestMethod()]
-        public void CheckNumericTest5()
-        {
-            var r = ValidateHelper.CheckNumeric("+12.3");
-            Assert.IsTrue(r);
-        }
-
-        [TestMethod()]
-        public void CheckNumericTest6()
-        {
-            var r = ValidateHelper.CheckNumeric("-123");
-            Assert.IsTrue(r);
-        }
-
-        [TestMethod()]
-        public void CheckNumericTest7()
-        {
-            var r = ValidateHelper.CheckNumeric("-12.3");
-            Assert.IsTrue(r);
-        }
-
-        [TestMethod()]
-        public void CheckNumericTest8()
-        {
-            var r = ValidateHelper.CheckNumeric("1.2.3");
-            Assert.IsFalse(r);
-        }
-
-        [TestMethod()]
-        public void CheckNumericTest9()
-        {
-            var r = ValidateHelper.CheckNumeric("001354566");
-            Assert.IsFalse(r);
-        }
-
-        [TestMethod()]
-        public void CheckNumericTest10()
-        {
-            var r = ValidateHelper.CheckNumeric("00");
-            Assert.IsFalse(r);
-        }
-
-        [TestMethod()]
-        public void CheckNumericTest11()
-        {
-            var r = ValidateHelper.CheckNumeric("00.00");
-            Assert.IsFalse(r);
-        }
-
-        [TestMethod()]
-        public void CheckNumericTest12()
-        {
-            var r = ValidateHelper.CheckNumeric("0.00100");
-            Assert.IsTrue(r);
-        }
     }
 }
