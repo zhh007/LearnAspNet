@@ -107,8 +107,91 @@ namespace Aspnet.Mvc.Extension.Tests
         {
             var r = ValidateHelper.CheckIDCard("44172319910215491");
             Assert.IsFalse(r);
-        } 
+        }
         #endregion
 
+        [TestMethod()]
+        public void CheckNumericTest()
+        {
+            var r = ValidateHelper.CheckNumeric("123");
+            Assert.IsTrue(r);
+        }
+
+        [TestMethod()]
+        public void CheckNumericTest2()
+        {
+            var r = ValidateHelper.CheckNumeric("12.3");
+            Assert.IsTrue(r);
+        }
+
+        [TestMethod()]
+        public void CheckNumericTest3()
+        {
+            var r = ValidateHelper.CheckNumeric("0");
+            Assert.IsTrue(r);
+        }
+
+        [TestMethod()]
+        public void CheckNumericTest4()
+        {
+            var r = ValidateHelper.CheckNumeric("+123");
+            Assert.IsTrue(r);
+        }
+
+        [TestMethod()]
+        public void CheckNumericTest5()
+        {
+            var r = ValidateHelper.CheckNumeric("+12.3");
+            Assert.IsTrue(r);
+        }
+
+        [TestMethod()]
+        public void CheckNumericTest6()
+        {
+            var r = ValidateHelper.CheckNumeric("-123");
+            Assert.IsTrue(r);
+        }
+
+        [TestMethod()]
+        public void CheckNumericTest7()
+        {
+            var r = ValidateHelper.CheckNumeric("-12.3");
+            Assert.IsTrue(r);
+        }
+
+        [TestMethod()]
+        public void CheckNumericTest8()
+        {
+            var r = ValidateHelper.CheckNumeric("1.2.3");
+            Assert.IsFalse(r);
+        }
+
+        [TestMethod()]
+        public void CheckNumericTest9()
+        {
+            var r = ValidateHelper.CheckNumeric("001354566");
+            Assert.IsFalse(r);
+        }
+
+        [TestMethod()]
+        public void CheckNumericTest10()
+        {
+            var r = ValidateHelper.CheckNumeric("00");
+            Assert.IsFalse(r);
+        }
+
+        [TestMethod()]
+        public void CheckNumericTest11()
+        {
+            var r = ValidateHelper.CheckNumeric("00.00");
+            Assert.IsFalse(r);
+        }
+
+        [TestMethod()]
+        public void CheckNumericTest12()
+        {
+            var r = ValidateHelper.CheckNumeric("0.00100");
+            Assert.IsTrue(r);
+        }
     }
 }
