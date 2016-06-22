@@ -52,8 +52,9 @@
   </Choose>
   <ItemGroup>
     <Compile Include="TestDateAttribute.cs" />
-    <Compile Include="TestZipCode.cs" />
+    <Compile Include="ZipCodeAttributeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ValidateHelperTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aspnet.Mvc.Extension\Aspnet.Mvc.Extension.csproj">

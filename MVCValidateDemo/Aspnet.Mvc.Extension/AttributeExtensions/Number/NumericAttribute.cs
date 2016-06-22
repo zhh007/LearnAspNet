@@ -19,16 +19,14 @@ namespace Aspnet.Mvc.Extension
 
         public override bool IsValid(object value)
         {
-            if (value == null) return true;
-            if (string.IsNullOrEmpty(value.ToString())) return true;
+            if (value == null)
+                return true;
 
-            string idCardReg = @"^[+-]?(([1-9]\d*)|0)(.[0-9]+)?$";
-            if (!Regex.IsMatch(value.ToString(), idCardReg))
-            {
-                return false;
-            }
+            string str = value.ToString();
+            if (string.IsNullOrEmpty(str))
+                return true;
 
-            return true;
+            return ValidateHelper.CheckNumeric(str);
         }
 
         public IEnumerable<ModelClientValidationRule> GetClientValidationRules(ModelMetadata metadata, ControllerContext context)

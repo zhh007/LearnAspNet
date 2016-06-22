@@ -6,7 +6,7 @@ using Aspnet.Mvc.Extension;
 namespace UnitTestProject
 {
     [TestClass]
-    public class TestZipCode
+    public class ZipCodeAttributeTests
     {
         [TestMethod]
         public void TestMethod1()

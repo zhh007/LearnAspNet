@@ -12,8 +12,6 @@ namespace Aspnet.Mvc.Extension
     [AttributeUsage(AttributeTargets.Property)]
     public class ZipCodeAttribute : ValidationAttribute, IClientValidatable
     {
-        private readonly static Regex ZipcodeReg = new Regex("^[1-9][0-9]{5}$");
-
         //public ZipCodeAttribute()
         //{
         //    base.ErrorMessage = "请输入正确的{0}！";
@@ -26,20 +24,14 @@ namespace Aspnet.Mvc.Extension
 
         public override bool IsValid(object value)
         {
-            bool result = true;
             if (value == null)
-            {
-                result = true;
-            }
-            else if (string.IsNullOrEmpty(value.ToString()))
-            {
-                result = true;
-            }
-            else
-            {
-                result = ZipcodeReg.IsMatch(value.ToString());
-            }
-            return result;
+                return true;
+
+            string str = value.ToString();
+            if (string.IsNullOrEmpty(str))
+                return true;
+
+            return ValidateHelper.CheckZipcode(str);
         }
 
         public IEnumerable<ModelClientValidationRule> GetClientValidationRules(ModelMetadata metadata, ControllerContext context)
