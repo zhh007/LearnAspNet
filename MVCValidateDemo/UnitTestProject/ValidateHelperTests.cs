@@ -277,5 +277,117 @@ namespace Aspnet.Mvc.Extension.Tests
                 Assert.Fail("测试失败：" + string.Join(", ", fails.ToArray()));
             }
         }
+
+        [TestMethod()]
+        public void CheckPosIntegerTest()
+        {
+            var fails = new List<string>();
+            var list = new string[] { "12300", "+12300", };
+            foreach (var item in list)
+            {
+                if (!ValidateHelper.CheckPosInteger(item))
+                {
+                    fails.Add(item);
+                }
+            }
+
+            var list2 = new string[] { "1.2.3", "001", "00", "-1.0", "+1.0", "+0", "-0", "0", "-12300", };
+            foreach (var item in list2)
+            {
+                if (ValidateHelper.CheckPosInteger(item))
+                {
+                    fails.Add(item);
+                }
+            }
+
+            if (fails.Count > 0)
+            {
+                Assert.Fail("测试失败：" + string.Join(", ", fails.ToArray()));
+            }
+        }
+
+        [TestMethod()]
+        public void CheckNegIntegerTest()
+        {
+            var fails = new List<string>();
+            var list = new string[] { "-12300" };
+            foreach (var item in list)
+            {
+                if (!ValidateHelper.CheckNegInteger(item))
+                {
+                    fails.Add(item);
+                }
+            }
+
+            var list2 = new string[] { "1.2.3", "001", "00", "-1.0", "+1.0", "+0", "-0", "12300", "0", "+12300", };
+            foreach (var item in list2)
+            {
+                if (ValidateHelper.CheckNegInteger(item))
+                {
+                    fails.Add(item);
+                }
+            }
+
+            if (fails.Count > 0)
+            {
+                Assert.Fail("测试失败：" + string.Join(", ", fails.ToArray()));
+            }
+        }
+
+        [TestMethod()]
+        public void CheckNonPosIntegerTest()
+        {
+            var fails = new List<string>();
+            var list = new string[] {  "0", "-12300", };
+            foreach (var item in list)
+            {
+                if (!ValidateHelper.CheckNonPosInteger(item))
+                {
+                    fails.Add(item);
+                }
+            }
+
+            var list2 = new string[] { "1.2.3", "001", "00", "-1.0", "+1.0", "+0", "-0", "12300", "+12300"};
+            foreach (var item in list2)
+            {
+                if (ValidateHelper.CheckNonPosInteger(item))
+                {
+                    fails.Add(item);
+                }
+            }
+
+            if (fails.Count > 0)
+            {
+                Assert.Fail("测试失败：" + string.Join(", ", fails.ToArray()));
+            }
+        }
+
+        [TestMethod()]
+        public void CheckNonNegIntegerTest()
+        {
+            var fails = new List<string>();
+            var list = new string[] { "12300", "0", "+12300", };
+            foreach (var item in list)
+            {
+                if (!ValidateHelper.CheckNonNegInteger(item))
+                {
+                    fails.Add(item);
+                }
+            }
+
+            var list2 = new string[] { "1.2.3", "001", "00", "-1.0", "+1.0", "+0", "-0", "-12300" };
+            foreach (var item in list2)
+            {
+                if (ValidateHelper.CheckNonNegInteger(item))
+                {
+                    fails.Add(item);
+                }
+            }
+
+            if (fails.Count > 0)
+            {
+                Assert.Fail("测试失败：" + string.Join(", ", fails.ToArray()));
+            }
+        }
     }
 }

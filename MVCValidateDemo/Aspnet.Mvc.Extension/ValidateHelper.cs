@@ -18,10 +18,10 @@ namespace Aspnet.Mvc.Extension
         private readonly static Regex RegNonPosNumeric = new Regex(@"^(-[1-9]+\d*(\.\d*[1-9]?\d*)?)$|^(-0\.\d*[1-9]\d*)$|^0$");
         private readonly static Regex RegNonNegNumeric = new Regex(@"^([+]?[1-9]+\d*(\.\d*[1-9]?\d*)?)$|^([+]?0\.\d*[1-9]\d*)$|^0$");
         private readonly static Regex RegInteger = new Regex(@"^[+-]?[1-9][0-9]*$|^0$");
-        private readonly static Regex RegPosInteger = new Regex(@"");
-        private readonly static Regex RegNegInteger = new Regex(@"");
-        private readonly static Regex RegNonPosInteger = new Regex(@"");
-        private readonly static Regex RegNonNegInteger = new Regex(@"");
+        private readonly static Regex RegPosInteger = new Regex(@"^[+]?[1-9][0-9]*$");
+        private readonly static Regex RegNegInteger = new Regex(@"^-[1-9][0-9]*$");
+        private readonly static Regex RegNonPosInteger = new Regex(@"^-[1-9][0-9]*$|^0$");
+        private readonly static Regex RegNonNegInteger = new Regex(@"^[+]?[1-9][0-9]*$|^0$");
 
         /// <summary>
         /// 邮政编码
@@ -118,7 +118,9 @@ namespace Aspnet.Mvc.Extension
         /// </summary>
         public static bool CheckPosInteger(string str)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str))
+                return false;
+            return RegPosInteger.IsMatch(str);
         }
 
         /// <summary>
@@ -126,7 +128,9 @@ namespace Aspnet.Mvc.Extension
         /// </summary>
         public static bool CheckNegInteger(string str)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str))
+                return false;
+            return RegNegInteger.IsMatch(str);
         }
 
         /// <summary>
@@ -134,7 +138,9 @@ namespace Aspnet.Mvc.Extension
         /// </summary>
         public static bool CheckNonPosInteger(string str)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str))
+                return false;
+            return RegNonPosInteger.IsMatch(str);
         }
 
         /// <summary>
@@ -142,7 +148,9 @@ namespace Aspnet.Mvc.Extension
         /// </summary>
         public static bool CheckNonNegInteger(string str)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str))
+                return false;
+            return RegNonNegInteger.IsMatch(str);
         }
     }
 }
