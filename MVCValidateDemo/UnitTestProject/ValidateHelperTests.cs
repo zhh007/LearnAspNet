@@ -11,6 +11,7 @@ namespace Aspnet.Mvc.Extension.Tests
     [TestClass()]
     public class ValidateHelperTests
     {
+        #region Zipcode
         [TestMethod()]
         public void CheckZipcodeTest()
         {
@@ -31,6 +32,9 @@ namespace Aspnet.Mvc.Extension.Tests
             var r = ValidateHelper.CheckZipcode("1234567");
             Assert.IsFalse(r);
         }
+        #endregion
+
+        #region Mobile
 
         [TestMethod()]
         public void CheckMobileTest()
@@ -73,6 +77,9 @@ namespace Aspnet.Mvc.Extension.Tests
             var r = ValidateHelper.CheckMobile("1374561235");
             Assert.IsFalse(r);
         }
+        #endregion
+
+        #region IDCard
 
         [TestMethod()]
         public void CheckIDCardTest()
@@ -100,6 +107,8 @@ namespace Aspnet.Mvc.Extension.Tests
         {
             var r = ValidateHelper.CheckIDCard("44172319910215491");
             Assert.IsFalse(r);
-        }
+        } 
+        #endregion
+
     }
 }
