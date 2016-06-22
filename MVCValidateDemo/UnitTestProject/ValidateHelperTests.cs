@@ -117,7 +117,7 @@ namespace Aspnet.Mvc.Extension.Tests
             var list = new string[] { "123", "12.3", "0", "+123", "+12.3", "-123", "-12.3", "0.01", "0.00100" };
             foreach (var item in list)
             {
-                if(!ValidateHelper.CheckNumeric(item))
+                if (!ValidateHelper.CheckNumeric(item))
                 {
                     fails.Add(item);
                 }
@@ -138,5 +138,32 @@ namespace Aspnet.Mvc.Extension.Tests
             }
         }
 
+        [TestMethod()]
+        public void CheckNegNumericTest()
+        {
+            var fails = new List<string>();
+            var list = new string[] { "-123", "-12.3", "-0.01", "-0.00100" };
+            foreach (var item in list)
+            {
+                if (!ValidateHelper.CheckNegNumeric(item))
+                {
+                    fails.Add(item);
+                }
+            }
+
+            var list2 = new string[] { "-1.2.3", "-001354566", "-00", "-00.00", "123", "1.23", "+123", "+1.23" };
+            foreach (var item in list2)
+            {
+                if (ValidateHelper.CheckNegNumeric(item))
+                {
+                    fails.Add(item);
+                }
+            }
+
+            if (fails.Count > 0)
+            {
+                Assert.Fail("测试失败：" + string.Join(", ", fails.ToArray()));
+            }
+        }
     }
 }
