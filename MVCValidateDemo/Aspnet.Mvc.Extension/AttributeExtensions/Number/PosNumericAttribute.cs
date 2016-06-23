@@ -6,12 +6,12 @@ using System.Web.Mvc;
 namespace Aspnet.Mvc.Extension
 {
     /// <summary>
-    /// 有效的数字（整数，小数，零）
+    /// 正数（正整数，正小数）
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
-    public class NumericAttribute : ValidationAttribute, IClientValidatable
+    public class PosNumericAttribute : ValidationAttribute, IClientValidatable
     {
-        public NumericAttribute()
+        public PosNumericAttribute()
         {
             ErrorMessage = "请输入正确的{0}！";
         }
@@ -25,12 +25,12 @@ namespace Aspnet.Mvc.Extension
             if (string.IsNullOrEmpty(str))
                 return true;
 
-            return ValidateHelper.CheckNumeric(str);
+            return ValidateHelper.CheckPosNumeric(str);
         }
 
         public IEnumerable<ModelClientValidationRule> GetClientValidationRules(ModelMetadata metadata, ControllerContext context)
         {
-            yield return new ModelClientValidationRule { ValidationType = "numeric", ErrorMessage = this.FormatErrorMessage(metadata.DisplayName) };
+            yield return new ModelClientValidationRule { ValidationType = "posnumeric", ErrorMessage = this.FormatErrorMessage(metadata.DisplayName) };
         }
     }
 }

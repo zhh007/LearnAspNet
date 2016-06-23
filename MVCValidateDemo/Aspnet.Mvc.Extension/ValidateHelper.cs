@@ -13,6 +13,8 @@ namespace Aspnet.Mvc.Extension
         private readonly static Regex RegMobile = new Regex(@"^((\+86)|(86))?(1)\d{10}$");
         private readonly static Regex RegIDCard = new Regex(@"^[1-9]([0-9]{16}|[0-9]{13})[xX0-9]$");
 
+        private readonly static Regex RegDigits = new Regex(@"^\d+$");
+
         private readonly static Regex RegNumeric = new Regex(@"^[+-]?([1-9]\d*)(\.\d*)?$|^[+-]?0(\.\d*[1-9]\d*)?$");
         private readonly static Regex RegPosNumeric = new Regex(@"^([+]?[1-9]+\d*(\.\d*[1-9]?\d*)?)$|^([+]?0\.\d*[1-9]\d*)$");
         private readonly static Regex RegNegNumeric = new Regex(@"^(-[1-9]+\d*(\.\d*[1-9]?\d*)?)$|^(-0\.\d*[1-9]\d*)$");
@@ -28,6 +30,7 @@ namespace Aspnet.Mvc.Extension
         private readonly static Regex RegDecimal = new Regex(@"^[+-]?([1-9]\d*)\.\d*$|^[+-]?0\.\d*[1-9]\d*$");
         private readonly static Regex RegPosDecimal = new Regex(@"^[+]?([1-9]\d*)\.\d*$|^[+]?0\.\d*[1-9]\d*$");
         private readonly static Regex RegNegDecimal = new Regex(@"^-([1-9]\d*)\.\d*$|^-0\.\d*[1-9]\d*$");
+
 
         /// <summary>
         /// 邮政编码
@@ -57,6 +60,17 @@ namespace Aspnet.Mvc.Extension
             if (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str))
                 return false;
             return RegIDCard.IsMatch(str);
+        }
+
+        /// <summary>
+        /// 任意数字
+        /// </summary>
+        /// <returns></returns>
+        public static bool CheckDigits(string str)
+        {
+            if (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str))
+                return false;
+            return RegDigits.IsMatch(str);
         }
 
         /// <summary>

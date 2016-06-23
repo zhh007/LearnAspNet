@@ -12,10 +12,10 @@ namespace Aspnet.Mvc.Extension
     [AttributeUsage(AttributeTargets.Property)]
     public class ZipCodeAttribute : ValidationAttribute, IClientValidatable
     {
-        //public ZipCodeAttribute()
-        //{
-        //    base.ErrorMessage = "请输入正确的{0}！";
-        //}
+        public ZipCodeAttribute()
+        {
+            base.ErrorMessage = "请输入正确的{0}！";
+        }
 
         //public override string FormatErrorMessage(string name)
         //{

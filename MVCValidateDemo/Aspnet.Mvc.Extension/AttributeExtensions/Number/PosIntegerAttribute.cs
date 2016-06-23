@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text.RegularExpressions;
 using System.Web.Mvc;
 
 namespace Aspnet.Mvc.Extension
@@ -19,21 +18,19 @@ namespace Aspnet.Mvc.Extension
 
         public override bool IsValid(object value)
         {
-            if (value == null) return true;
-            if (string.IsNullOrEmpty(value.ToString())) return true;
+            if (value == null)
+                return true;
 
-            string idCardReg = @"^[0-9]*[1-9][0-9]*$";
-            if (!Regex.IsMatch(value.ToString(), idCardReg))
-            {
-                return false;
-            }
+            string str = value.ToString();
+            if (string.IsNullOrEmpty(str))
+                return true;
 
-            return true;
+            return ValidateHelper.CheckPosInteger(str);
         }
 
         public IEnumerable<ModelClientValidationRule> GetClientValidationRules(ModelMetadata metadata, ControllerContext context)
         {
-            yield return new ModelClientValidationRule { ValidationType = "posint", ErrorMessage = this.FormatErrorMessage(metadata.DisplayName) };
+            yield return new ModelClientValidationRule { ValidationType = "posinteger", ErrorMessage = this.FormatErrorMessage(metadata.DisplayName) };
         }
     }
 }
