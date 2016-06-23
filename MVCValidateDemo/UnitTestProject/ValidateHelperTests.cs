@@ -11,122 +11,20 @@ namespace Aspnet.Mvc.Extension.Tests
     [TestClass()]
     public class ValidateHelperTests
     {
-        #region Zipcode
-        [TestMethod()]
-        public void CheckZipcodeTest()
-        {
-            var r = ValidateHelper.CheckZipcode("310000");
-            Assert.IsTrue(r);
-        }
-
-        [TestMethod()]
-        public void CheckZipcodeTest2()
-        {
-            var r = ValidateHelper.CheckZipcode("12345");
-            Assert.IsFalse(r);
-        }
-
-        [TestMethod()]
-        public void CheckZipcodeTest3()
-        {
-            var r = ValidateHelper.CheckZipcode("1234567");
-            Assert.IsFalse(r);
-        }
-        #endregion
-
-        #region Mobile
-
-        [TestMethod()]
-        public void CheckMobileTest()
-        {
-            var r = ValidateHelper.CheckMobile("13745612358");
-            Assert.IsTrue(r);
-        }
-
-        [TestMethod()]
-        public void CheckMobileTest2()
-        {
-            var r = ValidateHelper.CheckMobile("8613745612358");
-            Assert.IsTrue(r);
-        }
-
-        [TestMethod()]
-        public void CheckMobileTest3()
-        {
-            var r = ValidateHelper.CheckMobile("+8613745612358");
-            Assert.IsTrue(r);
-        }
-
-        [TestMethod()]
-        public void CheckMobileTest4()
-        {
-            var r = ValidateHelper.CheckMobile("23745612358");
-            Assert.IsFalse(r);
-        }
-
-        [TestMethod()]
-        public void CheckMobileTest5()
-        {
-            var r = ValidateHelper.CheckMobile("137456123589");
-            Assert.IsFalse(r);
-        }
-
-        [TestMethod()]
-        public void CheckMobileTest6()
-        {
-            var r = ValidateHelper.CheckMobile("1374561235");
-            Assert.IsFalse(r);
-        }
-        #endregion
-
-        #region IDCard
-
-        [TestMethod()]
-        public void CheckIDCardTest()
-        {
-            var r = ValidateHelper.CheckIDCard("36042419781114235X");
-            Assert.IsTrue(r);
-        }
-
-        [TestMethod()]
-        public void CheckIDCardTest2()
-        {
-            var r = ValidateHelper.CheckIDCard("441723199102154913");
-            Assert.IsTrue(r);
-        }
-
-        [TestMethod()]
-        public void CheckIDCardTest3()
-        {
-            var r = ValidateHelper.CheckIDCard("36042419781114235X0");
-            Assert.IsFalse(r);
-        }
-
-        [TestMethod()]
-        public void CheckIDCardTest4()
-        {
-            var r = ValidateHelper.CheckIDCard("44172319910215491");
-            Assert.IsFalse(r);
-        }
-        #endregion
-
-        [TestMethod()]
-        public void CheckNumericTest()
+        public void Run(Func<string, bool> func, List<string> successList, List<string> failList)
         {
             var fails = new List<string>();
-            var list = new string[] { "123", "12.3", "0", "+123", "+12.3", "-123", "-12.3", "0.01", "0.00100", "1.00", "+1.00", "-1.00" };
-            foreach (var item in list)
+            foreach (var item in successList)
             {
-                if (!ValidateHelper.CheckNumeric(item))
+                if (func(item) == false)
                 {
                     fails.Add(item);
                 }
             }
 
-            var list2 = new string[] { "1.2.3", "001354566", "00", "00.00" };
-            foreach (var item in list2)
+            foreach (var item in failList)
             {
-                if (ValidateHelper.CheckNumeric(item))
+                if (func(item) == true)
                 {
                     fails.Add(item);
                 }
@@ -136,342 +34,198 @@ namespace Aspnet.Mvc.Extension.Tests
             {
                 Assert.Fail("测试失败：" + string.Join(", ", fails.ToArray()));
             }
+        }
+
+        [TestMethod()]
+        public void CheckZipcodeTest()
+        {
+            Run(p => ValidateHelper.CheckZipcode(p),
+                new List<string> {
+                    "310000"
+                },
+                new List<string> {
+                    "12345", "1234567"
+                });
+        }
+
+        [TestMethod()]
+        public void CheckMobileTest()
+        {
+            Run(p => ValidateHelper.CheckMobile(p),
+                new List<string> {
+                "13745612358","8613745612358","+8613745612358"
+                },
+                new List<string> {
+                "23745612358", "137456123589", "1374561235"
+                });
+        }
+
+        [TestMethod()]
+        public void CheckIDCardTest()
+        {
+            Run(p => ValidateHelper.CheckIDCard(p),
+                new List<string> {
+                "36042419781114235X","441723199102154913"
+                },
+                new List<string> {
+                "36042419781114235X0", "44172319910215491"
+                });
+        }
+
+        [TestMethod()]
+        public void CheckNumericTest()
+        {
+            Run(p => ValidateHelper.CheckNumeric(p),
+                new List<string> {
+                    "123", "12.3", "0", "+123", "+12.3", "-123", "-12.3", "0.01", "0.00100", "1.00", "+1.00", "-1.00"
+                },
+                new List<string> {
+                    "1.2.3", "001354566", "00", "00.00"
+                });
         }
 
         [TestMethod()]
         public void CheckNegNumericTest()
         {
-            var fails = new List<string>();
-            var list = new string[] { "-123", "-12.3", "-0.01", "-0.00100", "-1.00" };
-            foreach (var item in list)
-            {
-                if (!ValidateHelper.CheckNegNumeric(item))
-                {
-                    fails.Add(item);
-                }
-            }
-
-            var list2 = new string[] { "-1.2.3", "-001354566", "-00", "0", "-00.00", "-0.00", "123", "1.23", "+123", "+1.23" };
-            foreach (var item in list2)
-            {
-                if (ValidateHelper.CheckNegNumeric(item))
-                {
-                    fails.Add(item);
-                }
-            }
-
-            if (fails.Count > 0)
-            {
-                Assert.Fail("测试失败：" + string.Join(", ", fails.ToArray()));
-            }
+            Run(p => ValidateHelper.CheckNegNumeric(p),
+                new List<string> {
+                    "-123", "-12.3", "-0.01", "-0.00100", "-1.00"
+                },
+                new List<string> {
+                    "-1.2.3", "-001354566", "-00", "0", "-00.00", "-0.00", "123", "1.23", "+123", "+1.23"
+                });
         }
 
         [TestMethod()]
         public void CheckNonNegNumericTest()
         {
-            var fails = new List<string>();
-            var list = new string[] { "123", "12.3", "0", "+123", "+12.3", "0.01", "0.00100", "1.00", "+1.00" };
-            foreach (var item in list)
-            {
-                if (!ValidateHelper.CheckNonNegNumeric(item))
-                {
-                    fails.Add(item);
-                }
-            }
-
-            var list2 = new string[] { "-1.2.3", "-001354566", "-00", "-00.00", "-123", "-1.23", "-1.00" };
-            foreach (var item in list2)
-            {
-                if (ValidateHelper.CheckNonNegNumeric(item))
-                {
-                    fails.Add(item);
-                }
-            }
-
-            if (fails.Count > 0)
-            {
-                Assert.Fail("测试失败：" + string.Join(", ", fails.ToArray()));
-            }
+            Run(p => ValidateHelper.CheckNonNegNumeric(p),
+                new List<string> {
+                    "123", "12.3", "0", "+123", "+12.3", "0.01", "0.00100", "1.00", "+1.00"
+                },
+                new List<string> {
+                    "-1.2.3", "-001354566", "-00", "-00.00", "-123", "-1.23", "-1.00"
+                });
         }
 
         [TestMethod()]
         public void CheckPosNumericTest()
         {
-            var fails = new List<string>();
-            var list = new string[] { "123000", "12.3", "0.01", "0.00100", "1.00", "+123000", "+12.3", "+0.01", "+0.00100", "+1.00" };
-            foreach (var item in list)
-            {
-                if (!ValidateHelper.CheckPosNumeric(item))
-                {
-                    fails.Add(item);
-                }
-            }
-
-            var list2 = new string[] { "1.2.3", "001354566", "00", "00.00", "0", "0.00000", "-123000", "-12.3", "-0.01", "-0.00100", "-1.00" };
-            foreach (var item in list2)
-            {
-                if (ValidateHelper.CheckPosNumeric(item))
-                {
-                    fails.Add(item);
-                }
-            }
-
-            if (fails.Count > 0)
-            {
-                Assert.Fail("测试失败：" + string.Join(", ", fails.ToArray()));
-            }
+            Run(p => ValidateHelper.CheckPosNumeric(p),
+                new List<string> {
+                    "123000", "12.3", "0.01", "0.00100", "1.00", "+123000", "+12.3", "+0.01", "+0.00100", "+1.00"
+                },
+                new List<string> {
+                    "1.2.3", "001354566", "00", "00.00", "0", "0.00000", "-123000", "-12.3", "-0.01", "-0.00100", "-1.00"
+                });
         }
 
         [TestMethod()]
         public void CheckNonPosNumericTest()
         {
-            var fails = new List<string>();
-            var list = new string[] { "-123", "-12.3", "0", "-0.01", "-0.00100", "-1.00" };
-            foreach (var item in list)
-            {
-                if (!ValidateHelper.CheckNonPosNumeric(item))
-                {
-                    fails.Add(item);
-                }
-            }
-
-            var list2 = new string[] { "-1.2.3", "-001354566", "-00", "-00.00", "123", "1.23", "1.00", "+1.00" };
-            foreach (var item in list2)
-            {
-                if (ValidateHelper.CheckNonPosNumeric(item))
-                {
-                    fails.Add(item);
-                }
-            }
-
-            if (fails.Count > 0)
-            {
-                Assert.Fail("测试失败：" + string.Join(", ", fails.ToArray()));
-            }
+            Run(p => ValidateHelper.CheckNonPosNumeric(p),
+                new List<string> {
+                    "-123", "-12.3", "0", "-0.01", "-0.00100", "-1.00"
+                },
+                new List<string> {
+                    "-1.2.3", "-001354566", "-00", "-00.00", "123", "1.23", "1.00", "+1.00"
+                });
         }
 
         [TestMethod()]
         public void CheckIntegerTest()
         {
-            var fails = new List<string>();
-            var list = new string[] { "12300", "0", "+12300", "-12300", };
-            foreach (var item in list)
-            {
-                if (!ValidateHelper.CheckInteger(item))
-                {
-                    fails.Add(item);
-                }
-            }
-
-            var list2 = new string[] { "1.2.3", "001", "00", "-1.0", "+1.0", "+0", "-0" };
-            foreach (var item in list2)
-            {
-                if (ValidateHelper.CheckInteger(item))
-                {
-                    fails.Add(item);
-                }
-            }
-
-            if (fails.Count > 0)
-            {
-                Assert.Fail("测试失败：" + string.Join(", ", fails.ToArray()));
-            }
+            Run(p => ValidateHelper.CheckInteger(p),
+                new List<string> {
+                    "12300", "0", "+12300", "-12300"
+                },
+                new List<string> {
+                    "1.2.3", "001", "00", "-1.0", "+1.0", "+0", "-0"
+                });
         }
 
         [TestMethod()]
         public void CheckPosIntegerTest()
         {
-            var fails = new List<string>();
-            var list = new string[] { "12300", "+12300", };
-            foreach (var item in list)
-            {
-                if (!ValidateHelper.CheckPosInteger(item))
-                {
-                    fails.Add(item);
-                }
-            }
-
-            var list2 = new string[] { "1.2.3", "001", "00", "-1.0", "+1.0", "+0", "-0", "0", "-12300", };
-            foreach (var item in list2)
-            {
-                if (ValidateHelper.CheckPosInteger(item))
-                {
-                    fails.Add(item);
-                }
-            }
-
-            if (fails.Count > 0)
-            {
-                Assert.Fail("测试失败：" + string.Join(", ", fails.ToArray()));
-            }
+            Run(p => ValidateHelper.CheckPosInteger(p),
+                new List<string> {
+                    "12300", "+12300"
+                },
+                new List<string> {
+                    "1.2.3", "001", "00", "-1.0", "+1.0", "+0", "-0", "0", "-12300"
+                });
         }
 
         [TestMethod()]
         public void CheckNegIntegerTest()
         {
-            var fails = new List<string>();
-            var list = new string[] { "-12300" };
-            foreach (var item in list)
-            {
-                if (!ValidateHelper.CheckNegInteger(item))
-                {
-                    fails.Add(item);
-                }
-            }
-
-            var list2 = new string[] { "1.2.3", "001", "00", "-1.0", "+1.0", "+0", "-0", "12300", "0", "+12300", };
-            foreach (var item in list2)
-            {
-                if (ValidateHelper.CheckNegInteger(item))
-                {
-                    fails.Add(item);
-                }
-            }
-
-            if (fails.Count > 0)
-            {
-                Assert.Fail("测试失败：" + string.Join(", ", fails.ToArray()));
-            }
+            Run(p => ValidateHelper.CheckNegInteger(p),
+                new List<string> {
+                    "-12300"
+                },
+                new List<string> {
+                    "1.2.3", "001", "00", "-1.0", "+1.0", "+0", "-0", "12300", "0", "+12300"
+                });
         }
 
         [TestMethod()]
         public void CheckNonPosIntegerTest()
         {
-            var fails = new List<string>();
-            var list = new string[] { "0", "-12300", };
-            foreach (var item in list)
-            {
-                if (!ValidateHelper.CheckNonPosInteger(item))
-                {
-                    fails.Add(item);
-                }
-            }
-
-            var list2 = new string[] { "1.2.3", "001", "00", "-1.0", "+1.0", "+0", "-0", "12300", "+12300" };
-            foreach (var item in list2)
-            {
-                if (ValidateHelper.CheckNonPosInteger(item))
-                {
-                    fails.Add(item);
-                }
-            }
-
-            if (fails.Count > 0)
-            {
-                Assert.Fail("测试失败：" + string.Join(", ", fails.ToArray()));
-            }
+            Run(p => ValidateHelper.CheckNonPosInteger(p),
+                new List<string> {
+                    "0", "-12300"
+                },
+                new List<string> {
+                    "1.2.3", "001", "00", "-1.0", "+1.0", "+0", "-0", "12300", "+12300"
+                });
         }
 
         [TestMethod()]
         public void CheckNonNegIntegerTest()
         {
-            var fails = new List<string>();
-            var list = new string[] { "12300", "0", "+12300", };
-            foreach (var item in list)
-            {
-                if (!ValidateHelper.CheckNonNegInteger(item))
-                {
-                    fails.Add(item);
-                }
-            }
-
-            var list2 = new string[] { "1.2.3", "001", "00", "-1.0", "+1.0", "+0", "-0", "-12300" };
-            foreach (var item in list2)
-            {
-                if (ValidateHelper.CheckNonNegInteger(item))
-                {
-                    fails.Add(item);
-                }
-            }
-
-            if (fails.Count > 0)
-            {
-                Assert.Fail("测试失败：" + string.Join(", ", fails.ToArray()));
-            }
+            Run(p => ValidateHelper.CheckNonNegInteger(p),
+                new List<string> {
+                    "12300", "0", "+12300"
+                },
+                new List<string> {
+                    "1.2.3", "001", "00", "-1.0", "+1.0", "+0", "-0", "-12300"
+                });
         }
 
         [TestMethod()]
         public void CheckDecimalTest()
         {
-            var fails = new List<string>();
-            var list = new string[] { "1.00", "0.00100", "+1.00", "+0.00100", "-1.00", "-0.00100" };
-            foreach (var item in list)
-            {
-                if (!ValidateHelper.CheckDecimal(item))
-                {
-                    fails.Add(item);
-                }
-            }
-
-            var list2 = new string[] { "1.2.3", "001", "00", "12", "0", "+0", "-0", "-12300" };
-            foreach (var item in list2)
-            {
-                if (ValidateHelper.CheckDecimal(item))
-                {
-                    fails.Add(item);
-                }
-            }
-
-            if (fails.Count > 0)
-            {
-                Assert.Fail("测试失败：" + string.Join(", ", fails.ToArray()));
-            }
+            Run(p => ValidateHelper.CheckDecimal(p),
+                new List<string> {
+                    "1.00", "0.00100", "+1.00", "+0.00100", "-1.00", "-0.00100"
+                },
+                new List<string> {
+                    "1.2.3", "001", "00", "12", "0", "+0", "-0", "-12300"
+                });
         }
 
         [TestMethod()]
         public void CheckPosDecimalTest()
         {
-            var fails = new List<string>();
-            var list = new string[] { "1.00", "0.00100", "+1.00", "+0.00100" };
-            foreach (var item in list)
-            {
-                if (!ValidateHelper.CheckPosDecimal(item))
-                {
-                    fails.Add(item);
-                }
-            }
-
-            var list2 = new string[] { "1.2.3", "001", "00", "12", "0", "+0", "-0", "-12300", "-1.00", "-0.00100" };
-            foreach (var item in list2)
-            {
-                if (ValidateHelper.CheckPosDecimal(item))
-                {
-                    fails.Add(item);
-                }
-            }
-
-            if (fails.Count > 0)
-            {
-                Assert.Fail("测试失败：" + string.Join(", ", fails.ToArray()));
-            }
+            Run(p => ValidateHelper.CheckPosDecimal(p),
+                new List<string> {
+                    "1.00", "0.00100", "+1.00", "+0.00100"
+                },
+                new List<string> {
+                    "1.2.3", "001", "00", "12", "0", "+0", "-0", "-12300", "-1.00", "-0.00100"
+                });
         }
 
         [TestMethod()]
         public void CheckNegDecimalTest()
         {
-            var fails = new List<string>();
-            var list = new string[] {  "-1.00", "-0.00100" };
-            foreach (var item in list)
-            {
-                if (!ValidateHelper.CheckNegDecimal(item))
-                {
-                    fails.Add(item);
-                }
-            }
-
-            var list2 = new string[] { "1.2.3", "001", "00", "12", "0", "+0", "-0", "-12300", "1.00", "0.00100", "+1.00", "+0.00100" };
-            foreach (var item in list2)
-            {
-                if (ValidateHelper.CheckNegDecimal(item))
-                {
-                    fails.Add(item);
-                }
-            }
-
-            if (fails.Count > 0)
-            {
-                Assert.Fail("测试失败：" + string.Join(", ", fails.ToArray()));
-            }
+            Run(p => ValidateHelper.CheckNegDecimal(p),
+                new List<string> {
+                    "-1.00", "-0.00100"
+                },
+                new List<string> {
+                    "1.2.3", "001", "00", "12", "0", "+0", "-0", "-12300", "1.00", "0.00100", "+1.00", "+0.00100"
+                });
         }
     }
 }
