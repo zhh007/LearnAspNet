@@ -12,16 +12,22 @@ namespace Aspnet.Mvc.Extension
         private readonly static Regex RegZipcode = new Regex(@"^[1-9][0-9]{5}$");
         private readonly static Regex RegMobile = new Regex(@"^((\+86)|(86))?(1)\d{10}$");
         private readonly static Regex RegIDCard = new Regex(@"^[1-9]([0-9]{16}|[0-9]{13})[xX0-9]$");
-        private readonly static Regex RegNumeric = new Regex(@"^[+-]?(([1-9]\d*)|0)(\.\d*[1-9]\d*)?$");
+
+        private readonly static Regex RegNumeric = new Regex(@"^[+-]?([1-9]\d*)(\.\d*)?$|^[+-]?0(\.\d*[1-9]\d*)?$");
         private readonly static Regex RegPosNumeric = new Regex(@"^([+]?[1-9]+\d*(\.\d*[1-9]?\d*)?)$|^([+]?0\.\d*[1-9]\d*)$");
         private readonly static Regex RegNegNumeric = new Regex(@"^(-[1-9]+\d*(\.\d*[1-9]?\d*)?)$|^(-0\.\d*[1-9]\d*)$");
         private readonly static Regex RegNonPosNumeric = new Regex(@"^(-[1-9]+\d*(\.\d*[1-9]?\d*)?)$|^(-0\.\d*[1-9]\d*)$|^0$");
         private readonly static Regex RegNonNegNumeric = new Regex(@"^([+]?[1-9]+\d*(\.\d*[1-9]?\d*)?)$|^([+]?0\.\d*[1-9]\d*)$|^0$");
+
         private readonly static Regex RegInteger = new Regex(@"^[+-]?[1-9][0-9]*$|^0$");
         private readonly static Regex RegPosInteger = new Regex(@"^[+]?[1-9][0-9]*$");
         private readonly static Regex RegNegInteger = new Regex(@"^-[1-9][0-9]*$");
         private readonly static Regex RegNonPosInteger = new Regex(@"^-[1-9][0-9]*$|^0$");
         private readonly static Regex RegNonNegInteger = new Regex(@"^[+]?[1-9][0-9]*$|^0$");
+
+        private readonly static Regex RegDecimal = new Regex(@"^[+-]?([1-9]\d*)\.\d*$|^[+-]?0\.\d*[1-9]\d*$");
+        private readonly static Regex RegPosDecimal = new Regex(@"^[+]?([1-9]\d*)\.\d*$|^[+]?0\.\d*[1-9]\d*$");
+        private readonly static Regex RegNegDecimal = new Regex(@"^-([1-9]\d*)\.\d*$|^-0\.\d*[1-9]\d*$");
 
         /// <summary>
         /// 邮政编码
@@ -151,6 +157,36 @@ namespace Aspnet.Mvc.Extension
             if (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str))
                 return false;
             return RegNonNegInteger.IsMatch(str);
+        }
+
+        /// <summary>
+        /// 小数（正小数，负小数）
+        /// </summary>
+        public static bool CheckDecimal(string str)
+        {
+            if (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str))
+                return false;
+            return RegDecimal.IsMatch(str);
+        }
+
+        /// <summary>
+        /// 正小数
+        /// </summary>
+        public static bool CheckPosDecimal(string str)
+        {
+            if (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str))
+                return false;
+            return RegPosDecimal.IsMatch(str);
+        }
+
+        /// <summary>
+        /// 负小数
+        /// </summary>
+        public static bool CheckNegDecimal(string str)
+        {
+            if (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str))
+                return false;
+            return RegNegDecimal.IsMatch(str);
         }
     }
 }
