@@ -13,5 +13,10 @@ namespace MVCValidateDemo.Controllers
         {
             return View();
         }
+
+        public ActionResult InputLimit()
+        {
+            return View();
+        }
     }
 }

@@ -65,7 +65,7 @@ namespace Aspnet.Mvc.Extension.Tests
         {
             Run(p => ValidateHelper.CheckIDCard(p),
                 new List<string> {
-                "36042419781114235X","441723199102154913"
+                "36042419781114235X","441723199102154913", "110105710923582"
                 },
                 new List<string> {
                 "36042419781114235X0", "44172319910215491"

@@ -1,0 +1,139 @@
+﻿
+@{
+    ViewBag.Title = "InputLimit";
+}
+
+<h2>InputLimit</h2>
+
+<div class="row">
+    <form class="form-horizontal" method="post" onsubmit="return false;">
+        <div class="form-group">
+            <label class="col-md-2 control-label">邮政编码</label>
+            <div class="col-md-10">
+                <input type="text" id="inpZipCode" name="inpZipCode" class="form-control" data-val="true" data-val-zipcode="请输入正确的邮政编码。" />
+                <span class="field-validation-valid text-danger" data-valmsg-for="inpZipCode" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">身份证</label>
+            <div class="col-md-10">
+                <input type="text" id="inpIDCard" name="inpIDCard" class="form-control" data-val="true" data-val-idcard="请输入正确的身份证。" />
+                <span class="field-validation-valid text-danger" data-valmsg-for="inpIDCard" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">手机号码</label>
+            <div class="col-md-10">
+                <input type="text" id="inpMobile" name="inpMobile" class="form-control" data-val="true" data-val-mobile="请输入正确的手机号码。" />
+                <span class="field-validation-valid text-danger" data-valmsg-for="inpMobile" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">日期</label>
+            <div class="col-md-10">
+                <input type="text" id="inpDate" name="inpDate" class="form-control" data-val="true" data-val-date="请输入正确的日期。" />
+                <span class="field-validation-valid text-danger" data-valmsg-for="inpDate" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">有效的数字</label>
+            <div class="col-md-10">
+                <input type="text" id="inpNumeric" name="inpNumeric" class="form-control" data-val="true" data-val-numeric="输入错误。" />
+                <span class="field-validation-valid text-danger" data-valmsg-for="inpNumeric" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">正数</label>
+            <div class="col-md-10">
+                <input type="text" id="inpPosNumeric" name="inpPosNumeric" class="form-control" data-val="true" data-val-posnumeric="输入错误。" />
+                <span class="field-validation-valid text-danger" data-valmsg-for="inpPosNumeric" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">负数</label>
+            <div class="col-md-10">
+                <input type="text" id="inpNegNumeric" name="inpNegNumeric" class="form-control" data-val="true" data-val-negnumeric="输入错误。" />
+                <span class="field-validation-valid text-danger" data-valmsg-for="inpNegNumeric" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">非正数</label>
+            <div class="col-md-10">
+                <input type="text" id="inpNonPosNumeric" name="inpNonPosNumeric" class="form-control" data-val="true" data-val-nonposnumeric="输入错误。" />
+                <span class="field-validation-valid text-danger" data-valmsg-for="inpNonPosNumeric" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">非负数</label>
+            <div class="col-md-10">
+                <input type="text" id="inpNonNegNumeric" name="inpNonNegNumeric" class="form-control" data-val="true" data-val-nonnegnumeric="输入错误。" />
+                <span class="field-validation-valid text-danger" data-valmsg-for="inpNonNegNumeric" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">整数</label>
+            <div class="col-md-10">
+                <input type="text" id="inpInteger" name="inpInteger" class="form-control" data-val="true" data-val-integer="输入错误。" />
+                <span class="field-validation-valid text-danger" data-valmsg-for="inpInteger" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">正整数</label>
+            <div class="col-md-10">
+                <input type="text" id="inpPosInteger" name="inpPosInteger" class="form-control" data-val="true" data-val-posinteger="输入错误。" />
+                <span class="field-validation-valid text-danger" data-valmsg-for="inpPosInteger" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">负整数</label>
+            <div class="col-md-10">
+                <input type="text" id="inpNegInteger" name="inpNegInteger" class="form-control" data-val="true" data-val-neginteger="输入错误。" />
+                <span class="field-validation-valid text-danger" data-valmsg-for="inpNegInteger" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">非正整数</label>
+            <div class="col-md-10">
+                <input type="text" id="inpNonPosInteger" name="inpNonPosInteger" class="form-control" data-val="true" data-val-nonposinteger="输入错误。" />
+                <span class="field-validation-valid text-danger" data-valmsg-for="inpNonPosInteger" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">非负整数</label>
+            <div class="col-md-10">
+                <input type="text" id="inpNonNegInteger" name="inpNonNegInteger" class="form-control" data-val="true" data-val-nonneginteger="输入错误。" />
+                <span class="field-validation-valid text-danger" data-valmsg-for="inpNonNegInteger" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">小数</label>
+            <div class="col-md-10">
+                <input type="text" id="inpDecimal" name="inpDecimal" class="form-control" data-val="true" data-val-decimal="输入错误。" />
+                <span class="field-validation-valid text-danger" data-valmsg-for="inpDecimal" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">正小数</label>
+            <div class="col-md-10">
+                <input type="text" id="inpPosDecimal" name="inpPosDecimal" class="form-control" data-val="true" data-val-posdecimal="输入错误。" />
+                <span class="field-validation-valid text-danger" data-valmsg-for="inpPosDecimal" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">负小数</label>
+            <div class="col-md-10">
+                <input type="text" id="inpNegDecimal" name="inpNegDecimal" class="form-control" data-val="true" data-val-negdecimal="输入错误。" />
+                <span class="field-validation-valid text-danger" data-valmsg-for="inpNegDecimal" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="btn btn-default" value="保存" />
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+
+}
