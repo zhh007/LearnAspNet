@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<div class="row text-center">
+    <ul class="pagination">
+        <li><a disabled="disabled">首页</a></li>
+        <li><a disabled="disabled"><span aria-hidden="true">«</span></a></li>
+        <li class="active"><a href="javascript:void(0)">1</a></li>
+        <li><a href="/Cust/GetChildren/2" onclick="$.ajax({url:$(this).attr('href'),success:function(data,status,xhr){$('#').html(data);},beforeSend:function(a,b){a.abort(); paged_Children(b.url); }});return false;">2</a></li>
+        <li><a href="/Cust/GetChildren/3" onclick="$.ajax({url:$(this).attr('href'),success:function(data,status,xhr){$('#').html(data);},beforeSend:function(a,b){a.abort(); paged_Children(b.url); }});return false;">3</a></li>
+        <li><a href="/Cust/GetChildren/4" onclick="$.ajax({url:$(this).attr('href'),success:function(data,status,xhr){$('#').html(data);},beforeSend:function(a,b){a.abort(); paged_Children(b.url); }});return false;">4</a></li>
+        <li><a href="/Cust/GetChildren/5" onclick="$.ajax({url:$(this).attr('href'),success:function(data,status,xhr){$('#').html(data);},beforeSend:function(a,b){a.abort(); paged_Children(b.url); }});return false;">5</a></li>
+        <li><a href="/Cust/GetChildren/6" onclick="$.ajax({url:$(this).attr('href'),success:function(data,status,xhr){$('#').html(data);},beforeSend:function(a,b){a.abort(); paged_Children(b.url); }});return false;">...</a></li>
+        <li><a href="/Cust/GetChildren/2" onclick="$.ajax({url:$(this).attr('href'),success:function(data,status,xhr){$('#').html(data);},beforeSend:function(a,b){a.abort(); paged_Children(b.url); }});return false;"><span aria-hidden="true">»</span></a></li>
+        <li><a href="/Cust/GetChildren/8" onclick="$.ajax({url:$(this).attr('href'),success:function(data,status,xhr){$('#').html(data);},beforeSend:function(a,b){a.abort(); paged_Children(b.url); }});return false;">尾页</a></li>
+    </ul>
+    <div class="pagination">
+        <button class="btn btn-default">abc</button>
+        @*<div style="height:34px; line-height:34px;">第1/8页，共160条，每页20条&nbsp;&nbsp;&nbsp;&nbsp;</div>*@
+    </div>
+</div>

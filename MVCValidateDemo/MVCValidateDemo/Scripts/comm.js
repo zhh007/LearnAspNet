@@ -2,6 +2,225 @@
 /// <reference path="jquery.validate.js" />
 /// <reference path="jquery.validate.unobtrusive.js" />
 
+/*
+*功能：字符串去两边空格
+*参数：
+*返回：
+*/
+String.prototype.trim = function () {
+    return this.replace(/(^\s*)|(\s*$)/g, "");
+}
+
+/*
+*功能：取字符串长度
+*参数：
+*返回：
+*/
+String.prototype.len = function () {
+    return this.replace(/[^\x00-\xff]/g, "aa").length;
+}
+
+/*
+*小数格式化
+*参数：n-待格式化数字,b-保留小数点位数
+*返回：格式化后的数字
+*/
+function formatNumber(n, b) {
+    return Math.round(n * Math.pow(10, b)) / Math.pow(10, b);
+}
+
+/*
+*功能：判断日期类型是否为YYYY-MM-DD或YYYY/MM/DD
+*参数：d-待检参数
+*返回：格式正确返回true,否则返回false
+*/
+function isDateFormat(d) {
+    var reg = /^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2})$/;
+    return reg.test(d.trim());
+}
+
+/*
+*功能：判断日期类型是否为hh:mm:ss(24小时制)
+*参数：t-待检参数
+*返回：格式正确返回true,否则返回false
+*/
+function isTimeFormat(t) {
+    var reg = /^((20|21|22|23|[0-1]\d)\:[0-5][0-9])(\:[0-5][0-9])?$/;
+    return reg.test(t.trim());
+}
+
+/*
+*功能：判断日期类型是否为YYYY-MM-DD hh:mm:ss(或YYYY/MM/DD hh:mm:ss)
+*参数：d-待检参数
+*返回：格式正确返回true,否则返回false
+*/
+function IsDateTimeFormat(d) {
+    var reg = /^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$/;
+    return reg.test(d.trim());
+}
+
+/*
+*功能：日期有效性判断(YYYY-MM-DD)
+*参数：d-待检参数
+*返回：有效返回true,否则返回false
+*/
+function isDate(d) {
+    d = d.replace(/\s+/g, ""); //去所有空格
+    var reg = /^(\d{4})-(\d{1,2})-(\d{1,2})$/;
+    if (reg.test(d)) {
+        var y = parseInt(RegExp.$1);
+        var m = parseInt(RegExp.$2);
+        var d = parseInt(RegExp.$3);
+        switch (m) {
+            case 1:
+            case 3:
+            case 5:
+            case 7:
+            case 8:
+            case 10:
+            case 12:
+                if (d > 31) {
+                    return false;
+                } else {
+                    return true;
+                }
+                break;
+            case 2:
+                if ((y % 4 == 0 && d > 29) || ((y % 4 != 0 && d > 28))) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+                break;
+            case 4:
+            case 6:
+            case 9:
+            case 11:
+                if (d > 30) {
+                    return false;
+                } else {
+                    return true;
+                }
+                break;
+            default:
+                return false;
+        }
+    }
+    else {
+        return false;
+    }
+}
+
+//校验合法时间   
+function isDate2(e) {
+    if (!/^(\d{4})(\.|\/|\-)(\d{1,2})(\.|\/|\-)(\d{1,2})$/.test(e)) {
+        return false;
+    }
+    var y = parseInt(RegExp.$1);
+    var m = parseInt(RegExp.$3);
+    var d = parseInt(RegExp.$5);
+    var D = new Date(y, m - 1, d);
+    return (D.getFullYear() == y && (D.getMonth() + 1) == m && D.getDate() == d);
+};
+
+/*
+*功能：判断输入的EMAIL格式是否正确
+*参数：e-待检参数
+*返回：Email返回true,否则返回false
+*/
+function isEmail(e) {
+    var reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+    return reg.test(e.trim());
+}
+
+/*
+Phone : /^((\(\d{2,3}\))|(\d{3}\-))?(\(0\d{2,3}\)|0\d{2,3}-)?[1-9]\d{6,7}(\-\d{1,4})?$/
+Mobile : /^((\(\d{2,3}\))|(\d{3}\-))?13\d{9}$/
+Url : /^http:\/\/[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/
+IdCard : /^\d{15}(\d{2}[A-Za-z0-9])?$/
+QQ : /^[1-9]\d{4,8}$/
+*/
+
+/*
+*功能：校验ip地址的格式
+*参数：i-待检参数
+*返回：格式正确返回true,否则返回false
+*/
+function isIP(i) {
+    var reg = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
+    if (reg.test(i.trim())) {
+        if (RegExp.$1 < 256 && RegExp.$2 < 256 && RegExp.$3 < 256 && RegExp.$4 < 256) return true;
+    }
+    return false;
+}
+
+//比较时间 格式 yyyy-mm-dd hh:mi:ss
+function dateCompare(beginTime, endTime) {
+    var beginTimes = beginTime.substring(0, 10).split('-');
+    var endTimes = endTime.substring(0, 10).split('-');
+
+    beginTime = beginTimes[1] + '-' + beginTimes[2] + '-' + beginTimes[0] + ' ' + beginTime.substring(10, 19);
+    endTime = endTimes[1] + '-' + endTimes[2] + '-' + endTimes[0] + ' ' + endTime.substring(10, 19);
+
+    // alert(Date.parse(endTime));alert(Date.parse(beginTime));
+
+    var a = (Date.parse(endTime) - Date.parse(beginTime)) / 3600 / 1000;
+
+    if (a < 0) {
+        return -1;
+    } else if (a > 0) {
+        return 1;
+    } else if (a == 0) {
+        return 0;
+    } else {
+        return 'exception'
+    }
+}
+
+function getFrameWindow(framename) {
+    var ifr = window.frames[framename];
+    return ifr;
+}
+function createHideFrame(framename) {
+    var frame = document.createElement("iframe");
+    frame.name = framename;
+    frame.id = framename;
+    document.body.appendChild(frame);
+    frame.style.width = "0px";
+    frame.style.height = "0px";
+    frame.style.border = "0px";
+    var frameWindow = window.frames[framename];
+    return frameWindow;
+}
+
+function openDialog(opt) {
+    var cmd = "resizable: " + (opt.resizable ? opt.resizable : "no") + ";";
+    cmd += "status: " + (opt.status ? opt.status : "no") + ";";
+    cmd += "scroll: " + (opt.scroll ? opt.scroll : "no") + ";";
+    cmd += "help: " + (opt.help ? opt.help : "no") + ";";
+    cmd += "center: " + (opt.center ? opt.center : "no") + ";";
+    cmd += "dialogWidth: " + (opt.dialogWidth ? opt.dialogWidth : "700px") + ";";
+    cmd += "dialogHeight: " + (opt.dialogHeight ? opt.dialogHeight : "600px") + ";";
+
+    if (opt.boxurl.indexOf("?") != -1)
+        opt.boxurl += "&tmp=" + Math.random();
+    else
+        opt.boxurl += "?tmp=" + Math.random();
+
+    if (opt.url.indexOf("?") != -1)
+        opt.url += "&isdialog=1&tmp=" + Math.random();
+    else
+        opt.url += "?isdialog=1&tmp=" + Math.random();
+
+    var args = extend({ __url: opt.url }, opt.args, true);
+
+    if (opt.modal)
+        return window.showModalDialog(opt.boxurl, args, cmd);
+    else
+        return window.showModelessDialog(opt.boxurl, args, cmd);
+}
+
 (function ($) {
     $.extend($, {
         //邮编
