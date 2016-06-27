@@ -212,31 +212,31 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="assets\bootstrap\bootstrap.css" />
+    <Content Include="assets\bootstrap\bootstrap.min.css" />
     <Content Include="favicon.ico" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="assets\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
+    <Content Include="assets\css\Site.css" />
     <Content Include="Scripts\ai.0.22.9-build00167.js" />
     <Content Include="Scripts\ai.0.22.9-build00167.min.js" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="assets\bootstrap\bootstrap.js" />
+    <Content Include="assets\bootstrap\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\comm.js" />
-    <Content Include="Scripts\jquery-1.10.2.js" />
-    <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\respond.js" />
-    <Content Include="Scripts\respond.min.js" />
+    <None Include="assets\jquery\jquery-1.10.2.intellisense.js" />
+    <Content Include="assets\js\comm.js" />
+    <Content Include="assets\jquery\jquery-1.10.2.js" />
+    <Content Include="assets\jquery\jquery-1.10.2.min.js" />
+    <None Include="assets\jquery\jquery.validate-vsdoc.js" />
+    <Content Include="assets\jquery\jquery.validate.js" />
+    <Content Include="assets\jquery\jquery.validate.min.js" />
+    <Content Include="assets\jquery\jquery.validate.unobtrusive.js" />
+    <Content Include="assets\jquery\jquery.validate.unobtrusive.min.js" />
+    <Content Include="assets\js\modernizr-2.6.2.js" />
+    <Content Include="assets\bootstrap\respond.js" />
+    <Content Include="assets\bootstrap\respond.min.js" />
     <Content Include="Scripts\snippets\idcard.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
@@ -287,12 +287,12 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="assets\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="assets\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="assets\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
-    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="assets\jquery\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aspnet.Mvc.Extension\Aspnet.Mvc.Extension.csproj">
