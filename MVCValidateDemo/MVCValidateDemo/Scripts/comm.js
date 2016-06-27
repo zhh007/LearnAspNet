@@ -239,56 +239,56 @@
     //输入限制
     function limitInput() {
         //邮政编码（0-9）
-        $("input[data-val-zipcode]").css("ime-mode", "disabled").bind("keypress", function () {
-            if (event.keyCode < 48 || event.keyCode > 57) { event.returnValue = false; return false; }
+        $("input[data-val-zipcode]").css("ime-mode", "disabled").bind("keypress", function (e) {
+            if (e.keyCode < 48 || e.keyCode > 57) { return false; }
         });
 
         //身份证（0-9，x，X）
-        $("input[data-val-idcard]").css("ime-mode", "disabled").bind("keypress", function () {
-            if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode != 88 && event.keyCode != 120)) { event.returnValue = false; return false; }
+        $("input[data-val-idcard]").css("ime-mode", "disabled").bind("keypress", function (e) {
+            if ((e.keyCode < 48 || e.keyCode > 57) && (e.keyCode != 88 && e.keyCode != 120)) { return false; }
         });
 
         //手机号码（0-9，+）
-        $("input[data-val-mobile]").css("ime-mode", "disabled").bind("keypress", function () {
-            if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode != 43)) { event.returnValue = false; return false; }
+        $("input[data-val-mobile]").css("ime-mode", "disabled").bind("keypress", function (e) {
+            if ((e.keyCode < 48 || e.keyCode > 57) && (e.keyCode != 43)) { return false; }
         });
 
         /*日期（0-9，-，/）*/
         $("input[data-val-date],input[data-val-datelt],input[data-val-datele],input[data-val-dategt],input[data-val-datege],input[data-val-dateeq],input[data-val-datene]")
-            .css("ime-mode", "disabled").bind("keypress", function () {
-                if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode != 45 && event.keyCode != 47)) { event.returnValue = false; return false; }
+            .css("ime-mode", "disabled").bind("keypress", function (e) {
+                if ((e.keyCode < 48 || e.keyCode > 57) && (e.keyCode != 45 && e.keyCode != 47)) { return false; }
             });
 
         /*有效的数字，小数（0-9，.，+，-）*/
-        $("input[data-val-numeric],input[data-val-decimal]").css("ime-mode", "disabled").bind("keypress", function () {
-            if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode != 46 && event.keyCode != 43 && event.keyCode != 45)) { event.returnValue = false; return false; }
+        $("input[data-val-numeric],input[data-val-decimal]").css("ime-mode", "disabled").bind("keypress", function (e) {
+            if ((e.keyCode < 48 || e.keyCode > 57) && (e.keyCode != 46 && e.keyCode != 43 && e.keyCode != 45)) { return false; }
         });
 
         //正数，非负数，正小数（0-9，.，+）
         $("input[data-val-posnumeric],input[data-val-nonnegnumeric],input[data-val-posdecimal]")
-            .css("ime-mode", "disabled").bind("keypress", function () {
-                if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode != 46 && event.keyCode != 43)) { event.returnValue = false; return false; }
+            .css("ime-mode", "disabled").bind("keypress", function (e) {
+                if ((e.keyCode < 48 || e.keyCode > 57) && (e.keyCode != 46 && e.keyCode != 43)) { return false; }
             });
 
         //负数，非正数，负小数（0-9，.，-）
         $("input[data-val-negnumeric],input[data-val-nonposnumeric],input[data-val-negdecimal]")
-            .css("ime-mode", "disabled").bind("keypress", function () {
-                if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode != 46 && event.keyCode != 45)) { event.returnValue = false; return false; }
+            .css("ime-mode", "disabled").bind("keypress", function (e) {
+                if ((e.keyCode < 48 || e.keyCode > 57) && (e.keyCode != 46 && e.keyCode != 45)) { return false; }
             });
 
         //整数（0-9，+，-）
-        $("input[data-val-integer]").css("ime-mode", "disabled").bind("keypress", function () {
-            if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode != 43 && event.keyCode != 45)) { event.returnValue = false; return false; }
+        $("input[data-val-integer]").css("ime-mode", "disabled").bind("keypress", function (e) {
+            if ((e.keyCode < 48 || e.keyCode > 57) && (e.keyCode != 43 && e.keyCode != 45)) { return false; }
         });
 
         //正整数，非负整数（0-9，+）
-        $("input[data-val-posinteger],input[data-val-nonneginteger]").css("ime-mode", "disabled").bind("keypress", function () {
-            if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode != 43)) { event.returnValue = false; return false; }
+        $("input[data-val-posinteger],input[data-val-nonneginteger]").css("ime-mode", "disabled").bind("keypress", function (e) {
+            if ((e.keyCode < 48 || e.keyCode > 57) && (e.keyCode != 43)) { return false; }
         });
 
         //负整数，非正整数（0-9，-）
-        $("input[data-val-neginteger],input[data-val-nonposinteger]").css("ime-mode", "disabled").bind("keypress", function () {
-            if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode != 45)) { event.returnValue = false; return false; }
+        $("input[data-val-neginteger],input[data-val-nonposinteger]").css("ime-mode", "disabled").bind("keypress", function (e) {
+            if ((e.keyCode < 48 || e.keyCode > 57) && (e.keyCode != 45)) { return false; }
         });
 
     }
