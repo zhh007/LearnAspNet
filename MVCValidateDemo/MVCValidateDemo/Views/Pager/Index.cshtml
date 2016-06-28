@@ -18,8 +18,21 @@
         <li><a href="/Cust/GetChildren/2" onclick="$.ajax({url:$(this).attr('href'),success:function(data,status,xhr){$('#').html(data);},beforeSend:function(a,b){a.abort(); paged_Children(b.url); }});return false;"><span aria-hidden="true">»</span></a></li>
         <li><a href="/Cust/GetChildren/8" onclick="$.ajax({url:$(this).attr('href'),success:function(data,status,xhr){$('#').html(data);},beforeSend:function(a,b){a.abort(); paged_Children(b.url); }});return false;">尾页</a></li>
     </ul>
-    <div class="pagination">
-        <button class="btn btn-default">abc</button>
-        @*<div style="height:34px; line-height:34px;">第1/8页，共160条，每页20条&nbsp;&nbsp;&nbsp;&nbsp;</div>*@
+    <div style="display:inline-block;vertical-align:top;">
+        <div style="height:34px; line-height:34px;margin:20px 0">第1/8页，共160条，每页20条&nbsp;&nbsp;&nbsp;&nbsp;</div>
     </div>
 </div>
+
+<h2>测试</h2>
+<div id="pager1" class="row text-center" data-pagesize="10" data-total="250" data-arg="page">
+
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            var abc = $("#pager1").pager({pagesize:20});
+            console.log("test");
+        });
+    </script>
+}

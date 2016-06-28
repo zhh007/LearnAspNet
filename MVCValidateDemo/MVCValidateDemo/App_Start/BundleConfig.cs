@@ -28,7 +28,8 @@ namespace MVCValidateDemo
                       "~/assets/css/site.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/base").Include(
-                        "~/assets/js/comm.js"));
+                        "~/assets/js/comm.js",
+                        "~/assets/js/jquery.pager.js"));
         }
     }
 }
