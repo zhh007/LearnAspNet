@@ -38,78 +38,69 @@
         return r[0] + (query.length > 2 ? query + "&" : "?") + (newval ? param + "=" + newval : '');
     }
 
-    function getUrl(para, idx) {
-        return updateUrl(para, idx);
+    function getUrl($this, idx, txt, enable) {
+        var link = $('<a></a>').html(txt);
+        if (enable) {
+            if (idx == $this.index) {
+                link.prop('href', 'javascript:void(0)');
+            } else {
+                if ($this.pagefunc) {
+                    link.prop('href', 'javascript:void(0)').attr('onclick', $this.pagefunc + '(' + idx + ')');
+                } else {
+                    link.prop('href', updateUrl($this.arg, idx));
+                }
+            }
+        } else {
+            link.prop('disabled', 'disabled').prop('href', 'javascript:void(0)');
+        }
+        return link;
     }
 
     function showFirstLink($this, el) {
-        var h = '<li';
+        var obj = $('<li></li>');
         if ($this.index == 1) {
-            h += ' class="disabled"';
+            obj.prop('class', 'disabled');
         }
-        h += '><a';
-        if ($this.index == 1) {
-            h += ' disabled="disabled" href="javascript:void(0)"';
-        } else {
-            h += ' href="' + getUrl($this.arg, 1) + '"';
-        }
-        h += '>首页</a></li>';
-        $(h).appendTo(el);
+        var link = getUrl($this, 1, "首页", $this.index > 1);
+        obj.append(link).appendTo(el);
     }
 
     function showLastLink($this, el) {
-        var h = '<li';
+        var obj = $('<li></li>');
         if ($this.index == $this.count) {
-            h += ' class="disabled"';
+            obj.prop('class', 'disabled');
         }
-        h += '><a';
-        if ($this.index == $this.count) {
-            h += ' disabled="disabled" href="javascript:void(0)"';
-        } else {
-            h += ' href="' + getUrl($this.arg, $this.count) + '"';
-        }
-        h += '>尾页</a></li>';
-        $(h).appendTo(el);
+        var link = getUrl($this, $this.count, "尾页", $this.index < $this.count);
+        obj.append(link).appendTo(el);
     }
 
     function showPrevLink($this, el) {
-        var prev = $this.index - 1;
-        var h = '<li';
-        if (prev < 1) {
-            h += ' class="disabled"';
+        var idx = $this.index - 1;
+        var obj = $('<li></li>');
+        if (idx < 1) {
+            obj.prop('class', 'disabled');
         }
-        h += '><a';
-        if (prev < 1) {
-            h += ' disabled="disabled" href="javascript:void(0)"';
-        } else {
-            h += ' href="' + getUrl($this.arg, prev) + '"';
-        }
-        h += '><span aria-hidden="true">&laquo;</span></a></li>';
-        $(h).appendTo(el);
+        var link = getUrl($this, idx, '<span aria-hidden="true">&laquo;</span>', idx > 1);
+        obj.append(link).appendTo(el);
     }
 
     function showNextLink($this, el) {
-        var next = $this.index + 1;
-        var h = '<li';
-        if (next > $this.count) {
-            h += ' class="disabled"';
+        var idx = $this.index + 1;
+        var obj = $('<li></li>');
+        if (idx > $this.count) {
+            obj.prop('class', 'disabled');
         }
-        h += '><a';
-        if (next > $this.count) {
-            h += ' disabled="disabled" href="javascript:void(0)"';
-        } else {
-            h += ' href="' + getUrl($this.arg, next) + '"';
-        }
-        h += '><span aria-hidden="true">&raquo;</span></a></li>';
-        $(h).appendTo(el);
+        var link = getUrl($this, idx, '<span aria-hidden="true">&raquo;</span>', idx < $this.count);
+        obj.append(link).appendTo(el);
     }
 
     function showMoreBefore($this, el) {
         if ($this.start > 1) {
             var index = $this.start - 1;
             if (index < 1) index = 1;
-            var h = '<li><a href="' + getUrl($this.arg, index) + '">...</a></li>';
-            $(h).appendTo(el);
+            var obj = $('<li></li>');
+            var link = getUrl($this, index, '...', true);
+            obj.append(link).appendTo(el);
         }
     }
 
@@ -117,25 +108,20 @@
         if ($this.end < $this.count) {
             var index = $this.start + $this.options.itemcount;
             if (index > $this.count) { index = $this.count; }
-            var h = '<li><a href="' + getUrl($this.arg, index) + '">...</a></li>';
-            $(h).appendTo(el);
+            var obj = $('<li></li>');
+            var link = getUrl($this, index, '...', true);
+            obj.append(link).appendTo(el);
         }
     }
 
     function showNumberLinks($this, el) {
         for (var i = $this.start; i <= $this.end; i++) {
-            var h = '<li';
+            var obj = $('<li></li>');
             if (i == $this.index) {
-                h += ' class="active"';
+                obj.prop('class', 'active');
             }
-            h += '><a';
-            if (i == $this.index) {
-                h += ' href="javascript:void(0)"';
-            } else {
-                h += ' href="' + getUrl($this.arg, i) + '"';
-            }
-            h += '>' + i + '</a></li>';
-            $(h).appendTo(el);
+            var link = getUrl($this, i, i, true);
+            obj.append(link).appendTo(el);
         }
     }
 
@@ -153,6 +139,9 @@
         if (this.index > this.count || this.index < 1) {
             this.$element.hide();
             return;
+        }
+        if (this.options.pagefunc) {
+            this.pagefunc = this.options.pagefunc;
         }
 
         // start page index

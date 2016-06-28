@@ -28,11 +28,21 @@
 
 </div>
 
+<h2>测试2</h2>
+<div id="pager2" class="row text-center" data-pagesize="10" data-total="250" data-pagefunc="query">
+
+</div>
+
 @section Scripts {
     <script type="text/javascript">
         $(function () {
-            var abc = $("#pager1").pager({pagesize:20});
-            console.log("test");
+            $("#pager1").pager({pagesize:20});
+            
+            $("#pager2").pager({ pagesize: 20 });
         });
+
+        function query(page) {
+            console.log(page);
+        }
     </script>
 }
