@@ -8,7 +8,6 @@
  * $("#pager1").pager();
  */
 
-
 +function ($) {
     "use strict";
     var Pager = function (element, options) {
