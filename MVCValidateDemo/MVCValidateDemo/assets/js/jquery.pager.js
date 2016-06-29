@@ -1,4 +1,14 @@
-﻿
+﻿/// <reference path="jquery-1.10.2.js" />
+/*
+ * 分页控件
+ * 用法：
+ * <div id="pager1" class="row text-center" data-pagesize="10" data-total="250" data-arg="page"></div>
+ * or
+ * <div id="pager1" class="row text-center" data-pagesize="10" data-total="250" data-pagefunc="query"></div>
+ * $("#pager1").pager();
+ */
+
+
 +function ($) {
     "use strict";
     var Pager = function (element, options) {
