@@ -1,6 +1,8 @@
-﻿/// <reference path="jquery-1.10.2.js" />
-/*
+﻿/*
  * 分页控件
+ * 依赖：
+ * bootstrap css v3
+ * jquery-1.10.2.js
  * 用法：
  * <div id="pager1" class="row text-center" data-pagesize="10" data-total="250" data-arg="page"></div>
  * or
