@@ -453,6 +453,7 @@ function openDialog(opt) {
             return $.checkNegDecimal(value);
         });
         $.validator.unobtrusive.adapters.addBool("negdecimal");
+
     }
 
     //输入限制

@@ -29,7 +29,8 @@ namespace MVCValidateDemo
 
             bundles.Add(new ScriptBundle("~/bundles/base").Include(
                         "~/assets/js/comm.js",
-                        "~/assets/js/jquery.pager.js"));
+                        "~/assets/js/jquery.pager.js",
+                        "~/assets/js/fileupload.js"));
         }
     }
 }

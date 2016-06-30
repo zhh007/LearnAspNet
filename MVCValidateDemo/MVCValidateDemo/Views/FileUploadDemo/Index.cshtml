@@ -1,0 +1,64 @@
+﻿@model MVCValidateDemo.Controllers.FileUploadTestViewModel2
+@using Aspnet.Mvc.Extension
+@{
+    ViewBag.Title = "Index";
+}
+
+<hr />
+@using (Html.BeginForm("Index", "FileUploadDemo", FormMethod.Post, new { id = "form1" }))
+{
+    @*@Html.ValidationSummaryDialog()*@
+    <div>
+        @Html.TextBoxFor(p => p.Name)
+    </div>
+    <div>
+        @Html.FileUpload(p => p.Files)
+        @Html.ValidationMessage("FileUploadTestViewModel2-Files", "", new { @class = "text-danger" })
+    </div>
+    <hr />
+
+    <p>
+        <input type="submit" value="Save" />
+    </p>
+}
+
+@section Scripts
+{
+<link href="~/assets/fileupload/fineuploader.css" rel="stylesheet" type="text/css" />
+<script src="~/assets/fileupload/jquery.fineuploader-3.0.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var PageIsValidate = true;
+    function PageValidFunc(formErrorMsg) {
+        var errors = "";
+        if (typeof (formErrorMsg) != "undefined")
+            errors += formErrorMsg;
+
+        //自定义错误处理
+        //        if ($("#__WorkflowSubject").val() == "") {
+        //            errors += "<div class='errormsg'>请输入流程主题!</div>";
+        //        }
+
+        PageIsValidate = (errors == "");
+        if (PageIsValidate == false) {
+            alert(errors);
+        }
+    }
+
+    function EForm_Submit(eform) {
+        var qform = $(eform);
+        $.validator.unobtrusive.parse(qform);
+        $("#form1").validate().settings.ignore = [];
+        var jqPageValid = qform.valid();
+        var isValid = (typeof (PageIsValidate) != 'undefined' && PageIsValidate);
+
+        if (isValid && jqPageValid) {
+            return true;
+        }
+        return false;
+    }
+
+    $(function () {
+        $("#form1").validate().settings.ignore = [];
+    });
+</script>
+}

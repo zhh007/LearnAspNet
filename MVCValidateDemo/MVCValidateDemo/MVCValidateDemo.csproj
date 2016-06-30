@@ -204,6 +204,7 @@
     <Compile Include="assets\ueditor\net\App_Code\PathFormater.cs" />
     <Compile Include="assets\ueditor\net\App_Code\UploadHandler.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\FileUploadDemoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JqueryValidateDemoController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -222,6 +223,19 @@
   <ItemGroup>
     <Content Include="assets\bootstrap\bootstrap.css" />
     <Content Include="assets\bootstrap\bootstrap.min.css" />
+    <Content Include="assets\fileupload\fineuploader.css" />
+    <Content Include="assets\fileupload\images\delet.png" />
+    <Content Include="assets\fileupload\images\doc.png" />
+    <Content Include="assets\fileupload\images\file.png" />
+    <Content Include="assets\fileupload\images\loading-uploader.gif" />
+    <Content Include="assets\fileupload\images\pdf.png" />
+    <Content Include="assets\fileupload\images\pic.png" />
+    <Content Include="assets\fileupload\images\ppt.png" />
+    <Content Include="assets\fileupload\images\xls.png" />
+    <Content Include="assets\fileupload\images\zip.png" />
+    <Content Include="assets\fileupload\jquery.fineuploader-3.0.js" />
+    <Content Include="assets\fileupload\jquery.fineuploader-3.0.min.js" />
+    <Content Include="assets\js\fileupload.js" />
     <Content Include="assets\ueditor\dialogs\anchor\anchor.html" />
     <Content Include="assets\ueditor\dialogs\attachment\attachment.css" />
     <Content Include="assets\ueditor\dialogs\attachment\attachment.html" />
@@ -561,6 +575,7 @@
     <Content Include="Views\JqueryValidateDemo\Index.cshtml" />
     <Content Include="Views\JqueryValidateDemo\InputLimit.cshtml" />
     <Content Include="Views\Pager\Index.cshtml" />
+    <Content Include="Views\FileUploadDemo\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
