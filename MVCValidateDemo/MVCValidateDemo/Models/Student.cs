@@ -29,5 +29,8 @@ namespace MVCValidateDemo.Models
 
         [DisplayName("报名时间")]
         public DateTime BaomingTime { get; set; }
+
+        [DisplayName("个人简介")]
+        public string Content { get; set; }
     }
 }

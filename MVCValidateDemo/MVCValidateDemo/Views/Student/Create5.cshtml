@@ -7,7 +7,7 @@
 <p>
     验证邮政编码
 </p>
-@using (Html.BeginForm("index", "Student", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("index", "Student", FormMethod.Post, new { @id = "form1", @class = "form-horizontal" }))
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary("", new { @class = "text-danger" })
