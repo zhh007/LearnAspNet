@@ -13,7 +13,7 @@
     </div>
     <div>
         @Html.FileUpload(p => p.Files)
-        @Html.ValidationMessage("FileUploadTestViewModel2-Files", "", new { @class = "text-danger" })
+        @Html.ValidationMessageFor(p => p.Files, "", new { @class = "text-danger" })
     </div>
     <hr />
 

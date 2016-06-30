@@ -163,7 +163,8 @@ namespace Aspnet.Mvc.Extension
                 fieldName = displayAtt.Name;
             }
 
-            string htmlId = string.Format("{0}-{1}", metadata.ContainerType.Name, metadata.PropertyName);
+            //string htmlId = string.Format("{0}-{1}", metadata.ContainerType.Name, metadata.PropertyName);
+            string htmlId = string.Format("{0}", metadata.PropertyName);
 
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("\r\n<div>");

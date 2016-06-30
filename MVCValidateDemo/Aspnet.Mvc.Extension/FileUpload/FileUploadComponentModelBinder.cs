@@ -30,7 +30,8 @@ namespace Aspnet.Mvc.Extension
                             bindingContext.ModelState[property.Name] = modelState;
                         }
 
-                        string htmlId = string.Format("{0}-{1}", modelType.Name, property.Name);
+                        //string htmlId = string.Format("{0}-{1}", modelType.Name, property.Name);
+                        string htmlId = string.Format("{0}", property.Name);
                         string v = controllerContext.HttpContext.Request[htmlId];
                         o.Folder = new Guid(v);
                         o.Files = FileUploadHelper.GetFiles(o.Folder);
