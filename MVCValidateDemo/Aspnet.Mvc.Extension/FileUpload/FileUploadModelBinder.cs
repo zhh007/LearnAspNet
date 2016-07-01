@@ -37,7 +37,7 @@ namespace Aspnet.Mvc.Extension
 
                         string v = controllerContext.HttpContext.Request[htmlId];
                         o.Folder = new Guid(v);
-                        o.Files = FileUploadHtmlHelper.GetFiles(o.Folder);
+                        o.Files = FileUploadManager.GetFiles(o.Folder);
 
                         FileUploadConfigDTO _config = null;
                         FileUploadConfigDTO _gConfig = null;
@@ -51,7 +51,7 @@ namespace Aspnet.Mvc.Extension
                         string RegexMessage = string.Empty;
                         string[] MustFiles = null;
                         FileUploadValidateAttribute fatt = FileUploadHtmlHelper.GetFileUploadValidateAttribute(modelType, property.Name);
-                        FileUploadConfigLoader cfgLoader = new FileUploadConfigLoader();
+                        FileUploadManager manager = new FileUploadManager();
                         if (fatt != null)
                         {
                             MinFilesCount = fatt.MinFilesCount;
@@ -62,7 +62,7 @@ namespace Aspnet.Mvc.Extension
                             Regex = fatt.Regex;
                             RegexMessage = fatt.RegexMessage;
                             MustFiles = fatt.MustFiles;
-                            _config = cfgLoader.GetConfigByName(fatt.ConfigName);
+                            _config = manager.GetConfigByName(fatt.ConfigName);
                         }
                         if (_config != null)
                         {
@@ -78,11 +78,11 @@ namespace Aspnet.Mvc.Extension
                                 MustFiles = _config.MustFiles.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
                             }
                         }
-                        _gConfig = cfgLoader.GetGlobalConfig();
+                        _gConfig = manager.GetGlobalConfig();
                         if (_gConfig != null)
                         {
-                            MaxFileSizeMB = cfgLoader.MergeGolbalMaxFileSizeMB(_gConfig, MaxFileSizeMB);
-                            MaxTotalFileSizeMB = cfgLoader.MergeGolbalMaxTotalFileSizeMB(_gConfig, MaxTotalFileSizeMB);
+                            MaxFileSizeMB = manager.MergeGolbalMaxFileSizeMB(_gConfig, MaxFileSizeMB);
+                            MaxTotalFileSizeMB = manager.MergeGolbalMaxTotalFileSizeMB(_gConfig, MaxTotalFileSizeMB);
                             ExcludeFileExtensions = _gConfig.FileExtensions_Exclude;
                         }
 

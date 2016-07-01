@@ -21,7 +21,7 @@ namespace Aspnet.Mvc.Extension
 
         public void Save()
         {
-            FileUploadHtmlHelper.SaveFolder(this.Folder);
+            FileUploadManager.SaveFolder(this.Folder);
         }
     }
 

@@ -98,7 +98,6 @@
     <Compile Include="FileUpload\FileUploadModelBinderProvider.cs" />
     <Compile Include="FileUpload\FileUploadModel.cs" />
     <Compile Include="FileUpload\FileUploadModelBinder.cs" />
-    <Compile Include="FileUpload\FileUploadConfigLoader.cs" />
     <Compile Include="FileUpload\FileUploadController.cs" />
     <Compile Include="FileUpload\FileUploadHtmlHelper.cs" />
     <Compile Include="FileUpload\FileUploadValidateAttribute.cs" />

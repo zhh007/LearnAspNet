@@ -63,7 +63,7 @@ namespace Aspnet.Mvc.Extension.Controllers
 
                     if (totalSizeLimit > 0)
                     {
-                        var oldFiles = FileUploadHtmlHelper.GetFiles(folder);
+                        var oldFiles = FileUploadManager.GetFiles(folder);
                         long curTotalFileSize = item.ContentLength;
                         foreach (var of in oldFiles)
                         {
@@ -202,7 +202,7 @@ namespace Aspnet.Mvc.Extension.Controllers
                 {
                     string userfilePath = FileUploadHtmlHelper.FileStorePath;
                     string storePath = string.Empty;
-                    using (SqlConnection sqlConn = new SqlConnection(FileUploadHtmlHelper.DatabaseConnection))
+                    using (SqlConnection sqlConn = new SqlConnection(SystemConfig.DBLink))
                     {
                         string sql = @"
 SELECT [StorePath] FROM [dbo].[WorkflowFiles] WITH (NOLOCK) where ID=@ID
@@ -243,7 +243,7 @@ DELETE FROM [dbo].[WorkflowFiles] WHERE ID=@ID"
             string storePath = "";
             string userfilePath = FileUploadHtmlHelper.FileStorePath;
             string sql = @"SELECT [FileName], [StorePath] FROM [dbo].[WorkflowFiles] WITH (NOLOCK) where ID=@ID";
-            using (SqlConnection sqlConn = new SqlConnection(FileUploadHtmlHelper.DatabaseConnection))
+            using (SqlConnection sqlConn = new SqlConnection(SystemConfig.DBLink))
             {
                 SqlCommand cmd = new SqlCommand(sql, sqlConn);
 
