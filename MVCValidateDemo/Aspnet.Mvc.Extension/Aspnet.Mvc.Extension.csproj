@@ -94,6 +94,7 @@
     <Compile Include="AttributeExtensions\ZipCodeAttribute.cs" />
     <Compile Include="ChinaIDCard.cs" />
     <Compile Include="ControllerExtensions.cs" />
+    <Compile Include="FileUpload\FileUploadManager.cs" />
     <Compile Include="FileUpload\FileUploadModelBinderProvider.cs" />
     <Compile Include="FileUpload\FileUploadModel.cs" />
     <Compile Include="FileUpload\FileUploadModelBinder.cs" />
@@ -110,6 +111,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="FileUpload\readme.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
