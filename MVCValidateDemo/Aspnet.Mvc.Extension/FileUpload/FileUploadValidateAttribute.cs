@@ -10,10 +10,10 @@ namespace Aspnet.Mvc.Extension
     {
         public FileUploadValidateAttribute()
         {
-            MaxTotalFileSizeMB = FileUploadHelper.defaultMaxTotalFileSizeMB;
-            MaxFileSizeMB = FileUploadHelper.defaultMaxFileSizeMB;//5MB
-            MinFilesCount = FileUploadHelper.defaultMinFilesCount;
-            MaxFilesCount = FileUploadHelper.defaultMaxFilesCount;
+            MaxTotalFileSizeMB = FileUploadHtmlHelper.defaultMaxTotalFileSizeMB;
+            MaxFileSizeMB = FileUploadHtmlHelper.defaultMaxFileSizeMB;//5MB
+            MinFilesCount = FileUploadHtmlHelper.defaultMinFilesCount;
+            MaxFilesCount = FileUploadHtmlHelper.defaultMaxFilesCount;
         }
 
         /// <summary>

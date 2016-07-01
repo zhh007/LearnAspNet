@@ -7,18 +7,18 @@ using System.Threading;
 
 namespace Aspnet.Mvc.Extension
 {
-    public class CustomModelBinderProvider : IModelBinderProvider
+    public class FileUploadModelBinderProvider : IModelBinderProvider
     {
         private static ReaderWriterLockSlim _lock;
-        static CustomModelBinderProvider()
+        static FileUploadModelBinderProvider()
         {
             _lock = new ReaderWriterLockSlim();
         }
 
-        Dictionary<Type, IModelBinder> dict = new Dictionary<Type, IModelBinder>();
+        private Dictionary<Type, IModelBinder> dict = new Dictionary<Type, IModelBinder>();
 
-        FileUploadComponentModelBinder cmb = new FileUploadComponentModelBinder();
-        public CustomModelBinderProvider()
+        private FileUploadModelBinder cmb = new FileUploadModelBinder();
+        public FileUploadModelBinderProvider()
         {
         }
 
@@ -31,12 +31,12 @@ namespace Aspnet.Mvc.Extension
             }
             else
             {
-                _lock.EnterWriteLock();
                 try
                 {
+                    _lock.EnterWriteLock();
                     foreach (var property in modelType.GetProperties())
                     {
-                        if (property.PropertyType == typeof(FileUploadComponentModel))
+                        if (property.PropertyType == typeof(FileUploadModel))
                         {
                             result = cmb;
                             break;

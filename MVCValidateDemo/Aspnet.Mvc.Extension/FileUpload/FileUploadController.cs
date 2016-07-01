@@ -57,13 +57,13 @@ namespace Aspnet.Mvc.Extension.Controllers
 
                     if (sizeLimit > 0 && item.ContentLength > sizeLimit)
                     {
-                        string validateMessage = string.Format("{0}文件太大, 最大支持{1}。", item.FileName, FileUploadHelper.GetFileSizeFormat(sizeLimit));
+                        string validateMessage = string.Format("{0}文件太大, 最大支持{1}。", item.FileName, FileUploadHtmlHelper.GetFileSizeFormat(sizeLimit));
                         return Json(new { success = false, error = validateMessage, message = validateMessage }, "text/html");
                     }
 
                     if (totalSizeLimit > 0)
                     {
-                        var oldFiles = FileUploadHelper.GetFiles(folder);
+                        var oldFiles = FileUploadHtmlHelper.GetFiles(folder);
                         long curTotalFileSize = item.ContentLength;
                         foreach (var of in oldFiles)
                         {
@@ -72,13 +72,13 @@ namespace Aspnet.Mvc.Extension.Controllers
 
                         if (curTotalFileSize > totalSizeLimit)
                         {
-                            string validateMessage = string.Format("总文件大小不能超过{0}。", FileUploadHelper.GetFileSizeFormat(totalSizeLimit.Value));
+                            string validateMessage = string.Format("总文件大小不能超过{0}。", FileUploadHtmlHelper.GetFileSizeFormat(totalSizeLimit.Value));
                             return Json(new { success = false, error = validateMessage, message = validateMessage }, "text/html");
                         }
                     }
                 }
 
-                string savePath = Request.MapPath(FileUploadHelper.TempFileSavePath);
+                string savePath = Request.MapPath(FileUploadHtmlHelper.TempFileSavePath);
                 if (!Directory.Exists(savePath))
                 {
                     Directory.CreateDirectory(savePath);
@@ -129,7 +129,7 @@ namespace Aspnet.Mvc.Extension.Controllers
 
                 if ((id == 0 || id == -1) && folder.HasValue)
                 {
-                    string savePath = Request.MapPath(FileUploadHelper.TempFileSavePath);
+                    string savePath = Request.MapPath(FileUploadHtmlHelper.TempFileSavePath);
                     if (!Directory.Exists(savePath))
                     {
                         Directory.CreateDirectory(savePath);
@@ -179,7 +179,7 @@ namespace Aspnet.Mvc.Extension.Controllers
             try
             {
                 //删除临时文件
-                string savePath = Request.MapPath(FileUploadHelper.TempFileSavePath);
+                string savePath = Request.MapPath(FileUploadHtmlHelper.TempFileSavePath);
                 if (!Directory.Exists(savePath))
                 {
                     Directory.CreateDirectory(savePath);
@@ -200,9 +200,9 @@ namespace Aspnet.Mvc.Extension.Controllers
                 //删除正式库文件
                 if (fileID.HasValue && fileID != 0 && fileID != -1)
                 {
-                    string userfilePath = FileUploadHelper.FileStorePath;
+                    string userfilePath = FileUploadHtmlHelper.FileStorePath;
                     string storePath = string.Empty;
-                    using (SqlConnection sqlConn = new SqlConnection(FileUploadHelper.DatabaseConnection))
+                    using (SqlConnection sqlConn = new SqlConnection(FileUploadHtmlHelper.DatabaseConnection))
                     {
                         string sql = @"
 SELECT [StorePath] FROM [dbo].[WorkflowFiles] WITH (NOLOCK) where ID=@ID
@@ -241,9 +241,9 @@ DELETE FROM [dbo].[WorkflowFiles] WHERE ID=@ID"
         private string GetAttachmentFilePath(int id, ref string fileName)
         {
             string storePath = "";
-            string userfilePath = FileUploadHelper.FileStorePath;
+            string userfilePath = FileUploadHtmlHelper.FileStorePath;
             string sql = @"SELECT [FileName], [StorePath] FROM [dbo].[WorkflowFiles] WITH (NOLOCK) where ID=@ID";
-            using (SqlConnection sqlConn = new SqlConnection(FileUploadHelper.DatabaseConnection))
+            using (SqlConnection sqlConn = new SqlConnection(FileUploadHtmlHelper.DatabaseConnection))
             {
                 SqlCommand cmd = new SqlCommand(sql, sqlConn);
 
@@ -271,11 +271,5 @@ DELETE FROM [dbo].[WorkflowFiles] WHERE ID=@ID"
 
             return Path.Combine(userfilePath, storePath);
         }
-
-        
-
-        
-        
-        
     }
 }

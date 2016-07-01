@@ -8,19 +8,22 @@ using System.Text.RegularExpressions;
 
 namespace Aspnet.Mvc.Extension
 {
-    public class FileUploadComponentModelBinder : DefaultModelBinder
+    public class FileUploadModelBinder : DefaultModelBinder
     {
         public override object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
         {
             var model = base.BindModel(controllerContext, bindingContext);
+            if(model == null)
+            {
+                return null;
+            }
             var modelType = model.GetType();
-
 
             foreach (var property in modelType.GetProperties())
             {
-                if (property.PropertyType == typeof(FileUploadComponentModel))
+                if (property.PropertyType == typeof(FileUploadModel))
                 {
-                    FileUploadComponentModel o = property.GetValue(model, null) as FileUploadComponentModel;
+                    FileUploadModel o = property.GetValue(model, null) as FileUploadModel;
                     if (o != null)
                     {
                         ModelState modelState = bindingContext.ModelState[property.Name];
@@ -30,24 +33,24 @@ namespace Aspnet.Mvc.Extension
                             bindingContext.ModelState[property.Name] = modelState;
                         }
 
-                        //string htmlId = string.Format("{0}-{1}", modelType.Name, property.Name);
-                        string htmlId = string.Format("{0}", property.Name);
+                        string htmlId = string.Format("{0}-{1}", modelType.Name, property.Name);
+
                         string v = controllerContext.HttpContext.Request[htmlId];
                         o.Folder = new Guid(v);
-                        o.Files = FileUploadHelper.GetFiles(o.Folder);
+                        o.Files = FileUploadHtmlHelper.GetFiles(o.Folder);
 
                         FileUploadConfigDTO _config = null;
                         FileUploadConfigDTO _gConfig = null;
-                        int MinFilesCount = FileUploadHelper.defaultMinFilesCount;
-                        int MaxFilesCount = FileUploadHelper.defaultMaxFilesCount;
-                        int MaxFileSizeMB = FileUploadHelper.defaultMaxFileSizeMB;
-                        int MaxTotalFileSizeMB = FileUploadHelper.defaultMaxTotalFileSizeMB;
+                        int MinFilesCount = FileUploadHtmlHelper.defaultMinFilesCount;
+                        int MaxFilesCount = FileUploadHtmlHelper.defaultMaxFilesCount;
+                        int MaxFileSizeMB = FileUploadHtmlHelper.defaultMaxFileSizeMB;
+                        int MaxTotalFileSizeMB = FileUploadHtmlHelper.defaultMaxTotalFileSizeMB;
                         string ExcludeFileExtensions = string.Empty;//全局配置中才有
                         string IncludeFileExtensions = string.Empty;
                         string Regex = string.Empty;
                         string RegexMessage = string.Empty;
                         string[] MustFiles = null;
-                        FileUploadValidateAttribute fatt = FileUploadHelper.GetFileUploadValidateAttribute(modelType, property.Name);
+                        FileUploadValidateAttribute fatt = FileUploadHtmlHelper.GetFileUploadValidateAttribute(modelType, property.Name);
                         FileUploadConfigLoader cfgLoader = new FileUploadConfigLoader();
                         if (fatt != null)
                         {
@@ -83,8 +86,8 @@ namespace Aspnet.Mvc.Extension
                             ExcludeFileExtensions = _gConfig.FileExtensions_Exclude;
                         }
 
-                        RequiredAttribute reqAtt = FileUploadHelper.GetRequiredAttribute(modelType, property.Name);
-                        DisplayAttribute displayAtt = FileUploadHelper.GetDisplayAttribute(modelType, property.Name);
+                        RequiredAttribute reqAtt = FileUploadHtmlHelper.GetRequiredAttribute(modelType, property.Name);
+                        DisplayAttribute displayAtt = FileUploadHtmlHelper.GetDisplayAttribute(modelType, property.Name);
                         string fieldName = "";
                         if (displayAtt != null)
                         {
@@ -114,7 +117,7 @@ namespace Aspnet.Mvc.Extension
                                 {
                                     if (file.FileSize > MaxFileSizeMB * 1024 * 1024)
                                     {
-                                        modelState.Errors.Add(string.Format("{0} 文件太大, 最大支持 {1}。", file.FileName, FileUploadHelper.GetFileSizeFormat(MaxFileSizeMB)));
+                                        modelState.Errors.Add(string.Format("{0} 文件太大, 最大支持 {1}。", file.FileName, FileUploadHtmlHelper.GetFileSizeFormat(MaxFileSizeMB)));
                                     }
                                 }
                             }
@@ -128,7 +131,7 @@ namespace Aspnet.Mvc.Extension
                                 }
                                 if (total > MaxTotalFileSizeMB * 1024 * 1024)
                                 {
-                                    modelState.Errors.Add(string.Format("{0} 总文件大小不能超过 {1}。", fieldName, FileUploadHelper.GetFileSizeFormat(MaxTotalFileSizeMB)));
+                                    modelState.Errors.Add(string.Format("{0} 总文件大小不能超过 {1}。", fieldName, FileUploadHtmlHelper.GetFileSizeFormat(MaxTotalFileSizeMB)));
                                 }
                             }
 

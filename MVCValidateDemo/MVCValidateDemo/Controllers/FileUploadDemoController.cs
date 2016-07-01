@@ -13,7 +13,8 @@ namespace MVCValidateDemo.Controllers
         // GET: FileUploadDemo
         public ActionResult Index()
         {
-            return View();
+            FileUploadTestViewModel2 model = new FileUploadTestViewModel2();
+            return View(model);
         }
 
         [HttpPost]
@@ -35,11 +36,11 @@ namespace MVCValidateDemo.Controllers
         [Required]
         //[FileUploadValidate(MaxFilesCount=2)]
         [FileUploadValidate(ConfigName = "testconfig")]
-        public FileUploadComponentModel Files { get; set; }
+        public FileUploadModel Files { get; set; }
 
         public FileUploadTestViewModel2()
         {
-            Files = new FileUploadComponentModel();
+            Files = new FileUploadModel();
         }
     }
 }

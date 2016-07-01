@@ -23,9 +23,7 @@ namespace Aspnet.Mvc.Extension
 
                 //ModelBinders.Binders.Add(typeof(FileUploadComponentModel), new FileUploadComponentModelBinder());
 
-                //var a = ModelBinderProviders.BinderProviders;//.Add(
-
-                ModelBinderProviders.BinderProviders.Add(new CustomModelBinderProvider());
+                ModelBinderProviders.BinderProviders.Add(new FileUploadModelBinderProvider());
             }
         }
 

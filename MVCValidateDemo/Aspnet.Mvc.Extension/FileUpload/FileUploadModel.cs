@@ -2,10 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Web.Mvc;
 
 namespace Aspnet.Mvc.Extension
 {
-    public class WorkflowFileInfo
+    [Serializable]
+    [ModelBinder(typeof(FileUploadModelBinder))]
+    public class FileUploadModel
+    {
+        public Guid Folder { get; set; }
+
+        public List<FileUploadItem> Files { get; set; }
+
+        public FileUploadModel()
+        {
+            Files = new List<FileUploadItem>();
+        }
+
+        public void Save()
+        {
+            FileUploadHtmlHelper.SaveFolder(this.Folder);
+        }
+    }
+
+    public class FileUploadItem
     {
         public int ID { get; set; }
         public string FileName { get; set; }
@@ -15,8 +35,6 @@ namespace Aspnet.Mvc.Extension
         public Guid CreatorID { get; set; }
         public string CreatorName { get; set; }
         public string CreatorCode { get; set; }
-        public WorkflowFileType Type { get; set; }
-        public WorkflowFileStatus FileStatus { get; set; }
         public Guid FolderID { get; set; }
         public DateTime CreateTime { get; set; }
 
@@ -24,7 +42,7 @@ namespace Aspnet.Mvc.Extension
         {
             get
             {
-                return FileUploadHelper.GetFileSizeFormat(this.FileSize);
+                return FileUploadHtmlHelper.GetFileSizeFormat(this.FileSize);
             }
         }
 
@@ -32,41 +50,20 @@ namespace Aspnet.Mvc.Extension
         {
             get
             {
-                return FileUploadHelper.GetFileClass(this.FileName);
+                return FileUploadHtmlHelper.GetFileClass(this.FileName);
             }
         }
     }
 
-    public enum WorkflowFileType
-    {
-        None = 0,
-        /// <summary>
-        /// 来自代办事项
-        /// </summary>
-        FromTodo = 1,
-        /// <summary>
-        /// 来自反馈
-        /// </summary>
-        FromFeedback = 2,
-        /// <summary>
-        /// 来自消息中心
-        /// </summary>
-        FromMessage = 3,
-        /// <summary>
-        /// 来自工作流
-        /// </summary>
-        FromWorkflow = 4
-    }
-
-    public enum WorkflowFileStatus
+    public enum FileUploadDisplayType
     {
         /// <summary>
-        /// 未提交
+        /// 编辑
         /// </summary>
-        UnSubmit = 0,
+        Edit = 0,
         /// <summary>
-        /// 已提交
+        /// 显示
         /// </summary>
-        Submit = 1,
+        View = 1
     }
 }

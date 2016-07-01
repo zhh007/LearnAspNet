@@ -10,10 +10,11 @@
     @*@Html.ValidationSummaryDialog()*@
     <div>
         @Html.TextBoxFor(p => p.Name)
+        @Html.ValidationMessageFor(p => p.Name, null, new { @class = "text-danger" });
     </div>
     <div>
         @Html.FileUpload(p => p.Files)
-        @Html.ValidationMessageFor(p => p.Files, "", new { @class = "text-danger" })
+        @Html.FileUploadValidationMessageFor(p => p.Files, "", new { @class = "text-danger" })
     </div>
     <hr />
 

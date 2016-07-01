@@ -182,3 +182,4 @@ UpgradeLog*.htm
 # Microsoft Fakes
 FakesAssemblies/
 /MVCValidateDemo/MVCValidateDemo/assets/ueditor/net/upload/image/
+/MVCValidateDemo/MVCValidateDemo/App_Data/UploadFiles

@@ -12,10 +12,11 @@ using System.Data.SqlClient;
 using System.Data;
 using System.IO;
 using System.Configuration;
+using System.Web.Mvc.Html;
 
 namespace Aspnet.Mvc.Extension
 {
-    public static class FileUploadHelper
+    public static class FileUploadHtmlHelper
     {
         public static readonly string DatabaseConnection = ConfigurationManager.ConnectionStrings["ENTERPRISES_SUPERWORKFLOWContext"].ConnectionString;
 
@@ -96,20 +97,15 @@ namespace Aspnet.Mvc.Extension
 
         public static MvcHtmlString FileUpload<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper
             , Expression<Func<TModel, TProperty>> expression, string text = "添加文件", bool enabled = true
-            , FileUploadDisplayModel displayModel = FileUploadDisplayModel.Edit)
+            , FileUploadDisplayType displayModel = FileUploadDisplayType.Edit)
         {
-            if (typeof(TProperty) != typeof(FileUploadComponentModel))
+            if (typeof(TProperty) != typeof(FileUploadModel))
             {
                 throw new Exception("上传控件只能绑定FileUploadComponentModel类。");
             }
 
             ModelMetadata metadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
-            FileUploadComponentModel model = metadata.Model as FileUploadComponentModel;
-            if (model == null)
-            {
-                model = new FileUploadComponentModel();
-                //throw new Exception("上传控件属性未赋值。");
-            }
+            FileUploadModel model = metadata.Model as FileUploadModel;
 
             if (model.Folder == null || model.Folder == Guid.Empty)
             {
@@ -163,14 +159,13 @@ namespace Aspnet.Mvc.Extension
                 fieldName = displayAtt.Name;
             }
 
-            //string htmlId = string.Format("{0}-{1}", metadata.ContainerType.Name, metadata.PropertyName);
-            string htmlId = string.Format("{0}", metadata.PropertyName);
+            string htmlId = string.Format("{0}-{1}", metadata.ContainerType.Name, metadata.PropertyName);
 
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("\r\n<div>");
             sb.AppendFormat("<input type='hidden' id='{0}' name='{0}' value='{1}'", htmlId, model.Folder);
 
-            if (displayModel == FileUploadDisplayModel.Edit && enabled)
+            if (displayModel == FileUploadDisplayType.Edit && enabled)
             {
                 sb.Append(" data-val='true'");
                 if (reqAtt != null || MinFilesCount > 0)
@@ -206,7 +201,7 @@ namespace Aspnet.Mvc.Extension
             var files = model.Files;//FileUploadController.GetFiles(model.Folder);
             foreach (var item in files)
             {
-                if (enabled && displayModel == FileUploadDisplayModel.Edit)
+                if (enabled && displayModel == FileUploadDisplayType.Edit)
                 {
                     sb.AppendFormat("<li class=' qq-upload-success'><span class='{5} qq-upload-file'>{0}</span><span class='qq-upload-size' style='display: inline;'>{1}</span><span class='qq-upload-cancel-s' onclick=\"EFDeleteUploadFile(this, '{4}', '{2}', '{0}', '{3}')\"></span></li>"
                         , item.FileName, item.FileSizeFormat, model.Folder, item.ID
@@ -238,7 +233,7 @@ namespace Aspnet.Mvc.Extension
 
             sb.AppendLine("</div>");
 
-            if (enabled && displayModel == FileUploadDisplayModel.Edit)
+            if (enabled && displayModel == FileUploadDisplayType.Edit)
             {
                 sb.AppendLine("<script type='text/javascript'>");
                 sb.AppendLine("$(function () {");
@@ -274,6 +269,32 @@ namespace Aspnet.Mvc.Extension
             return MvcHtmlString.Create(sb.ToString());
         }
 
+        public static MvcHtmlString FileUploadValidationMessageFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression)
+        {
+            return htmlHelper.FileUploadValidationMessageFor(expression, null, null);
+        }
+
+        public static MvcHtmlString FileUploadValidationMessageFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, string validationMessage)
+        {
+            return htmlHelper.FileUploadValidationMessageFor(expression, validationMessage, null);
+        }
+
+        public static MvcHtmlString FileUploadValidationMessageFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, string validationMessage, object htmlAttributes)
+        {
+            return htmlHelper.FileUploadValidationMessageFor(expression, validationMessage, htmlAttributes, null);
+        }
+
+        public static MvcHtmlString FileUploadValidationMessageFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, string validationMessage, object htmlAttributes, string tag)
+        {
+            ModelMetadata metadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
+            FileUploadModel model = metadata.Model as FileUploadModel;
+
+            string htmlId = string.Format("{0}-{1}", metadata.ContainerType.Name, metadata.PropertyName);
+
+            return htmlHelper.ValidationMessage(htmlId, validationMessage, htmlAttributes, tag);
+        }
+
+
         internal static FileUploadValidateAttribute GetFileUploadValidateAttribute(Type modelType, string propertyName)
         {
             var att = TypeDescriptor.GetProperties(modelType)[propertyName].Attributes[typeof(FileUploadValidateAttribute)] as FileUploadValidateAttribute;
@@ -307,9 +328,9 @@ namespace Aspnet.Mvc.Extension
             return null;
         }
 
-        public static List<WorkflowFileInfo> GetFilesFromDB(Guid folder)
+        public static List<FileUploadItem> GetFilesFromDB(Guid folder)
         {
-            List<WorkflowFileInfo> list = new List<WorkflowFileInfo>();
+            List<FileUploadItem> list = new List<FileUploadItem>();
 
             string sql = @"
 SELECT ID, FileName, FileSize, Extension, StorePath
@@ -317,7 +338,7 @@ FROM WorkflowFiles WITH (NOLOCK)
 WHERE FolderID=@FolderID
 ";
 
-            using (SqlConnection sqlConn = new SqlConnection(FileUploadHelper.DatabaseConnection))
+            using (SqlConnection sqlConn = new SqlConnection(FileUploadHtmlHelper.DatabaseConnection))
             {
                 sqlConn.Open();
                 SqlCommand cmd = new SqlCommand(sql, sqlConn);
@@ -330,7 +351,7 @@ WHERE FolderID=@FolderID
                 {
                     while (reader.Read())
                     {
-                        WorkflowFileInfo info = new WorkflowFileInfo();
+                        FileUploadItem info = new FileUploadItem();
                         info.ID = Convert.ToInt32(reader["ID"]);
                         info.FileName = reader["FileName"] as string;
                         info.FileSize = Convert.ToInt32(reader["FileSize"]);
@@ -347,11 +368,11 @@ WHERE FolderID=@FolderID
             return list;
         }
 
-        public static void Save(List<WorkflowFileInfo> list)
+        public static void Save(List<FileUploadItem> list)
         {
             if (list != null && list.Count > 0)
             {
-                using (SqlConnection sqlConn = new SqlConnection(FileUploadHelper.DatabaseConnection))
+                using (SqlConnection sqlConn = new SqlConnection(FileUploadHtmlHelper.DatabaseConnection))
                 {
                     string sql = @"
 INSERT INTO [dbo].[WorkflowFiles]
@@ -362,8 +383,8 @@ INSERT INTO [dbo].[WorkflowFiles]
            ,[CreatorID]
            ,[CreatorName]
            ,[CreatorCode]
-           ,[Type]
-           ,[FileStatus]
+           --,[Type]
+           --,[FileStatus]
            ,[FolderID]
            ,[CreateTime])
      VALUES
@@ -374,14 +395,14 @@ INSERT INTO [dbo].[WorkflowFiles]
            ,@CreatorID
            ,@CreatorName
            ,@CreatorCode
-           ,@Type
-           ,@FileStatus
+           --,@Type
+           --,@FileStatus
            ,@FolderID
            ,getdate());
 ";
                     sqlConn.Open();
                     SqlTransaction tran = sqlConn.BeginTransaction();
-                    foreach (WorkflowFileInfo item in list)
+                    foreach (FileUploadItem item in list)
                     {
                         SqlCommand cmd = new SqlCommand(sql, sqlConn);
                         cmd.Transaction = tran;
@@ -414,13 +435,13 @@ INSERT INTO [dbo].[WorkflowFiles]
                         para_CreatorCode.Value = item.CreatorCode;
                         cmd.Parameters.Add(para_CreatorCode);
 
-                        SqlParameter para_Type = new SqlParameter("Type", SqlDbType.Int);
-                        para_Type.Value = item.Type;
-                        cmd.Parameters.Add(para_Type);
+                        //SqlParameter para_Type = new SqlParameter("Type", SqlDbType.Int);
+                        //para_Type.Value = item.Type;
+                        //cmd.Parameters.Add(para_Type);
 
-                        SqlParameter para_FileStatus = new SqlParameter("FileStatus", SqlDbType.Int);
-                        para_FileStatus.Value = item.FileStatus;
-                        cmd.Parameters.Add(para_FileStatus);
+                        //SqlParameter para_FileStatus = new SqlParameter("FileStatus", SqlDbType.Int);
+                        //para_FileStatus.Value = item.FileStatus;
+                        //cmd.Parameters.Add(para_FileStatus);
 
                         SqlParameter para_FolderID = new SqlParameter("FolderID", SqlDbType.UniqueIdentifier);
                         para_FolderID.Value = item.FolderID;
@@ -434,17 +455,17 @@ INSERT INTO [dbo].[WorkflowFiles]
             }
         }
 
+        //public static void SaveFolder(Guid folder)
+        //{
+        //    SaveFolder(folder, WorkflowFileType.None);
+        //}
+
         public static void SaveFolder(Guid folder)
         {
-            SaveFolder(folder, WorkflowFileType.None);
-        }
-
-        public static void SaveFolder(Guid folder, WorkflowFileType type)
-        {
-            string savePath = System.Web.HttpContext.Current.Request.MapPath(FileUploadHelper.TempFileSavePath);
+            string savePath = System.Web.HttpContext.Current.Request.MapPath(FileUploadHtmlHelper.TempFileSavePath);
             string folderPath = Path.Combine(savePath, folder.ToString());
             DirectoryInfo dir = new DirectoryInfo(folderPath);
-            List<WorkflowFileInfo> list = new List<WorkflowFileInfo>();
+            List<FileUploadItem> list = new List<FileUploadItem>();
 
             if (dir.Exists)
             {
@@ -452,7 +473,7 @@ INSERT INTO [dbo].[WorkflowFiles]
 
                 if (files.Length > 0)
                 {
-                    string userfilePath = FileUploadHelper.FileStorePath;
+                    string userfilePath = FileUploadHtmlHelper.FileStorePath;
                     if (!Directory.Exists(userfilePath))
                     {
                         Directory.CreateDirectory(userfilePath);
@@ -468,15 +489,15 @@ INSERT INTO [dbo].[WorkflowFiles]
                             Directory.CreateDirectory(targetFolder);
                         }
 
-                        WorkflowFileInfo info = new WorkflowFileInfo();
+                        FileUploadItem info = new FileUploadItem();
                         info.FileName = file.Name;
                         info.FileSize = file.Length;
                         info.Extension = file.Extension;
                         //info.CreatorID = curUser.UserId;
                         //info.CreatorName = curUser.Name;
                         //info.CreatorCode = curUser.UserCode;
-                        info.Type = type;
-                        info.FileStatus = WorkflowFileStatus.Submit;
+                        //info.Type = type;
+                        //info.FileStatus = WorkflowFileStatus.Submit;
                         info.StorePath = storePath + file.Name;
                         info.FolderID = folder;
                         list.Add(info);
@@ -486,7 +507,7 @@ INSERT INTO [dbo].[WorkflowFiles]
                 }
             }
 
-            FileUploadHelper.Save(list);
+            FileUploadHtmlHelper.Save(list);
 
             if (dir.Exists)
             {
@@ -494,9 +515,9 @@ INSERT INTO [dbo].[WorkflowFiles]
             }
         }
 
-        public static List<WorkflowFileInfo> GetFiles(Guid folder)
+        public static List<FileUploadItem> GetFiles(Guid folder)
         {
-            List<WorkflowFileInfo> list = new List<WorkflowFileInfo>();
+            List<FileUploadItem> list = new List<FileUploadItem>();
 
             string sql = @"
 SELECT ID, FileName, FileSize, Extension
@@ -504,7 +525,7 @@ FROM WorkflowFiles WITH (NOLOCK)
 WHERE FolderID=@FolderID
 ";
 
-            using (SqlConnection sqlConn = new SqlConnection(FileUploadHelper.DatabaseConnection))
+            using (SqlConnection sqlConn = new SqlConnection(FileUploadHtmlHelper.DatabaseConnection))
             {
                 sqlConn.Open();
                 SqlCommand cmd = new SqlCommand(sql, sqlConn);
@@ -517,7 +538,7 @@ WHERE FolderID=@FolderID
                 {
                     while (reader.Read())
                     {
-                        WorkflowFileInfo info = new WorkflowFileInfo();
+                        FileUploadItem info = new FileUploadItem();
                         info.ID = Convert.ToInt32(reader["ID"]);
                         info.FileName = reader["FileName"] as string;
                         info.FileSize = Convert.ToInt32(reader["FileSize"]);
@@ -530,7 +551,7 @@ WHERE FolderID=@FolderID
                 sqlConn.Close();
             }
 
-            string savePath = System.Web.HttpContext.Current.Request.MapPath(FileUploadHelper.TempFileSavePath);
+            string savePath = System.Web.HttpContext.Current.Request.MapPath(FileUploadHtmlHelper.TempFileSavePath);
             string folderPath = Path.Combine(savePath, folder.ToString());
             DirectoryInfo dir = new DirectoryInfo(folderPath);
 
@@ -548,7 +569,7 @@ WHERE FolderID=@FolderID
 
                     foreach (FileInfo file in items)
                     {
-                        WorkflowFileInfo info = new WorkflowFileInfo();
+                        FileUploadItem info = new FileUploadItem();
                         info.ID = -1;
                         info.FileName = file.Name;
                         info.FileSize = file.Length;
@@ -577,9 +598,9 @@ WHERE FolderID=@FolderID
                 return;
             }
 
-            List<WorkflowFileInfo> oldList = FileUploadHelper.GetFilesFromDB(oldFolder);
+            List<FileUploadItem> oldList = FileUploadHtmlHelper.GetFilesFromDB(oldFolder);
 
-            string userfilePath = FileUploadHelper.FileStorePath;
+            string userfilePath = FileUploadHtmlHelper.FileStorePath;
             if (!Directory.Exists(userfilePath))
             {
                 Directory.CreateDirectory(userfilePath);
@@ -587,7 +608,7 @@ WHERE FolderID=@FolderID
             string storePath = DateTime.Now.ToString("yyyy/MM/dd/").Replace("/", "\\") + newFolder.ToString() + "\\";
             //var curUser = System.Web.HttpContext.Current.User.GetCurrentUser();
 
-            List<WorkflowFileInfo> newList = new List<WorkflowFileInfo>();
+            List<FileUploadItem> newList = new List<FileUploadItem>();
             foreach (var file in oldList)
             {
                 string targetFolder = Path.Combine(userfilePath, storePath);
@@ -596,15 +617,15 @@ WHERE FolderID=@FolderID
                     Directory.CreateDirectory(targetFolder);
                 }
 
-                WorkflowFileInfo info = new WorkflowFileInfo();
+                FileUploadItem info = new FileUploadItem();
                 info.FileName = file.FileName;
                 info.FileSize = file.FileSize;
                 info.Extension = file.Extension;
                 //info.CreatorID = curUser.UserId;
                 //info.CreatorName = curUser.Name;
                 //info.CreatorCode = curUser.UserCode;
-                info.Type = WorkflowFileType.FromWorkflow;
-                info.FileStatus = WorkflowFileStatus.Submit;
+                //info.Type = WorkflowFileType.FromWorkflow;
+                //info.FileStatus = WorkflowFileStatus.Submit;
                 info.StorePath = storePath + file.FileName;
                 info.FolderID = newFolder;
                 newList.Add(info);
@@ -612,7 +633,7 @@ WHERE FolderID=@FolderID
                 System.IO.File.Copy(Path.Combine(userfilePath, file.StorePath), Path.Combine(userfilePath, info.StorePath), true);
             }
 
-            FileUploadHelper.Save(newList);
+            FileUploadHtmlHelper.Save(newList);
         }
     }
 }
