@@ -70,12 +70,12 @@ textarea {
 	color: #23527c;
 }
 /*图片上传*/
-.qq-upload-button{
+.picupload .qq-upload-button{
     width: 80px;
     height: 80px;
     background: url(../images/lent.png) no-repeat;
 }
-.qq-upload-button:hover{
+.picupload .qq-upload-button:hover{
     width: 80px;
     height: 80px;
     background: url(../images/lent2.png) no-repeat;

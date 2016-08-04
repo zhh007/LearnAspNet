@@ -38,7 +38,7 @@ namespace Aspnet.Mvc.Extension
             int max = 9;
 
             StringBuilder sb = new StringBuilder();
-            sb.AppendFormat("\r\n<div class='speed-panel' id='{0}'>", htmlId);
+            sb.AppendFormat("\r\n<div class='speed-panel picupload' id='{0}'>", htmlId);
 
             int index = 0;
             foreach (var item in model.Files)
