@@ -71,7 +71,7 @@
                                 }
                                 @if (len < 1)
                                 {
-                                    <div class="speed-main" id="btuplaodGain">
+                                    <div class="speed-main" id="btnGain">
                                         <a href="#">
                                             <div class="lent">
                                             </div>
@@ -80,7 +80,7 @@
                                 }
                                 else
                                 {
-                                    <div class="speed-main " style="display: none;" id="btuplaodGain">
+                                    <div class="speed-main " style="display: none;" id="btnGain">
                                         <a href="#">
                                             <div class="lent">
                                             </div>
@@ -103,7 +103,7 @@
 </div>
 <script type="text/javascript">
     $(function () {
-        init9PicUploader("@Model.PhotoFolderId", "btuplaodGain", '@Href("~/Help/PicUpload_9")', "Gain", 9);
+        init9PicUploader("@Model.PhotoFolderId", "btnGain", '@Href("~/Help/PicUpload_9")', "Gain", 9);
 
         $("#frm-submit").click(function (evt) {
             var frmObj = $("#form1");

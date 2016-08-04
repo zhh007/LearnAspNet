@@ -77,7 +77,7 @@ namespace Aspnet.Mvc.Extension
                 , model.Folder, btnId, VirtualPathUtility.ToAbsolute("~/__picuploader/PicUpload")
                 , htmlId, max);
 
-            sb.AppendLine("});");
+            sb.AppendLine("\r\n});");
             sb.AppendLine("</script>");
 
             return MvcHtmlString.Create(sb.ToString());

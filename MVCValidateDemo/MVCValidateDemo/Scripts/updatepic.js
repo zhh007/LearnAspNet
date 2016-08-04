@@ -4,7 +4,7 @@ function deletePic(obj, boxid) {
     var thispic = $(obj).parents("div.speed-main");
     thispic.remove();
     buildPicInputName(boxid);
-    $("#btuplaod" + boxid).show();
+    $("#btn" + boxid).show();
 }
 
 function buildPicInputName(elId) {
