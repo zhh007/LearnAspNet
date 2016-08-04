@@ -205,10 +205,13 @@
     <Compile Include="assets\ueditor\net\App_Code\UploadHandler.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\FileUploadDemoController.cs" />
+    <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JqueryValidateDemoController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PagerController.cs" />
+    <Compile Include="Controllers\PicHelper.cs" />
+    <Compile Include="Controllers\PicUploadDemoController.cs" />
     <Compile Include="Controllers\StudentController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -216,6 +219,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\PicUploadDemoModel.cs" />
     <Compile Include="Models\Student.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -223,6 +227,7 @@
   <ItemGroup>
     <Content Include="assets\bootstrap\bootstrap.css" />
     <Content Include="assets\bootstrap\bootstrap.min.css" />
+    <Content Include="assets\bootstrap\font-awesome.min.css" />
     <Content Include="assets\fileupload\fineuploader.css" />
     <Content Include="assets\fileupload\images\delet.png" />
     <Content Include="assets\fileupload\images\doc.png" />
@@ -235,7 +240,34 @@
     <Content Include="assets\fileupload\images\zip.png" />
     <Content Include="assets\fileupload\jquery.fineuploader-3.0.js" />
     <Content Include="assets\fileupload\jquery.fineuploader-3.0.min.js" />
+    <Content Include="assets\fonts\fontawesome-webfont.svg" />
+    <Content Include="assets\images\imgpre.png" />
+    <Content Include="assets\images\lent.png" />
+    <Content Include="assets\images\lent2.png" />
     <Content Include="assets\js\fileupload.js" />
+    <Content Include="assets\lightbox\css\lightbox.css" />
+    <Content Include="assets\lightbox\css\screen.css" />
+    <Content Include="assets\lightbox\img\close.png" />
+    <Content Include="assets\lightbox\img\demopage\favicon.png" />
+    <Content Include="assets\lightbox\img\demopage\image-1.jpg" />
+    <Content Include="assets\lightbox\img\demopage\image-2.jpg" />
+    <Content Include="assets\lightbox\img\demopage\image-3.jpg" />
+    <Content Include="assets\lightbox\img\demopage\image-4.jpg" />
+    <Content Include="assets\lightbox\img\demopage\image-5.jpg" />
+    <Content Include="assets\lightbox\img\demopage\image-6.jpg" />
+    <Content Include="assets\lightbox\img\demopage\thumb-1.jpg" />
+    <Content Include="assets\lightbox\img\demopage\thumb-2.jpg" />
+    <Content Include="assets\lightbox\img\demopage\thumb-3.jpg" />
+    <Content Include="assets\lightbox\img\demopage\thumb-4.jpg" />
+    <Content Include="assets\lightbox\img\demopage\thumb-5.jpg" />
+    <Content Include="assets\lightbox\img\demopage\thumb-6.jpg" />
+    <Content Include="assets\lightbox\img\loading.gif" />
+    <Content Include="assets\lightbox\img\next.png" />
+    <Content Include="assets\lightbox\img\prev.png" />
+    <Content Include="assets\lightbox\index.html" />
+    <Content Include="assets\lightbox\js\jquery-1.11.0.min.js" />
+    <Content Include="assets\lightbox\js\lightbox.js" />
+    <Content Include="assets\lightbox\js\lightbox.min.js" />
     <Content Include="assets\ueditor\dialogs\anchor\anchor.html" />
     <Content Include="assets\ueditor\dialogs\attachment\attachment.css" />
     <Content Include="assets\ueditor\dialogs\attachment\attachment.html" />
@@ -518,6 +550,11 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="assets\fonts\fontawesome-webfont.eot" />
+    <Content Include="assets\fonts\fontawesome-webfont.ttf" />
+    <Content Include="assets\fonts\fontawesome-webfont.woff" />
+    <Content Include="assets\fonts\fontawesome-webfont.woff2" />
+    <Content Include="assets\fonts\FontAwesome.otf" />
     <None Include="assets\jquery\jquery-1.10.2.intellisense.js" />
     <Content Include="assets\js\comm.js" />
     <Content Include="assets\jquery\jquery-1.10.2.js" />
@@ -531,6 +568,7 @@
     <Content Include="assets\bootstrap\respond.js" />
     <Content Include="assets\bootstrap\respond.min.js" />
     <Content Include="Scripts\snippets\idcard.js" />
+    <Content Include="Scripts\updatepic.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -576,6 +614,7 @@
     <Content Include="Views\JqueryValidateDemo\InputLimit.cshtml" />
     <Content Include="Views\Pager\Index.cshtml" />
     <Content Include="Views\FileUploadDemo\Index.cshtml" />
+    <Content Include="Views\PicUploadDemo\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -594,6 +633,11 @@
     <Content Include="assets\ueditor\third-party\video-js\font\vjs.eot" />
     <Content Include="assets\ueditor\third-party\video-js\font\vjs.ttf" />
     <Content Include="assets\ueditor\third-party\video-js\font\vjs.woff" />
+    <Content Include="assets\lightbox\img\demopage\.DS_Store" />
+    <Content Include="assets\lightbox\js\.DS_Store" />
+    <Content Include="assets\lightbox\js\jquery-1.11.0.min.map" />
+    <Content Include="assets\lightbox\js\lightbox.min.map" />
+    <Content Include="assets\lightbox\README.markdown" />
     <None Include="Project_Readme.html" />
     <Content Include="assets\jquery\jquery-1.10.2.min.map" />
   </ItemGroup>
