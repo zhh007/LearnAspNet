@@ -615,6 +615,7 @@
     <Content Include="Views\Pager\Index.cshtml" />
     <Content Include="Views\FileUploadDemo\Index.cshtml" />
     <Content Include="Views\PicUploadDemo\Index.cshtml" />
+    <Content Include="Views\PicUploadDemo\Index2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

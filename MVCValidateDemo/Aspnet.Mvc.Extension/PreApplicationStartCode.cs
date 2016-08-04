@@ -35,6 +35,13 @@ namespace Aspnet.Mvc.Extension
                 new { controller = "FileUpload" },
                 new[] { "Aspnet.Mvc.Extension.Controllers" }
                 );
+
+            routes.MapRoute(
+                "picuploader",
+                "__picuploader/{action}",
+                new { controller = "PicUpload" },
+                new[] { "Aspnet.Mvc.Extension.Controllers" }
+                );
         }
     }
 }

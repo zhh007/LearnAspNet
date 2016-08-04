@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Aspnet.Mvc.Extension;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -86,7 +87,7 @@ namespace MVCValidateDemo.Controllers
                     FileData.SaveAs(rawPath);
 
                     // 生成缩略图
-                    PicHelper.GenerateThumb(rawPath, thumbPath, thumbWidth, thumbHeight, "Cut");
+                    ImageHelper.GenerateThumb(rawPath, thumbPath, thumbWidth, thumbHeight, "Cut");
                 }
                 catch (Exception)
                 {
