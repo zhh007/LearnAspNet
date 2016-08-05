@@ -39,32 +39,37 @@ namespace Aspnet.Mvc.Extension
 
             StringBuilder sb = new StringBuilder();
             sb.AppendFormat("\r\n<div class='speed-panel picupload' id='{0}'>", htmlId);
+            sb.AppendFormat("\r\n<input type='hidden' name='{0}' value='{1}' />\r\n", htmlId, model.Folder);
 
             int index = 0;
             foreach (var item in model.Files)
             {
+                if (item.State == UploadState.Delete)
+                    continue;
                 sb.AppendLine("<div class='speed-main'>");
                 sb.AppendLine("<div class='speed-img'>");
-                sb.AppendFormat("<a href='{0}' data-lightbox='roadtrip'>\r\n", !string.IsNullOrEmpty(item.ThumbUrl) ? item.ThumbUrl : item.FileUrl);
-                sb.AppendFormat("<img src='{0}' />\r\n", !string.IsNullOrEmpty(item.ThumbUrl) ? item.ThumbUrl : item.FileUrl);
-                sb.AppendLine("</a>");
+                sb.AppendFormat("\t<a href='{0}' data-lightbox='roadtrip'>\r\n", !string.IsNullOrEmpty(item.ThumbUrl) ? item.ThumbUrl : item.FileUrl);
+                sb.AppendFormat("\t<img src='{0}' />\r\n", !string.IsNullOrEmpty(item.ThumbUrl) ? item.ThumbUrl : item.FileUrl);
+                sb.AppendLine("\t</a>");
                 sb.AppendLine("</div>");
 
                 sb.AppendLine("<div class='speed-del'>");
-                sb.AppendFormat("<a href='javascript:;' onclick='deletePic(this, \"{0}\")'>", htmlId);
-                sb.AppendLine("<i class='fa fa-minus-circle fa-lg'></i>");
-                sb.AppendLine("</a>");
+                sb.AppendFormat("\t<a href='javascript:;' onclick='deletePic(this, \"{0}\")'>", htmlId);
+                sb.Append("<i class='fa fa-minus-circle fa-lg'></i>");
+                sb.Append("</a>");
+                sb.AppendLine("</div>");
 
-                sb.AppendFormat("<input type='hidden' class='state' name='{0}' value='{1}' />", string.Format("{0}State{1}", htmlId, index), 0);
-                sb.AppendFormat("<input type='hidden' class='filename' name='{0}' value='{1}' />", string.Format("{0}FileName{1}", htmlId, index), item.FileName);
-                sb.AppendFormat("<input type='hidden' class='fileurl' name='{0}' value='{1}' />", string.Format("{0}FileUrl{1}", htmlId, index), item.FileUrl);
-                sb.AppendFormat("<input type='hidden' class='thumbname' name='{0}' value='{1}' />", string.Format("{0}ThumbName{1}", htmlId, index), item.ThumbName);
-                sb.AppendFormat("<input type='hidden' class='thumburl' name='{0}' value='{1}' />", string.Format("{0}ThumbUrl{1}", htmlId, index), item.ThumbUrl);
+                sb.AppendFormat("<input type='hidden' class='state' name='{0}' value='{1}' />\r\n", string.Format("{0}State{1}", htmlId, index), item.State == UploadState.New ? 1 : 0);
+                sb.AppendFormat("<input type='hidden' class='filename' name='{0}' value='{1}' />\r\n", string.Format("{0}FileName{1}", htmlId, index), item.FileName);
+                sb.AppendFormat("<input type='hidden' class='fileurl' name='{0}' value='{1}' />\r\n", string.Format("{0}FileUrl{1}", htmlId, index), item.FileUrl);
+                sb.AppendFormat("<input type='hidden' class='thumbname' name='{0}' value='{1}' />\r\n", string.Format("{0}ThumbName{1}", htmlId, index), item.ThumbName);
+                sb.AppendFormat("<input type='hidden' class='thumburl' name='{0}' value='{1}' />\r\n", string.Format("{0}ThumbUrl{1}", htmlId, index), item.ThumbUrl);
 
                 sb.AppendLine("</div>");
                 index++;
             }
 
+            //upload button
             sb.Append("<div class='speed-main'");
             if (index >= max - 1)
             {
@@ -73,6 +78,15 @@ namespace Aspnet.Mvc.Extension
             sb.AppendLine("id='" + btnId + "'>");
             sb.AppendLine("<a href='#'><div class='lent'></div></a>");
             sb.AppendLine("</div>");
+
+            //delete files
+            index = 0;
+            foreach (var item in model.Files)
+            {
+                if (item.State != UploadState.Delete)
+                    continue;
+                sb.AppendFormat("<input type='hidden' class='delete_file' name='{0}' value='{1}' />\r\n", string.Format("{0}Delete{1}", htmlId, index), item.FileName);
+            }
 
             sb.AppendLine("<script type='text/javascript'>");
             sb.AppendLine("$(function () {");
@@ -83,6 +97,7 @@ namespace Aspnet.Mvc.Extension
 
             sb.AppendLine("\r\n});");
             sb.AppendLine("</script>");
+            sb.AppendLine("</div>");
 
             return MvcHtmlString.Create(sb.ToString());
         }

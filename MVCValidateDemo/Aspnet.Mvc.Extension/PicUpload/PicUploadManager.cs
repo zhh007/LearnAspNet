@@ -17,57 +17,57 @@ namespace Aspnet.Mvc.Extension
 
         public static readonly string DomainUrl = ConfigurationManager.AppSettings["System:DomainUrl"];
 
-        private static string SavePhoto(string imagePath)
-        {
-            string photourl = "";
-            if (File.Exists(imagePath))
-            {
-                if (!Directory.Exists(PicUploadManager.PhotoPath))
-                {
-                    Directory.CreateDirectory(PicUploadManager.PhotoPath);
-                }
+        //private static string SavePhoto(string imagePath)
+        //{
+        //    string photourl = "";
+        //    if (File.Exists(imagePath))
+        //    {
+        //        if (!Directory.Exists(PicUploadManager.PhotoPath))
+        //        {
+        //            Directory.CreateDirectory(PicUploadManager.PhotoPath);
+        //        }
 
-                string fpath = Path.Combine(PicUploadManager.PhotoPath, DateTime.Now.Year.ToString("0000"));
-                if (!Directory.Exists(fpath))
-                {
-                    Directory.CreateDirectory(fpath);
-                }
+        //        string fpath = Path.Combine(PicUploadManager.PhotoPath, DateTime.Now.Year.ToString("0000"));
+        //        if (!Directory.Exists(fpath))
+        //        {
+        //            Directory.CreateDirectory(fpath);
+        //        }
 
-                fpath = Path.Combine(fpath, DateTime.Now.Month.ToString("00"));
-                if (!Directory.Exists(fpath))
-                {
-                    Directory.CreateDirectory(fpath);
-                }
+        //        fpath = Path.Combine(fpath, DateTime.Now.Month.ToString("00"));
+        //        if (!Directory.Exists(fpath))
+        //        {
+        //            Directory.CreateDirectory(fpath);
+        //        }
 
-                fpath = Path.Combine(fpath, DateTime.Now.Day.ToString("00"));
-                if (!Directory.Exists(fpath))
-                {
-                    Directory.CreateDirectory(fpath);
-                }
+        //        fpath = Path.Combine(fpath, DateTime.Now.Day.ToString("00"));
+        //        if (!Directory.Exists(fpath))
+        //        {
+        //            Directory.CreateDirectory(fpath);
+        //        }
 
-                string fid = Guid.NewGuid().ToString();
-                string ext = Path.GetExtension(imagePath);
-                string filePath = Path.Combine(fpath, string.Format("{0}{1}", fid, ext));
-                if (File.Exists(filePath))
-                {
-                    File.Delete(filePath);
-                }
+        //        string fid = Guid.NewGuid().ToString();
+        //        string ext = Path.GetExtension(imagePath);
+        //        string filePath = Path.Combine(fpath, string.Format("{0}{1}", fid, ext));
+        //        if (File.Exists(filePath))
+        //        {
+        //            File.Delete(filePath);
+        //        }
 
-                File.Copy(imagePath, filePath);
+        //        File.Copy(imagePath, filePath);
 
-                //using (FileStream fs = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-                //{
-                //    fs.Write(bytes, 0, bytes.Length);
-                //    fs.Close();
-                //}
+        //        //using (FileStream fs = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+        //        //{
+        //        //    fs.Write(bytes, 0, bytes.Length);
+        //        //    fs.Close();
+        //        //}
 
-                photourl = string.Format("Photos/{0:yyyy}/{0:MM}/{0:dd}/{1}{2}", DateTime.Now, fid, ext);
-            }
+        //        photourl = string.Format("Photos/{0:yyyy}/{0:MM}/{0:dd}/{1}{2}", DateTime.Now, fid, ext);
+        //    }
 
-            return photourl;
-        }
+        //    return photourl;
+        //}
 
-        public static string GetPhotoPath(Guid folderid, string filename)
+        public static string GetPicPath(Guid folderid, string filename)
         {
             string savePath = HostingEnvironment.MapPath("~/App_Data/UploadFiles/");
             string folderPath = Path.Combine(savePath, folderid.ToString());
@@ -75,10 +75,10 @@ namespace Aspnet.Mvc.Extension
             return rawingPath;
         }
 
-        public static string SavePhoto(Guid folderid, string filename)
-        {
-            string path = GetPhotoPath(folderid, filename);
-            return SavePhoto(path);
-        }
+        //public static string SavePhoto(Guid folderid, string filename)
+        //{
+        //    string path = GetPhotoPath(folderid, filename);
+        //    return SavePhoto(path);
+        //}
     }
 }

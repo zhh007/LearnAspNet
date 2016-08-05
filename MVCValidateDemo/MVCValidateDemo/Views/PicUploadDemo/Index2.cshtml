@@ -50,46 +50,10 @@
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="button" class="btn btn-primary" id="frm-submit">保存</button>
-                        <button type="button" class="btn btn-default" onclick="goback()">取消</button>
+                        <input type="submit" class="btn btn-primary" value="保存" />
                     </div>
                 </div>
             }
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    $(function () {
-        $("#frm-submit").click(function (evt) {
-            var frmObj = $("#form1");
-            $.validator.unobtrusive.parse(frmObj);
-            var fvalid = check();
-            var fvalid2 = frmObj.valid();
-            if (fvalid && fvalid2) {
-                $.post('@Href("~/PicUploadDemo/Index2")'
-                    , frmObj.serialize()
-                    , function (data) {
-                        ajaxAlert(data);
-                        if (data.success) {
-                            goback();
-                        }
-                    }
-                    , "json"
-                );
-            }
-            evt.preventDefault();
-        });
-    });
-
-    function check() {
-        var success = true;
-
-        //addError("FixedMode", "请输入上课规律。");
-
-        return success;
-    }
-
-    function goback() {
-        location = '@Href("~/PicUploadDemo/")';
-    }
-</script>

@@ -58,21 +58,28 @@ namespace Aspnet.Mvc.Extension
                     break;
                 }
 
+                string state = request[prefix + "State" + rowIndex.ToString()];
                 string fileName = request[prefix + "FileName" + rowIndex.ToString()];
+                string fileUrl = request[prefix + "FileUrl" + rowIndex.ToString()];
                 string thumbName = request[prefix + "ThumbName" + rowIndex.ToString()];
+                string thumbUrl = request[prefix + "ThumbUrl" + rowIndex.ToString()];
 
                 PicUploadItem pfinfo = new PicUploadItem();
                 pfinfo.FileName = fileName;
                 pfinfo.ThumbName = thumbName;
-                if (fileName != "raw")
+                if (state == "1")
                 {
                     pfinfo.State = UploadState.New;
-                    pfinfo.FilePath = PicUploadManager.SavePhoto(folder, fileName);
-                    pfinfo.ThumbPath = PicUploadManager.SavePhoto(folder, thumbName);
+                    pfinfo.FilePath = PicUploadManager.GetPicPath(folder, fileName);
+                    pfinfo.FileUrl = fileUrl;
+                    pfinfo.ThumbPath = PicUploadManager.GetPicPath(folder, thumbName);
+                    pfinfo.ThumbUrl = thumbUrl;
                 }
                 else
                 {
                     pfinfo.State = UploadState.None;
+                    pfinfo.FileUrl = fileUrl;
+                    pfinfo.ThumbUrl = thumbUrl;
                 }
                 photos.Add(pfinfo);
                 rowIndex++;
