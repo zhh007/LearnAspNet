@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web.Mvc;
-using System.Linq.Expressions;
-using System.Web;
-using System.Threading;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Data.SqlClient;
 using System.Data;
 using System.IO;
-using System.Configuration;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
+using System.Web;
+using System.Web.Mvc;
 using System.Web.Mvc.Html;
 
 namespace Aspnet.Mvc.Extension
@@ -96,14 +92,15 @@ namespace Aspnet.Mvc.Extension
         public static MvcHtmlString FileUpload<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper
             , Expression<Func<TModel, TProperty>> expression, string text = "添加文件", bool enabled = true
             , FileUploadDisplayType displayModel = FileUploadDisplayType.Edit)
+            where TProperty : FileUploadModel
         {
-            if (typeof(TProperty) != typeof(FileUploadModel))
-            {
-                throw new Exception("上传控件只能绑定FileUploadModel类。");
-            }
-
             ModelMetadata metadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
             FileUploadModel model = metadata.Model as FileUploadModel;
+
+            if (model == null)
+            {
+                throw new Exception(string.Format("{0}未初始化。", metadata.PropertyName));
+            }
 
             if (model.Folder == null || model.Folder == Guid.Empty)
             {
@@ -267,25 +264,38 @@ namespace Aspnet.Mvc.Extension
             return MvcHtmlString.Create(sb.ToString());
         }
 
-        public static MvcHtmlString FileUploadValidationMessageFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression)
+        public static MvcHtmlString FileUploadValidationMessageFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper
+            , Expression<Func<TModel, TProperty>> expression)
+            where TProperty : FileUploadModel
         {
             return htmlHelper.FileUploadValidationMessageFor(expression, null, null);
         }
 
-        public static MvcHtmlString FileUploadValidationMessageFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, string validationMessage)
+        public static MvcHtmlString FileUploadValidationMessageFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper
+            , Expression<Func<TModel, TProperty>> expression, string validationMessage)
+            where TProperty : FileUploadModel
         {
             return htmlHelper.FileUploadValidationMessageFor(expression, validationMessage, null);
         }
 
-        public static MvcHtmlString FileUploadValidationMessageFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, string validationMessage, object htmlAttributes)
+        public static MvcHtmlString FileUploadValidationMessageFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper
+            , Expression<Func<TModel, TProperty>> expression, string validationMessage, object htmlAttributes)
+            where TProperty : FileUploadModel
         {
             return htmlHelper.FileUploadValidationMessageFor(expression, validationMessage, htmlAttributes, null);
         }
 
-        public static MvcHtmlString FileUploadValidationMessageFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, string validationMessage, object htmlAttributes, string tag)
+        public static MvcHtmlString FileUploadValidationMessageFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper
+            , Expression<Func<TModel, TProperty>> expression, string validationMessage, object htmlAttributes, string tag)
+            where TProperty : FileUploadModel
         {
             ModelMetadata metadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
             FileUploadModel model = metadata.Model as FileUploadModel;
+
+            if (model == null)
+            {
+                throw new Exception(string.Format("{0}未初始化。", metadata.PropertyName));
+            }
 
             string htmlId = string.Format("{0}-{1}", metadata.ContainerType.Name, metadata.PropertyName);
 
