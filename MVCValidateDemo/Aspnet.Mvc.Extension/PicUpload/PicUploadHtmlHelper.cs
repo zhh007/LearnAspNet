@@ -54,10 +54,8 @@ namespace Aspnet.Mvc.Extension
                 sb.AppendLine("\t</a>");
                 sb.AppendLine("</div>");
 
-                sb.AppendLine("<div class='speed-del'>");
-                sb.AppendFormat("\t<a href='javascript:;' onclick='deletePic(this, \"{0}\")'>", htmlId);
-                sb.Append("<i class='fa fa-minus-circle fa-lg'></i>");
-                sb.Append("</a>");
+                sb.Append("<div class='speed-del'>");
+                sb.Append("<a href='javascript:;' class='del'><i class='fa fa-minus-circle fa-lg'></i></a>");
                 sb.AppendLine("</div>");
 
                 sb.AppendFormat("<input type='hidden' class='state' name='{0}' value='{1}' />\r\n", string.Format("{0}State{1}", htmlId, index), item.State == UploadState.New ? 1 : 0);
@@ -92,7 +90,7 @@ namespace Aspnet.Mvc.Extension
             sb.AppendLine("<script type='text/javascript'>");
             sb.AppendLine("$(function () {");
 
-            sb.AppendFormat("init9PicUploader('{0}', '{1}', '{2}', '{3}', {4});"
+            sb.AppendFormat("$.picupload('{0}', '{1}', '{2}', '{3}', {4});"
                 , model.Folder, btnId, VirtualPathUtility.ToAbsolute("~/__picuploader/PicUpload")
                 , htmlId, max);
 

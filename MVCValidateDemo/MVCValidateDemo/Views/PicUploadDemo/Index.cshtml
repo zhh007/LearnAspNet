@@ -103,7 +103,9 @@
 </div>
 <script type="text/javascript">
     $(function () {
-        init9PicUploader("@Model.PhotoFolderId", "btnGain", '@Href("~/Help/PicUpload_9")', "Gain", 9);
+        //init9PicUploader("@Model.PhotoFolderId", "btnGain", '@Href("~/Help/PicUpload_9")', "Gain", 9);
+
+        $.picupload("@Model.PhotoFolderId", "btnGain", '@Href("~/Help/PicUpload_9")', "Gain", 9);
 
         $("#frm-submit").click(function (evt) {
             var frmObj = $("#form1");
