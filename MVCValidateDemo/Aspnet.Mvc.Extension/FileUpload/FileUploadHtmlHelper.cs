@@ -99,7 +99,7 @@ namespace Aspnet.Mvc.Extension
         {
             if (typeof(TProperty) != typeof(FileUploadModel))
             {
-                throw new Exception("上传控件只能绑定FileUploadComponentModel类。");
+                throw new Exception("上传控件只能绑定FileUploadModel类。");
             }
 
             ModelMetadata metadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
