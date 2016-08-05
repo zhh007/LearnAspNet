@@ -19,14 +19,15 @@ namespace Aspnet.Mvc.Extension
     public static class PicUploadHtmlHelper
     {
         public static MvcHtmlString PicUpload<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression)
+            where TProperty : PicUploadModel
         {
-            if (typeof(TProperty) != typeof(PicUploadModel))
-            {
-                throw new Exception("上传控件只能绑定PicUploadModel类。");
-            }
-
             ModelMetadata metadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
             PicUploadModel model = metadata.Model as PicUploadModel;
+
+            if(model == null)
+            {
+                throw new Exception(string.Format("{0}未初始化。", metadata.PropertyName));
+            }
 
             if (model.Folder == null || model.Folder == Guid.Empty)
             {

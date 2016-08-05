@@ -11,7 +11,6 @@ namespace MVCValidateDemo.Controllers
 {
     public class PicUploadDemoController : Controller
     {
-        // GET: PicUploadDemo
         public ActionResult Index()
         {
             PicUploadDemoModel model = new PicUploadDemoModel();
