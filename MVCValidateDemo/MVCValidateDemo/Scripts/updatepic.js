@@ -7,7 +7,7 @@ function deletePic(obj, boxid) {
         var filename = thispic.find("input[class='filename']").val();
         var len = $("#" + boxid).children("input[class='delete_file']").length;
         var inpDelete = boxid + "Delete" + len;
-        $("#" + btid).append('<input type="hidden" class="filename" value="' + filename + '" name="' + inpDelete + '"/>');
+        $("#" + boxid).append('<input type="hidden" class="filename" value="' + filename + '" name="' + inpDelete + '"/>');
     }
     thispic.remove();
     buildPicInputName(boxid);

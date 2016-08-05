@@ -570,6 +570,8 @@
     <Content Include="Scripts\snippets\idcard.js" />
     <Content Include="Scripts\updatepic.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="assets\demo\lion.jpg" />
+    <Content Include="assets\demo\dog.jpg" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
