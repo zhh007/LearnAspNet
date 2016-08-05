@@ -2,15 +2,25 @@
 
 function deletePic(obj, boxid) {
     var thispic = $(obj).parents("div.speed-main");
+    var state = thispic.find("input[class='state']").val();
+    if (state == '0') {
+        var filename = thispic.find("input[class='filename']").val();
+        var len = $("#" + boxid).children("input[class='delete_file']").length;
+        var inpDelete = boxid + "Delete" + len;
+        $("#" + btid).append('<input type="hidden" class="filename" value="' + filename + '" name="' + inpDelete + '"/>');
+    }
     thispic.remove();
     buildPicInputName(boxid);
     $("#btn" + boxid).show();
 }
 
-function buildPicInputName(elId) {
-    $("#" + elId).find("div.speed-main").each(function (i, o) {
-        $(this).find("input[class*='filename']").attr("name", elId + "FileName" + i);
-        $(this).find("input[class*='thumburl']").attr("name", elId + "ThumbUrl" + i);
+function buildPicInputName(boxid) {
+    $("#" + boxid).find("div.speed-main").each(function (i, o) {
+        $(this).find("input[class='state']").attr("name", boxid + "State" + i);
+        $(this).find("input[class='filename']").attr("name", boxid + "FileName" + i);
+        $(this).find("input[class='fileurl']").attr("name", boxid + "FileUrl" + i);
+        $(this).find("input[class='thumbname']").attr("name", boxid + "ThumbName" + i);
+        $(this).find("input[class='thumburl']").attr("name", boxid + "ThumbUrl" + i);
     });
 }
 
@@ -78,8 +88,11 @@ function init9PicUploader(curFolder, btid, endpointUrl, boxid, max) {
     function bindImg(responseJson) {
         $("#" + boxid).find(".clsimagepre").remove();
         var len = $("#" + boxid).children(".speed-main").length;
-        var filename = boxid + "FileName" + (len - 1);
-        var thumburl = boxid + "ThumbUrl" + (len - 1);
+        var inpState = boxid + "State" + (len - 1);
+        var inpFileName = boxid + "FileName" + (len - 1);
+        var inpFileUrl = boxid + "FileUrl" + (len - 1);
+        var inpThumbName = boxid + "ThumbName" + (len - 1);
+        var inpThumbUrl = boxid + "ThumbUrl" + (len - 1);
         var html = '<div class="speed-main">';
         html += '<div class="speed-img">';
         html += '<img src="' + responseJson.thumburl + '"></div>';
@@ -87,8 +100,11 @@ function init9PicUploader(curFolder, btid, endpointUrl, boxid, max) {
         html += "<a href='javascript:;' onclick=\"deletePic(this,\'" + boxid + "\')\"><i class='fa fa-minus-circle fa-lg'></i>";
         html += '</a>';
         html += '</div>';
-        html += '<input type="hidden" class="filename" value="' + responseJson.filename + '" name="' + filename + '"/>';
-        html += '<input type="hidden" class="thumburl" value="' + responseJson.thumburl + '" name="' + thumburl + '"/>';
+        html += '<input type="hidden" class="state" value="1" name="' + inpState + '"/>';
+        html += '<input type="hidden" class="filename" value="' + responseJson.filename + '" name="' + inpFileName + '"/>';
+        html += '<input type="hidden" class="fileurl" value="' + responseJson.fileurl + '" name="' + inpFileUrl + '"/>';
+        html += '<input type="hidden" class="thumbname" value="' + responseJson.thumbname + '" name="' + inpThumbName + '"/>';
+        html += '<input type="hidden" class="thumburl" value="' + responseJson.thumburl + '" name="' + inpThumbUrl + '"/>';
         html += '</div>';
         $("#" + btid).before(html);
         if (len >= max) {

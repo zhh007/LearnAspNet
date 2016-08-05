@@ -39,8 +39,6 @@ namespace Aspnet.Mvc.Extension
                         string v = controllerContext.HttpContext.Request[htmlId];
                         o.Folder = new Guid(v);
                         o.Files = Build(controllerContext.HttpContext.Request, o.Folder, htmlId);
-
-
                     }
                 }
             }
@@ -48,7 +46,7 @@ namespace Aspnet.Mvc.Extension
             return model;
         }
 
-        public List<PicUploadItem> Build(HttpRequestBase request, Guid? folder, string prefix)
+        public List<PicUploadItem> Build(HttpRequestBase request, Guid folder, string prefix)
         {
             List<PicUploadItem> photos = new List<PicUploadItem>();
 
@@ -60,13 +58,39 @@ namespace Aspnet.Mvc.Extension
                     break;
                 }
 
-                string rowFileName = request[prefix + "FileName" + rowIndex.ToString()];
+                string fileName = request[prefix + "FileName" + rowIndex.ToString()];
+                string thumbName = request[prefix + "ThumbName" + rowIndex.ToString()];
+
                 PicUploadItem pfinfo = new PicUploadItem();
-                pfinfo.FileName = rowFileName;
-                if (rowFileName != "raw")
+                pfinfo.FileName = fileName;
+                pfinfo.ThumbName = thumbName;
+                if (fileName != "raw")
                 {
-                    pfinfo.ThumbPath = PicUploadManager.SavePhoto(folder.GetValueOrDefault(), rowFileName);
+                    pfinfo.State = UploadState.New;
+                    pfinfo.FilePath = PicUploadManager.SavePhoto(folder, fileName);
+                    pfinfo.ThumbPath = PicUploadManager.SavePhoto(folder, thumbName);
                 }
+                else
+                {
+                    pfinfo.State = UploadState.None;
+                }
+                photos.Add(pfinfo);
+                rowIndex++;
+            }
+
+            rowIndex = 0;
+            while (true)
+            {
+                if (string.IsNullOrEmpty(request.Form[prefix + "Delete" + rowIndex.ToString()]))
+                {
+                    break;
+                }
+
+                string fileName = request[prefix + "Delete" + rowIndex.ToString()];
+
+                PicUploadItem pfinfo = new PicUploadItem();
+                pfinfo.FileName = fileName;
+                pfinfo.State = UploadState.Delete;
                 photos.Add(pfinfo);
                 rowIndex++;
             }

@@ -27,5 +27,17 @@ namespace Aspnet.Mvc.Extension
         public string ThumbName { get; set; }
         public string ThumbPath { get; set; }
         public string ThumbUrl { get; set; }
+        public UploadState State { get; set; }
+        public PicUploadItem()
+        {
+            State = UploadState.None;
+        }
+    }
+
+    public enum UploadState
+    {
+        None = 0,
+        New = 1,
+        Delete = 2
     }
 }

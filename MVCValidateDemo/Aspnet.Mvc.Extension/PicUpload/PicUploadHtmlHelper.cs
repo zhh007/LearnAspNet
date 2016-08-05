@@ -55,7 +55,11 @@ namespace Aspnet.Mvc.Extension
                 sb.AppendLine("<i class='fa fa-minus-circle fa-lg'></i>");
                 sb.AppendLine("</a>");
 
-                sb.AppendFormat("<input type='hidden' class='filename' value='raw' name='{0}' />", string.Format("{0}FileName{1}", htmlId, index));
+                sb.AppendFormat("<input type='hidden' class='state' name='{0}' value='{1}' />", string.Format("{0}State{1}", htmlId, index), 0);
+                sb.AppendFormat("<input type='hidden' class='filename' name='{0}' value='{1}' />", string.Format("{0}FileName{1}", htmlId, index), item.FileName);
+                sb.AppendFormat("<input type='hidden' class='fileurl' name='{0}' value='{1}' />", string.Format("{0}FileUrl{1}", htmlId, index), item.FileUrl);
+                sb.AppendFormat("<input type='hidden' class='thumbname' name='{0}' value='{1}' />", string.Format("{0}ThumbName{1}", htmlId, index), item.ThumbName);
+                sb.AppendFormat("<input type='hidden' class='thumburl' name='{0}' value='{1}' />", string.Format("{0}ThumbUrl{1}", htmlId, index), item.ThumbUrl);
 
                 sb.AppendLine("</div>");
                 index++;
