@@ -70,7 +70,7 @@ namespace Aspnet.Mvc.Extension
 
             //upload button
             sb.Append("<div class='speed-main'");
-            if (index >= max - 1)
+            if (index + 1 >= max)
             {
                 sb.Append(" style='display:none;'");
             }

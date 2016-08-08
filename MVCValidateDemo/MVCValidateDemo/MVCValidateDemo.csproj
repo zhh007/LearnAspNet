@@ -568,7 +568,7 @@
     <Content Include="assets\bootstrap\respond.js" />
     <Content Include="assets\bootstrap\respond.min.js" />
     <Content Include="Scripts\snippets\idcard.js" />
-    <Content Include="Scripts\updatepic.js" />
+    <Content Include="Scripts\picupload.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="assets\demo\lion.jpg" />
     <Content Include="assets\demo\dog.jpg" />
