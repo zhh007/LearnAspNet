@@ -18,7 +18,7 @@ namespace Aspnet.Mvc.Extension
         /// <param name="thumbPath">缩略图路径</param>
         /// <param name="width">缩略图宽度</param>
         /// <param name="height">缩略图高度</param>
-        /// <param name="mode">生成缩略图的方式</param>   
+        /// <param name="mode">生成缩略图的方式</param>
         public static void GenerateThumb(string imagePath, string thumbPath, int width, int height, string mode)
         {
             Image image = Image.FromFile(imagePath);

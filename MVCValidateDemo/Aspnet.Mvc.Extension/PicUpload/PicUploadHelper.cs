@@ -9,13 +9,13 @@ using System.Web.Hosting;
 
 namespace Aspnet.Mvc.Extension
 {
-    public class PicUploadManager
+    public static class PicUploadHelper
     {
-        public static readonly string FileStoreRootPath = ConfigurationManager.AppSettings["System:FileStoreRootPath"];
+        //public static readonly string FileStoreRootPath = ConfigurationManager.AppSettings["System:FileStoreRootPath"];
 
-        public static readonly string PhotoPath = Path.Combine(PicUploadManager.FileStoreRootPath, "Photos");
+        //public static readonly string PhotoPath = Path.Combine(FileStoreRootPath, "Photos");
 
-        public static readonly string DomainUrl = ConfigurationManager.AppSettings["System:DomainUrl"];
+        //public static readonly string DomainUrl = ConfigurationManager.AppSettings["System:DomainUrl"];
 
         //private static string SavePhoto(string imagePath)
         //{

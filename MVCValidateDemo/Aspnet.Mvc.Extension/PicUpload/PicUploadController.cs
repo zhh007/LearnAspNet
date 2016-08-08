@@ -12,7 +12,7 @@ namespace Aspnet.Mvc.Extension.Controllers
     public class PicUploadController : Controller
     {
         /// <summary>
-        /// 九宫格图片上传
+        /// 图片上传
         /// </summary>
         /// <param name="folder"></param>
         /// <param name="thumbWidth"></param>
@@ -20,7 +20,7 @@ namespace Aspnet.Mvc.Extension.Controllers
         /// <param name="sizeLimit"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult PicUpload(Guid folder, int thumbWidth, int thumbHeight, int sizeLimit)
+        public ActionResult Upload(Guid folder, int thumbWidth, int thumbHeight, int sizeLimit)
         {
             HttpFileCollectionBase files = Request.Files;
 
@@ -105,6 +105,22 @@ namespace Aspnet.Mvc.Extension.Controllers
                 thumbname = thumbName,
                 thumburl = Url.Content(thumbUrl)
             }, "text/html");
+        }
+
+        [HttpPost]
+        public ActionResult Delete(Guid folder, string filename)
+        {
+            string filePath = PicUploadHelper.GetPicPath(folder, filename);
+            string thumbPath = PicUploadHelper.GetPicPath(folder, "_thumb_" + filename);
+            if(System.IO.File.Exists(filePath))
+            {
+                System.IO.File.Delete(filePath);
+            }
+            if(System.IO.File.Exists(thumbPath))
+            {
+                System.IO.File.Delete(thumbPath);
+            }
+            return Json(new { success = true, message = "删除成功。" });
         }
     }
 }

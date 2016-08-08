@@ -24,7 +24,7 @@ namespace Aspnet.Mvc.Extension
             ModelMetadata metadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
             PicUploadModel model = metadata.Model as PicUploadModel;
 
-            if(model == null)
+            if (model == null)
             {
                 throw new Exception(string.Format("{0}未初始化。", metadata.PropertyName));
             }
@@ -90,8 +90,9 @@ namespace Aspnet.Mvc.Extension
             sb.AppendLine("<script type='text/javascript'>");
             sb.AppendLine("$(function () {");
 
-            sb.AppendFormat("$.picupload('{0}', '{1}', '{2}', '{3}', {4});"
-                , model.Folder, btnId, VirtualPathUtility.ToAbsolute("~/__picuploader/PicUpload")
+            sb.AppendFormat("$.picupload('{0}', '{1}', '{2}', {3});"
+                , VirtualPathUtility.ToAbsolute("~/__picuploader/Upload")
+                , VirtualPathUtility.ToAbsolute("~/__picuploader/Delete")
                 , htmlId, max);
 
             sb.AppendLine("\r\n});");
@@ -100,5 +101,5 @@ namespace Aspnet.Mvc.Extension
 
             return MvcHtmlString.Create(sb.ToString());
         }
-}
+    }
 }

@@ -70,9 +70,9 @@ namespace Aspnet.Mvc.Extension
                 if (state == "1")
                 {
                     pfinfo.State = UploadState.New;
-                    pfinfo.FilePath = PicUploadManager.GetPicPath(folder, fileName);
+                    pfinfo.FilePath = PicUploadHelper.GetPicPath(folder, fileName);
                     pfinfo.FileUrl = fileUrl;
-                    pfinfo.ThumbPath = PicUploadManager.GetPicPath(folder, thumbName);
+                    pfinfo.ThumbPath = PicUploadHelper.GetPicPath(folder, thumbName);
                     pfinfo.ThumbUrl = thumbUrl;
                 }
                 else

@@ -1,11 +1,11 @@
-﻿/*-----------------------九宫格JS代码------------------------------*/
-(function () {
+﻿//图片上传控件
 
-    function deletePic(obj, boxid) {
+(function () {
+    function deletePic(obj, boxid, folder, delurl) {
         var thispic = $(obj).parents("div.speed-main");
         var state = thispic.find("input[class='state']").val();
-        if (state == '0') {
-            var filename = thispic.find("input[class='filename']").val();
+        var filename = thispic.find("input[class='filename']").val();
+        if (state == '0') {//非新上传文件
             var len = $("#" + boxid).children("input[class='delete_file']").length;
             var inpDelete = boxid + "Delete" + len;
             $("#" + boxid).append('<input type="hidden" class="filename" value="' + filename + '" name="' + inpDelete + '"/>');
@@ -13,6 +13,7 @@
         thispic.remove();
         buildPicInputName(boxid);
         $("#btn" + boxid).show();
+        $.post(delurl, { 'folder': folder, 'filename': filename}, function (result) {}, "json");
     }
 
     function buildPicInputName(boxid) {
@@ -25,7 +26,7 @@
         });
     }
 
-    function init9PicUploader(curFolder, btid, endpointUrl, boxid, max) {
+    function initPicUploader(curFolder, btid, endpointUrl, boxid, max) {
         var curLimitfilesize = 10 * 1024 * 1024; // 1 MB = 1 * 1024 * 1024 bytes
         var lImageBoxHeight = 120, lImageBoxWidth = 120;
 
@@ -116,14 +117,15 @@
         }
     }
 
-    $.picupload = function (curFolder, btid, endpointUrl, boxid, max) {
-        init9PicUploader(curFolder, btid, endpointUrl, boxid, max);
+    $.picupload = function (uploadUrl, deleteUrl, boxid, max) {
+        var btid = "btn" + boxid;
+        var folder = $('input[name=' + boxid + ']').val();
+        initPicUploader(folder, btid, uploadUrl, boxid, max);
 
         //删除事件
         $("#" + boxid).on("click", "a.del", function (evt) {
-            deletePic(this, boxid);
+            deletePic(this, boxid, folder, deleteUrl);
         });
     }
 
 })();
-/*-----------------------九宫格JS代码end------------------------------*/

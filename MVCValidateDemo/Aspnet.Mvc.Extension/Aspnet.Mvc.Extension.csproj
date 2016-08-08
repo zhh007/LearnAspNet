@@ -105,7 +105,7 @@
     <Compile Include="LogHelper.cs" />
     <Compile Include="PicUpload\PicUploadController.cs" />
     <Compile Include="PicUpload\PicUploadHtmlHelper.cs" />
-    <Compile Include="PicUpload\PicUploadManager.cs" />
+    <Compile Include="PicUpload\PicUploadHelper.cs" />
     <Compile Include="PicUpload\PicUploadModel.cs" />
     <Compile Include="PicUpload\PicUploadModelBinder.cs" />
     <Compile Include="PicUpload\PicUploadModelBinderProvider.cs" />
