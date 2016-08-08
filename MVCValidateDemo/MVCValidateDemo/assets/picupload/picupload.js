@@ -1,4 +1,7 @@
-﻿//图片上传控件
+﻿/*
+ * 图片上传控件
+ * 依赖jquery,bootstrap3.0,font-awesome.min.css,lightbox
+ */
 
 (function () {
     function deletePic(obj, boxid, folder, delurl) {
