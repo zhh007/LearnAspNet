@@ -2,7 +2,7 @@
 
 (function () {
     function deletePic(obj, boxid, folder, delurl) {
-        var thispic = $(obj).parents("div.speed-main");
+        var thispic = $(obj).parents("div.pp-box");
         var state = thispic.find("input[class='state']").val();
         var filename = thispic.find("input[class='filename']").val();
         if (state == '0') {//非新上传文件
@@ -17,7 +17,7 @@
     }
 
     function buildPicInputName(boxid) {
-        $("#" + boxid).find("div.speed-main").each(function (i, o) {
+        $("#" + boxid).find("div.pp-box").each(function (i, o) {
             $(this).find("input[class='state']").attr("name", boxid + "State" + i);
             $(this).find("input[class='filename']").attr("name", boxid + "FileName" + i);
             $(this).find("input[class='fileurl']").attr("name", boxid + "FileUrl" + i);
@@ -53,7 +53,7 @@
             callbacks: {
                 onSubmit: function (id, fileName) {
                     this._options.request.params.sizeLimit = curLimitfilesize;
-                    var html = '<div class="speed-main clsimagepre"><div class="progress" style="margin:47px auto; width:80px"></div></div>';
+                    var html = '<div class="pp-box clsimagepre"><div class="progress"></div></div>';
                     $("#" + btid).before(html);
                     $("#" + btid).hide();
                 },
@@ -89,16 +89,17 @@
 
         function bindImg(responseJson) {
             $("#" + boxid).find(".clsimagepre").remove();
-            var len = $("#" + boxid).children(".speed-main").length;
+            var len = $("#" + boxid).children(".pp-box").length;
             var inpState = boxid + "State" + (len - 1);
             var inpFileName = boxid + "FileName" + (len - 1);
             var inpFileUrl = boxid + "FileUrl" + (len - 1);
             var inpThumbName = boxid + "ThumbName" + (len - 1);
             var inpThumbUrl = boxid + "ThumbUrl" + (len - 1);
-            var html = '<div class="speed-main">';
-            html += '<div class="speed-img">';
-            html += '<img src="' + responseJson.thumburl + '"></div>';
-            html += '<div class="speed-del">';
+            var html = '<div class="pp-box">';
+            html += '<div class="pp-img">';
+            html += '<a href="' + responseJson.fileurl + '" data-lightbox="roadtrip">';
+            html += '<img src="' + responseJson.thumburl + '"></a></div>';
+            html += '<div class="btn-del">';
             html += "<a href='javascript:;' class='del'><i class='fa fa-minus-circle fa-lg'></i>";
             html += '</a>';
             html += '</div>';

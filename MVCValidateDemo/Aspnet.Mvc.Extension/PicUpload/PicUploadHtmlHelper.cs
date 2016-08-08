@@ -39,7 +39,7 @@ namespace Aspnet.Mvc.Extension
             int max = 9;
 
             StringBuilder sb = new StringBuilder();
-            sb.AppendFormat("\r\n<div class='speed-panel picupload' id='{0}'>", htmlId);
+            sb.AppendFormat("\r\n<div class='pp-panel picupload' id='{0}'>", htmlId);
             sb.AppendFormat("\r\n<input type='hidden' name='{0}' value='{1}' />\r\n", htmlId, model.Folder);
 
             int index = 0;
@@ -47,14 +47,14 @@ namespace Aspnet.Mvc.Extension
             {
                 if (item.State == UploadState.Delete)
                     continue;
-                sb.AppendLine("<div class='speed-main'>");
-                sb.AppendLine("<div class='speed-img'>");
+                sb.AppendLine("<div class='pp-box'>");
+                sb.AppendLine("<div class='pp-img'>");
                 sb.AppendFormat("\t<a href='{0}' data-lightbox='roadtrip'>\r\n", !string.IsNullOrEmpty(item.ThumbUrl) ? item.ThumbUrl : item.FileUrl);
                 sb.AppendFormat("\t<img src='{0}' />\r\n", !string.IsNullOrEmpty(item.ThumbUrl) ? item.ThumbUrl : item.FileUrl);
                 sb.AppendLine("\t</a>");
                 sb.AppendLine("</div>");
 
-                sb.Append("<div class='speed-del'>");
+                sb.Append("<div class='btn-del'>");
                 sb.Append("<a href='javascript:;' class='del'><i class='fa fa-minus-circle fa-lg'></i></a>");
                 sb.AppendLine("</div>");
 
@@ -69,7 +69,7 @@ namespace Aspnet.Mvc.Extension
             }
 
             //upload button
-            sb.Append("<div class='speed-main'");
+            sb.Append("<div class='pp-box'");
             if (index + 1 >= max)
             {
                 sb.Append(" style='display:none;'");
@@ -87,6 +87,7 @@ namespace Aspnet.Mvc.Extension
                 sb.AppendFormat("<input type='hidden' class='delete_file' name='{0}' value='{1}' />\r\n", string.Format("{0}Delete{1}", htmlId, index), item.FileName);
             }
 
+            sb.AppendLine("<div style='clear:both'></div>");
             sb.AppendLine("<script type='text/javascript'>");
             sb.AppendLine("$(function () {");
 

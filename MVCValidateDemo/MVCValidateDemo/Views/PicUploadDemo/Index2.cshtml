@@ -3,22 +3,14 @@
     ViewBag.Title = "Index2";
 }
 
-<style type="text/css">
-    .qq-upload-list {
-        display: none;
-    }
-
-    .qq-upload-button {
-        background-color: transparent;
-        width: 80px;
-        height: 80px;
-    }
-</style>
+@section head{
+    <link href="~/assets/picupload/picupload.css" rel="stylesheet" />
+    <link href="~/assets/lightbox/css/lightbox.css" rel="stylesheet" />
+}
 
 @section scripts{
     <script src="~/assets/fileupload/jquery.fineuploader-3.0.min.js"></script>
-    <script src="~/Scripts/picupload.js"></script>
-    <link href="~/assets/lightbox/css/lightbox.css" rel="stylesheet" />
+    <script src="~/assets/picupload/picupload.js"></script>
     <script src="~/assets/lightbox/js/lightbox.min.js"></script>
 }
 <div class="row">

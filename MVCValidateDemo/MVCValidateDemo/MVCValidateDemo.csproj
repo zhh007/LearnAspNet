@@ -268,6 +268,7 @@
     <Content Include="assets\lightbox\js\jquery-1.11.0.min.js" />
     <Content Include="assets\lightbox\js\lightbox.js" />
     <Content Include="assets\lightbox\js\lightbox.min.js" />
+    <Content Include="assets\picupload\picupload.css" />
     <Content Include="assets\ueditor\dialogs\anchor\anchor.html" />
     <Content Include="assets\ueditor\dialogs\attachment\attachment.css" />
     <Content Include="assets\ueditor\dialogs\attachment\attachment.html" />
@@ -568,7 +569,7 @@
     <Content Include="assets\bootstrap\respond.js" />
     <Content Include="assets\bootstrap\respond.min.js" />
     <Content Include="Scripts\snippets\idcard.js" />
-    <Content Include="Scripts\picupload.js" />
+    <Content Include="assets\picupload\picupload.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="assets\demo\lion.jpg" />
     <Content Include="assets\demo\dog.jpg" />

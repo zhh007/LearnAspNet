@@ -1,0 +1,75 @@
+﻿/*图片上传*/
+.pp-panel {
+	width: 826px;
+}
+.pp-box {
+	float: left;
+	width: 80px;
+	height: 80px;
+	margin-right: 10px;
+	margin-bottom: 10px;
+}
+.pp-img {
+	position: absolute;
+	z-index: 98;
+	width: 80px;
+	height: 80px;
+	overflow: hidden;
+}
+.pp-img img {
+	width: 100%
+}
+.pp-box .lent {
+	width: 80px;
+	height: 80px;
+	background: url(../images/lent.png) no-repeat
+}
+.pp-box .lent:hover {
+	width: 80px;
+	height: 80px;
+	background: url(../images/lent2.png) no-repeat
+}
+.pp-box .btn-del {
+	width: 24px;
+	height: 24px;
+	position: relative;
+	top: 6px;
+	right: -60px;
+	z-index: 100;
+}
+.pp-box .btn-del i {
+	color: #337ab7;
+	width: 18px;
+	height: 18px;
+}
+.pp-box .btn-del i:hover {
+	color: #23527c;
+}
+.picupload .clsimagepre{
+    width: 80px;
+    height: 80px;
+    background: url(../images/imgpre.png) no-repeat;
+    background-size:cover;
+}
+.clsimagepre .progress {
+    margin-top:30px;width:80px
+}
+.picupload .qq-upload-list {
+    display: none;
+}
+.picupload .qq-upload-button{
+    width: 80px;
+    height: 80px;
+    background: url(../images/lent.png) no-repeat transparent;
+}
+.picupload .qq-upload-button:hover{
+    width: 80px;
+    height: 80px;
+    background: url(../images/lent2.png) no-repeat;
+}
+.qq-upload-button input[type=file] {
+    height:174px;
+}
+.qq-upload-button input[type=file]::-webkit-file-upload-button { /* chromes and blink button */
+    cursor: pointer; 
+}
