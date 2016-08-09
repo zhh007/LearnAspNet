@@ -16,7 +16,8 @@
         }
         thispic.remove();
         buildPicInputName(inputId);
-        $("#btn" +inputId).show();
+        $("#btn" + inputId).show();
+        $("#" +inputId).parents("form").validate().element("#" +inputId);
         $.post(delurl, { 'folder': folder, 'filename': filename}, function (result) {}, "json");
     }
 
@@ -120,6 +121,7 @@
             } else {
                 $("#" + btid).show();
             }
+            $("#" + inputId).parents("form").validate().element("#" + inputId);
         }
     }
 
