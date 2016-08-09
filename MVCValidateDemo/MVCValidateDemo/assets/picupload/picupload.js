@@ -3,33 +3,35 @@
  * 依赖jquery,bootstrap3.0,font-awesome.min.css,lightbox
  */
 
-(function () {
-    function deletePic(obj, boxid, folder, delurl) {
+(function ($) {
+    function deletePic(obj, inputId, folder, delurl) {
+        var boxid = "box" + inputId;
         var thispic = $(obj).parents("div.pp-box");
         var state = thispic.find("input[class='state']").val();
         var filename = thispic.find("input[class='filename']").val();
         if (state == '0') {//非新上传文件
             var len = $("#" + boxid).children("input[class='delete_file']").length;
-            var inpDelete = boxid + "Delete" + len;
+            var inpDelete = inputId + "Delete" + len;
             $("#" + boxid).append('<input type="hidden" class="filename" value="' + filename + '" name="' + inpDelete + '"/>');
         }
         thispic.remove();
-        buildPicInputName(boxid);
-        $("#btn" + boxid).show();
+        buildPicInputName(inputId);
+        $("#btn" +inputId).show();
         $.post(delurl, { 'folder': folder, 'filename': filename}, function (result) {}, "json");
     }
 
-    function buildPicInputName(boxid) {
-        $("#" + boxid).find("div.pp-box").each(function (i, o) {
-            $(this).find("input[class='state']").attr("name", boxid + "State" + i);
-            $(this).find("input[class='filename']").attr("name", boxid + "FileName" + i);
-            $(this).find("input[class='fileurl']").attr("name", boxid + "FileUrl" + i);
-            $(this).find("input[class='thumbname']").attr("name", boxid + "ThumbName" + i);
-            $(this).find("input[class='thumburl']").attr("name", boxid + "ThumbUrl" + i);
+    function buildPicInputName(inputId) {
+        $("#box" + inputId).find("div.pp-box").each(function (i, o) {
+            $(this).find("input[class='state']").attr("name", inputId + "State" +i);
+            $(this).find("input[class='filename']").attr("name", inputId + "FileName" +i);
+            $(this).find("input[class='fileurl']").attr("name", inputId + "FileUrl" +i);
+            $(this).find("input[class='thumbname']").attr("name", inputId + "ThumbName" +i);
+            $(this).find("input[class='thumburl']").attr("name", inputId + "ThumbUrl" +i);
         });
     }
 
-    function initPicUploader(curFolder, btid, endpointUrl, boxid, max) {
+    function initPicUploader(curFolder, btid, endpointUrl, inputId, max) {
+        var boxid = "box" + inputId;
         var curLimitfilesize = 10 * 1024 * 1024; // 1 MB = 1 * 1024 * 1024 bytes
         var lImageBoxHeight = 120, lImageBoxWidth = 120;
 
@@ -93,11 +95,11 @@
         function bindImg(responseJson) {
             $("#" + boxid).find(".clsimagepre").remove();
             var len = $("#" + boxid).children(".pp-box").length;
-            var inpState = boxid + "State" + (len - 1);
-            var inpFileName = boxid + "FileName" + (len - 1);
-            var inpFileUrl = boxid + "FileUrl" + (len - 1);
-            var inpThumbName = boxid + "ThumbName" + (len - 1);
-            var inpThumbUrl = boxid + "ThumbUrl" + (len - 1);
+            var inpState = inputId + "State" + (len - 1);
+            var inpFileName = inputId + "FileName" + (len - 1);
+            var inpFileUrl = inputId + "FileUrl" + (len - 1);
+            var inpThumbName = inputId + "ThumbName" + (len - 1);
+            var inpThumbUrl = inputId + "ThumbUrl" + (len - 1);
             var html = '<div class="pp-box">';
             html += '<div class="pp-img">';
             html += '<a href="' + responseJson.fileurl + '" data-lightbox="roadtrip">';
@@ -121,15 +123,34 @@
         }
     }
 
-    $.picupload = function (uploadUrl, deleteUrl, boxid, max) {
-        var btid = "btn" + boxid;
-        var folder = $('input[name=' + boxid + ']').val();
-        initPicUploader(folder, btid, uploadUrl, boxid, max);
+    $.picupload = function (uploadUrl, deleteUrl, inputId, max) {
+        var boxid = "box" +inputId;
+        var btnid = "btn" + inputId;
+        var folder = $('input[name=' + inputId + ']').val();
+        initPicUploader(folder, btnid, uploadUrl, inputId, max);
 
         //删除事件
         $("#" + boxid).on("click", "a.del", function (evt) {
-            deletePic(this, boxid, folder, deleteUrl);
+            deletePic(this, inputId, folder, deleteUrl);
         });
     }
 
-})();
+    if ($.validator && $.validator.unobtrusive) {
+        /*上传控件必填验证*/
+        /*上传控件至少要上传几个文件*/
+        $.validator.addMethod("puRequired", function (value, element, param) {
+            var elId = "box" + element.id;
+            if ($("#" + elId + " .pp-img").length < parseInt($(element).attr("MinFilesCount"), 10)) return false;
+            return true;
+        });
+        $.validator.unobtrusive.adapters.addBool("puRequired");
+
+        /*上传控件最多上传几个文件*/
+        $.validator.addMethod("puMaxFilesCount", function (value, element, param) {
+            var elId = "box" + element.id;
+            if ($("#" + elId + " .pp-img").length > parseInt($(element).attr("MaxFilesCount"), 10)) return false;
+            return true;
+        });
+        $.validator.unobtrusive.adapters.addBool("puMaxFilesCount");
+    }
+}(jQuery));

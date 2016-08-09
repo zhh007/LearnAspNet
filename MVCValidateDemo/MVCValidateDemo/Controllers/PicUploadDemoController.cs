@@ -55,13 +55,11 @@ namespace MVCValidateDemo.Controllers
         [Display(Name = "图片")]
         [Required]
         //[FileUploadValidate(MaxFilesCount=2)]
-        //[FileUploadValidate(ConfigName = "testconfig")]
         public PicUploadModel Files { get; set; }
 
         [Display(Name = "图片2")]
         [Required]
         //[FileUploadValidate(MaxFilesCount=2)]
-        //[FileUploadValidate(ConfigName = "testconfig")]
         public PicUploadModel Files2 { get; set; }
 
         public PicUploadDemoViewModel()

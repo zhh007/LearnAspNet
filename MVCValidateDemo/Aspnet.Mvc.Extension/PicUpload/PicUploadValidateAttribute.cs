@@ -10,11 +10,6 @@ namespace Aspnet.Mvc.Extension
     public class PicUploadValidateAttribute : Attribute
     {
         /// <summary>
-        /// 总文件大小（MB）
-        /// </summary>
-        public int MaxTotalFileSizeMB { get; set; }
-
-        /// <summary>
         /// 单文件大小（MB）
         /// </summary>
         public int MaxFileSizeMB { get; set; }

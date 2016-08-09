@@ -34,6 +34,9 @@ namespace Aspnet.Mvc.Extension
                             bindingContext.ModelState[property.Name] = modelState;
                         }
 
+                        //string partialFieldName = ExpressionHelper.GetExpressionText(expression);
+                        //string fullHtmlFieldName = htmlHelper.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName(partialFieldName);
+
                         string htmlId = string.Format("{0}-{1}", modelType.Name, property.Name);
 
                         string v = controllerContext.HttpContext.Request[htmlId];

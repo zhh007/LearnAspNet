@@ -23,7 +23,6 @@ namespace Aspnet.Mvc.Extension.Controllers
         [HttpPost]
         public ActionResult Upload(Guid folder, int thumbWidth, int thumbHeight, int sizeLimit)
         {
-            Thread.Sleep(100000);
             HttpFileCollectionBase files = Request.Files;
 
             if (files.Count == 0)
