@@ -34,6 +34,8 @@ namespace Aspnet.Mvc.Extension
                 model.Folder = Guid.NewGuid();
             }
 
+            PicUploadValidateAttribute fatt = Helper.GetAttribute<PicUploadValidateAttribute>(metadata.ContainerType, metadata.PropertyName);
+
             string htmlId = string.Format("{0}-{1}", metadata.ContainerType.Name, metadata.PropertyName);
             string btnId = string.Format("btn{0}", htmlId);
             int max = 9;

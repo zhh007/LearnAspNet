@@ -117,7 +117,7 @@ namespace Aspnet.Mvc.Extension
             string Regex = string.Empty;
             string RegexMessage = string.Empty;
             string[] MustFiles = null;
-            FileUploadValidateAttribute fatt = GetFileUploadValidateAttribute(metadata.ContainerType, metadata.PropertyName);
+            FileUploadValidateAttribute fatt = Helper.GetAttribute<FileUploadValidateAttribute>(metadata.ContainerType, metadata.PropertyName);//GetFileUploadValidateAttribute(metadata.ContainerType, metadata.PropertyName);
             if (fatt != null)
             {
                 MinFilesCount = fatt.MinFilesCount;
@@ -146,8 +146,8 @@ namespace Aspnet.Mvc.Extension
                 }
             }
 
-            RequiredAttribute reqAtt = GetRequiredAttribute(metadata.ContainerType, metadata.PropertyName);
-            DisplayAttribute displayAtt = GetDisplayAttribute(metadata.ContainerType, metadata.PropertyName);
+            RequiredAttribute reqAtt = Helper.GetAttribute<RequiredAttribute>(metadata.ContainerType, metadata.PropertyName); //GetRequiredAttribute(metadata.ContainerType, metadata.PropertyName);
+            DisplayAttribute displayAtt = Helper.GetAttribute<DisplayAttribute>(metadata.ContainerType, metadata.PropertyName);//GetDisplayAttribute(metadata.ContainerType, metadata.PropertyName);
             string fieldName = "";
             if (displayAtt != null)
             {
@@ -300,39 +300,6 @@ namespace Aspnet.Mvc.Extension
             string htmlId = string.Format("{0}-{1}", metadata.ContainerType.Name, metadata.PropertyName);
 
             return htmlHelper.ValidationMessage(htmlId, validationMessage, htmlAttributes, tag);
-        }
-
-        internal static FileUploadValidateAttribute GetFileUploadValidateAttribute(Type modelType, string propertyName)
-        {
-            var att = TypeDescriptor.GetProperties(modelType)[propertyName].Attributes[typeof(FileUploadValidateAttribute)] as FileUploadValidateAttribute;
-            if (att != null)
-            {
-                return att;
-            }
-
-            return null;
-        }
-
-        internal static RequiredAttribute GetRequiredAttribute(Type modelType, string propertyName)
-        {
-            var att = TypeDescriptor.GetProperties(modelType)[propertyName].Attributes[typeof(RequiredAttribute)] as RequiredAttribute;
-            if (att != null)
-            {
-                return att;
-            }
-
-            return null;
-        }
-
-        internal static DisplayAttribute GetDisplayAttribute(Type modelType, string propertyName)
-        {
-            var att = TypeDescriptor.GetProperties(modelType)[propertyName].Attributes[typeof(DisplayAttribute)] as DisplayAttribute;
-            if (att != null)
-            {
-                return att;
-            }
-
-            return null;
         }
 
     }

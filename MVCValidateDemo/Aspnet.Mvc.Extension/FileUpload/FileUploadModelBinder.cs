@@ -13,7 +13,7 @@ namespace Aspnet.Mvc.Extension
         public override object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
         {
             var model = base.BindModel(controllerContext, bindingContext);
-            if(model == null)
+            if (model == null)
             {
                 return null;
             }
@@ -50,7 +50,7 @@ namespace Aspnet.Mvc.Extension
                         string Regex = string.Empty;
                         string RegexMessage = string.Empty;
                         string[] MustFiles = null;
-                        FileUploadValidateAttribute fatt = FileUploadHtmlHelper.GetFileUploadValidateAttribute(modelType, property.Name);
+                        FileUploadValidateAttribute fatt = Helper.GetAttribute<FileUploadValidateAttribute>(modelType, property.Name); //FileUploadHtmlHelper.GetFileUploadValidateAttribute(modelType, property.Name);
                         FileUploadManager manager = new FileUploadManager();
                         if (fatt != null)
                         {
@@ -86,8 +86,8 @@ namespace Aspnet.Mvc.Extension
                             ExcludeFileExtensions = _gConfig.FileExtensions_Exclude;
                         }
 
-                        RequiredAttribute reqAtt = FileUploadHtmlHelper.GetRequiredAttribute(modelType, property.Name);
-                        DisplayAttribute displayAtt = FileUploadHtmlHelper.GetDisplayAttribute(modelType, property.Name);
+                        RequiredAttribute reqAtt = Helper.GetAttribute<RequiredAttribute>(modelType, property.Name);//FileUploadHtmlHelper.GetRequiredAttribute(modelType, property.Name);
+                        DisplayAttribute displayAtt = Helper.GetAttribute<DisplayAttribute>(modelType, property.Name);//FileUploadHtmlHelper.GetDisplayAttribute(modelType, property.Name);
                         string fieldName = "";
                         if (displayAtt != null)
                         {

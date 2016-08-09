@@ -101,6 +101,7 @@
     <Compile Include="FileUpload\FileUploadController.cs" />
     <Compile Include="FileUpload\FileUploadHtmlHelper.cs" />
     <Compile Include="FileUpload\FileUploadValidateAttribute.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="ImageHelper.cs" />
     <Compile Include="LogHelper.cs" />
     <Compile Include="PicUpload\PicUploadController.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="PicUpload\PicUploadModel.cs" />
     <Compile Include="PicUpload\PicUploadModelBinder.cs" />
     <Compile Include="PicUpload\PicUploadModelBinderProvider.cs" />
+    <Compile Include="PicUpload\PicUploadValidateAttribute.cs" />
     <Compile Include="PreApplicationStartCode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SystemConfig.cs" />
