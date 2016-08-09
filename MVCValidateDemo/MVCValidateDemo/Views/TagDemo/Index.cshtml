@@ -1,0 +1,133 @@
+﻿@model MVCValidateDemo.Controllers.TagDemoViewModel
+@{
+    ViewBag.Title = "Index2";
+}
+
+@section head{
+    <link href="~/assets/jquery-ui-1.10.4/themes/base/minified/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/assets/tagit/jquery.tagit.css" rel="stylesheet" />
+    <style type="text/css">
+        .xr-panel .alert {
+            padding: 1px 5px;
+            margin-bottom: 5px;
+            float: left;
+            margin-right: 5px;
+        }
+
+        .xr-panel .alert span {
+            margin-left: 10px;
+        }
+    </style>
+}
+
+@section scripts{
+    <script src="~/assets/jquery-ui-1.10.4/ui/minified/jquery-ui.min.js"></script>
+    <script src="~/assets/tagit/tag-it.min.js"></script>
+}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="page-header fn-clear">
+            <h2 class="col-md-10">标签DEMO</h2>
+            <div class="col-md-2 text-right">
+                @*<a onclick="goback()" class="btn btn-danger" style="margin-top: 25px;">返回</a>*@
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-wrapper">
+    <div class="row">
+        <div class="col-lg-8 col-md-9 col-sm-11">
+            @using (Html.BeginForm("Index", "TagDemo", FormMethod.Post, new { @id = "form1", @class = "form-horizontal" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        标签<span style="color: #F00">*</span>
+                    </label>
+                    <div class="col-sm-10">
+                        <div class="row">
+                            <div class="col-lg-12 form-control-static">您只能输入10个关键字标签。</div>
+                        </div>
+                        <ul id="myTags" style="display:inline-block; width:826px; margin-bottom:0;"></ul>
+                        <div class="row">
+                            <div class="col-lg-12 text-muted" style="">
+                                您可以自行输入，也可以从以下标签中快速选择：
+                            </div>
+                            <div class="xr-panel col-lg-12" style="max-height:none; margin-top:5px" id="tagpanel">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <input type="submit" class="btn btn-primary" value="保存" />
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function initTags() {
+        $("#myTags").tagit({
+            fieldName: "Tags",
+            tagLimit: 10,
+            autocomplete: { source: '@Href("~/TagDemo/GetTags")', delay: 0, minLength: 1 },
+            onTagLimitExceeded: function (event, ui) {
+                $("#myTagsTip").text("最多10个标签").css("color", "red").css("display", "none");
+                $("#myTagsTip").fadeIn(500, function () {
+                    $("#myTagsTip").fadeOut(1500, 0);
+                });
+            },
+            afterTagRemoved: function (event, ui) {
+                $("#myTagsTip").text("").css("color", "#bbb");
+            }
+        });
+
+        $("#myTags .tagit-new input").keyup(function () {
+            if ($("#myTags .tagit-choice").length >= 10) {
+                if ($.trim($(this).val()) == "") {
+                    $("#myTagsTip").text("").css("color", "#bbb");
+                } else {
+                    $("#myTagsTip").text("最多10个标签").css("color", "red").css("display", "none");
+                    $("#myTagsTip").fadeIn(500, function () {
+                        $("#myTagsTip").fadeOut(1500, 0);
+                    });
+                }
+            } else {
+                $("#myTagsTip").text("").css("color", "#bbb");
+            }
+        });
+
+        $("#myTags .tagit-new input").blur(function () {
+            if ($("#myTags .tagit-choice").length >= 10) {
+                $(this).val("");
+                $("#myTagsTip").text("").css("color", "#bbb");
+            }
+        });
+
+        buildTags();
+    }
+
+    function buildTags() {
+        $.post('@Href("~/TagDemo/GetRecommendTags")', null, function (data) {
+            if (data.success) {
+                $("#tagpanel").html("");
+                $.each(data.tags, function (i, o) {
+                    $("#tagpanel").append('<div style="cursor:pointer" class="alert alert-success alert-dismissible" onclick="addTag(this)">' + o + '</div>');
+                });
+            }
+        }
+            , "json"
+        );
+    }
+
+    function addTag(obj) {
+        $("#myTags").tagit("createTag", $.trim($(obj).text()));
+    }
+    $(function () {
+        $("#form1").validate().settings.ignore = [];
+
+        initTags();
+    });
+</script>
