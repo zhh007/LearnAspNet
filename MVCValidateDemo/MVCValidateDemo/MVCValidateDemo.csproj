@@ -242,6 +242,7 @@
     <Content Include="assets\fileupload\jquery.fineuploader-3.0.js" />
     <Content Include="assets\fileupload\jquery.fineuploader-3.0.min.js" />
     <Content Include="assets\fonts\fontawesome-webfont.svg" />
+    <Content Include="assets\images\img-upload.png" />
     <Content Include="assets\images\imgpre.png" />
     <Content Include="assets\images\lent.png" />
     <Content Include="assets\images\lent2.png" />

@@ -33,6 +33,7 @@
 
     function initPicUploader(curFolder, btid, endpointUrl, inputId, max) {
         var boxid = "box" + inputId;
+        var btnInBox = $("#" + boxid).find("#" + btid).length > 0;
         var curLimitfilesize = 10 * 1024 * 1024; // 1 MB = 1 * 1024 * 1024 bytes
         var lImageBoxHeight = 120, lImageBoxWidth = 120;
 
@@ -60,8 +61,16 @@
                 onSubmit: function (id, fileName) {
                     this._options.request.params.sizeLimit = curLimitfilesize;
                     var html = '<div class="pp-box clsimagepre"><div class="progress"></div></div>';
-                    $("#" + btid).before(html);
-                    $("#" + btid).hide();
+                    if (btnInBox) {
+                        $("#" + btid).before(html);
+                        $("#" + btid).hide();
+                    } else {
+                        if ($("#" + boxid + " .pp-box:last").length > 0) {
+                            $("#" + boxid + " .pp-box:last").after(html);
+                        } else {
+                            $("#" + boxid).prepend(html);
+                        }
+                    }
                 },
                 onError: function (id, fileName, reason) {
                     //alert(reason);
@@ -115,19 +124,28 @@
             html += '<input type="hidden" class="thumbname" value="' + responseJson.thumbname + '" name="' + inpThumbName + '"/>';
             html += '<input type="hidden" class="thumburl" value="' + responseJson.thumburl + '" name="' + inpThumbUrl + '"/>';
             html += '</div>';
-            $("#" + btid).before(html);
-            if (len >= max) {
-                $("#" + btid).hide();
+            if (btnInBox) {
+                $("#" + btid).before(html);
+                if (len >= max) {
+                    $("#" + btid).hide();
+                } else {
+                    $("#" + btid).show();
+                }
             } else {
-                $("#" + btid).show();
+                if ($("#" + boxid + " .pp-box:last").length > 0) {
+                    $("#" + boxid + " .pp-box:last").after(html);
+                } else {
+                    $("#" + boxid).prepend(html);
+                }
             }
+
             $("#" + inputId).parents("form").validate().element("#" + inputId);
         }
     }
 
-    $.picupload = function (uploadUrl, deleteUrl, inputId, max) {
+    $.picupload = function (uploadUrl, deleteUrl, inputId, btnid, max) {
         var boxid = "box" +inputId;
-        var btnid = "btn" + inputId;
+        //var btnid = "btn" + inputId;
         var folder = $('input[name=' + inputId + ']').val();
         initPicUploader(folder, btnid, uploadUrl, inputId, max);
 

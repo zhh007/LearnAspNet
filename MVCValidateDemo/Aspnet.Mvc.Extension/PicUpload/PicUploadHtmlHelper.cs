@@ -23,7 +23,7 @@ namespace Aspnet.Mvc.Extension
         public readonly static int defaultMaxFileSizeMB = 10;
 
         public static MvcHtmlString PicUpload<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper
-            , Expression<Func<TModel, TProperty>> expression)
+            , Expression<Func<TModel, TProperty>> expression, string btnId = "")
             where TProperty : PicUploadModel
         {
             ModelMetadata metadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
@@ -62,7 +62,6 @@ namespace Aspnet.Mvc.Extension
 
             string inputId = string.Format("{0}-{1}", metadata.ContainerType.Name, metadata.PropertyName);
             string boxId = string.Format("box{0}", inputId);
-            string btnId = string.Format("btn{0}", inputId);
 
             StringBuilder sb = new StringBuilder();
             sb.AppendFormat("\r\n<div class='pp-panel picupload' id='{0}'>", boxId);
@@ -110,14 +109,18 @@ namespace Aspnet.Mvc.Extension
             }
 
             //upload button
-            sb.Append("<div class='pp-box'");
-            if (MaxFilesCount > 0 && index + 1 >= MaxFilesCount)
+            if (string.IsNullOrEmpty(btnId))
             {
-                sb.Append(" style='display:none;'");
+                btnId = string.Format("btn{0}", inputId);
+                sb.Append("<div class='pp-box'");
+                if (MaxFilesCount > 0 && index + 1 >= MaxFilesCount)
+                {
+                    sb.Append(" style='display:none;'");
+                }
+                sb.AppendLine("id='" + btnId + "'>");
+                sb.AppendLine("<a href='#'><div class='lent'></div></a>");
+                sb.AppendLine("</div>");
             }
-            sb.AppendLine("id='" + btnId + "'>");
-            sb.AppendLine("<a href='#'><div class='lent'></div></a>");
-            sb.AppendLine("</div>");
 
             //delete files
             index = 0;
@@ -132,10 +135,10 @@ namespace Aspnet.Mvc.Extension
             sb.AppendLine("<script type='text/javascript'>");
             sb.AppendLine("$(function () {");
 
-            sb.AppendFormat("$.picupload('{0}', '{1}', '{2}', {3});"
+            sb.AppendFormat("$.picupload('{0}', '{1}', '{2}', '{3}', {4});"
                 , VirtualPathUtility.ToAbsolute("~/__picuploader/Upload")
                 , VirtualPathUtility.ToAbsolute("~/__picuploader/Delete")
-                , inputId, MaxFilesCount);
+                , inputId, btnId, MaxFilesCount);
 
             sb.AppendLine("\r\n});");
             sb.AppendLine("</script>");
