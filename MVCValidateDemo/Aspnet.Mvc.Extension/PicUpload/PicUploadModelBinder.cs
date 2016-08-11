@@ -42,6 +42,41 @@ namespace Aspnet.Mvc.Extension
                         string v = controllerContext.HttpContext.Request[htmlId];
                         o.Folder = new Guid(v);
                         o.Files = Build(controllerContext.HttpContext.Request, o.Folder, htmlId);
+
+                        int MinFilesCount = PicUploadHtmlHelper.defaultMinFilesCount;
+                        int MaxFilesCount = PicUploadHtmlHelper.defaultMaxFilesCount;
+                        int MaxFileSizeMB = PicUploadHtmlHelper.defaultMaxFileSizeMB;
+                        PicUploadValidateAttribute patt = Helper.GetAttribute<PicUploadValidateAttribute>(modelType, property.Name);
+                        if (patt != null)
+                        {
+                            MinFilesCount = patt.MinFilesCount;
+                            MaxFilesCount = patt.MaxFilesCount;
+                            MaxFileSizeMB = patt.MaxFileSizeMB;
+                        }
+
+                        RequiredAttribute reqAtt = Helper.GetAttribute<RequiredAttribute>(modelType, property.Name);
+                        DisplayAttribute displayAtt = Helper.GetAttribute<DisplayAttribute>(modelType, property.Name);//FileUploadHtmlHelper.GetDisplayAttribute(modelType, property.Name);
+                        string fieldDisplayName = "";
+                        if (displayAtt != null)
+                        {
+                            fieldDisplayName = displayAtt.Name;
+                        }
+
+                        if (reqAtt != null && MinFilesCount<=0)
+                        {
+                            MinFilesCount = 1;
+                        }
+
+                        if (MinFilesCount > 0 && (o.Files == null || o.Files.Count < MinFilesCount))
+                        {
+                            modelState.Errors.Add(string.Format("{0}至少要上传{1}个图片。", fieldDisplayName, MinFilesCount));
+                        }
+
+                        if (MaxFilesCount > 0 && o.Files != null && o.Files.Count > MaxFilesCount)
+                        {
+                            modelState.Errors.Add(string.Format("{0}最多上传{1}个图片。", fieldDisplayName, MaxFilesCount));
+                        }
+
                     }
                 }
             }
