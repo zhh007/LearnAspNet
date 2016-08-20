@@ -11,6 +11,21 @@
     <link href="~/Content/site.css" rel="stylesheet" type="text/css" />
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Content/messi/messi.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        jQuery.browser = {};
+        jQuery.browser.mozilla = /mozilla/.test(navigator.userAgent.toLowerCase()) && !/webkit/.test(navigator.userAgent.toLowerCase());
+        jQuery.browser.webkit = /webkit/.test(navigator.userAgent.toLowerCase());
+        jQuery.browser.opera = /opera/.test(navigator.userAgent.toLowerCase());
+        jQuery.browser.msie = /msie/.test(navigator.userAgent.toLowerCase());
+        jQuery.browser.version = '';
+        function _url(url) {
+            var root = '@Href("~/")';
+            if (url) {
+                root += (url[0] == '/' ? url.substring(1) : url);
+            }
+            return root;
+        }
+    </script>
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
