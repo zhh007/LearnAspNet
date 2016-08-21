@@ -47,13 +47,11 @@ namespace MvcFox.Controllers
             if (files.Count > 1)
             {
                 return Json(new { success = false }, "text/html");
-                //return Content("每次只能上传一个文件！");
             }
 
             if (files[0].ContentLength == 0)
             {
                 return Json(new { success = false }, "text/html");
-                //return Content("文件内容不能为空！");
             }
 
             if (files[0].ContentLength > sizeLimit)
@@ -173,8 +171,6 @@ namespace MvcFox.Controllers
                     {
                         throw new ApplicationException(e.Message);
                     }
-
-                    //result = string.Format("{{\"success\": true, \"fileid\": '{0}'}}", fileid.ToString());
                 }
                 catch (Exception ex)
                 {
@@ -274,11 +270,6 @@ namespace MvcFox.Controllers
                 y = 0;
             }
 
-            //x = x / percent;
-            //y = y / percent;
-            //w = w / percent;
-            //h = h / percent;
-
             float nPercent = 0;
             float nPercentW = 0;
             float nPercentH = 0;
@@ -286,21 +277,8 @@ namespace MvcFox.Controllers
             if (files.Count() == 1)
             {
                 string ext = files[0].Extension;
-                //string filename = Path.GetFileName(files[0].FullName).Substring(36 + 8);
-
-                //删除旧文件               
-                //var tmp_new = dif.GetFiles("_new_" + fileid.ToString() + "*", SearchOption.TopDirectoryOnly);
-                //foreach (var item in tmp_new)
-                //{
-                //    item.Delete();
-                //}
-
-                //{formatid}_raw_{filename}.ext
                 string raw_filename = "_rawing_" + fileid + ext;
                 string raw_filepath = Path.Combine(savePath, string.Format("_rawing_{0}{1}", fileid, ext)); // raw_filename);
-                //
-
-                //{formatid}_new_{filename}.ext
                 string newName = "_new_" + fileid + ext;
                 string newpath = Path.Combine(savePath, newName);
 
@@ -312,23 +290,10 @@ namespace MvcFox.Controllers
                 {
                     files[0].CopyTo(raw_filepath);
                 }
-                using (Bitmap oldimg = new Bitmap(raw_filepath))//files[0].FullName
+                using (Bitmap oldimg = new Bitmap(raw_filepath))
                 {
                     int sourceWidth = oldimg.Width;
                     int sourceHeight = oldimg.Height;
-
-                    //nPercentW = (maxWidth / (float)sourceWidth);
-                    //nPercentH = (maxHeight / (float)sourceHeight);
-
-                    //if (nPercentH < nPercentW)
-                    //    nPercent = nPercentH;
-                    //else
-                    //    nPercent = nPercentW;
-
-                    //x = x / nPercent;
-                    //y = y / nPercent;
-                    //w = w / nPercent;
-                    //h = h / nPercent;
 
                     if (w > sourceWidth)
                     {
@@ -356,46 +321,9 @@ namespace MvcFox.Controllers
                         }
 
                         ImageHelper.Resize(bmp, (int)maxWidth, (int)maxHeight, newpath);
-
-                        //EncoderParameters encoderParams = new EncoderParameters();
-                        //long[] quality = new long[1];
-                        //quality[0] = 92; //压缩比例，决定图片大小的重要因素。
-                        //EncoderParameter encoderParam = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, quality);
-                        //encoderParams.Param[0] = encoderParam;
-
-                        //int targetWidth = (int)maxWidth;
-                        //int targetHeight = (int)maxHeight;
-
-                        //using (Bitmap newBmp = new Bitmap(targetWidth, targetHeight))
-                        //{
-                        //    newBmp.SetResolution(oldimg.HorizontalResolution, oldimg.VerticalResolution);
-                        //    using (Graphics ng = Graphics.FromImage(newBmp))
-                        //    {
-                        //        // 用白色清空 
-                        //        ng.Clear(Color.White);
-                        //        // 指定高质量的双三次插值法。执行预筛选以确保高质量的收缩。此模式可产生质量最高的转换图像。 
-                        //        ng.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                        //        // 指定高质量、低速度呈现。 
-                        //        ng.SmoothingMode = SmoothingMode.HighQuality;
-
-                        //        // 在指定位置并且按指定大小绘制指定的 Image 的指定部分。 
-                        //        ng.DrawImage(bmp, new Rectangle(0, 0, targetWidth, targetHeight), new Rectangle(0, 0, bmp.Width, bmp.Height), GraphicsUnit.Pixel);
-                        //    }
-
-                        //    newBmp.Save(newpath, GetCodecInfo("image/jpeg"), encoderParams);
-                        //}
-
-                        //bmp.Save(newpath, GetCodecInfo("image/jpeg"), encoderParams);
                     }
-                    //内存不足
-                    //Bitmap newimg = oldimg.Clone(rect, oldimg.PixelFormat);
-                    //newimg.Save(newpath);
                 }
 
-                //string clearfile = Path.Combine(savePath, "_clear.txt");
-                //System.IO.File.Delete(clearfile);
-
-                //删除 {formatid}_rawing_{filename}.ext
                 try
                 {
                     System.IO.File.Delete(raw_filepath);
@@ -428,12 +356,6 @@ namespace MvcFox.Controllers
                     return File(files[0].FullName, "application/octet-stream", "draft");
                 }
             }
-
-            //ImageDocumentDTO doc = imageDocumentService.GetByOpenID(openid, formatid);
-            //if (doc != null)
-            //{
-            //    return File(doc.FileBody, "application/octet-stream", "show");
-            //}
 
             return Content("");
         }
