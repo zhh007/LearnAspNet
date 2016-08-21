@@ -20,6 +20,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -221,6 +222,7 @@
     <Compile Include="Controllers\HeadEditController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImageEditController.cs" />
+    <Compile Include="Controllers\ImageHelper.cs" />
     <Compile Include="Controllers\TestDialogController.cs" />
     <Compile Include="Controllers\TestErrorController.cs" />
     <Compile Include="Controllers\TestFormController.cs" />

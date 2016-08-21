@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
 
 namespace MvcFox.Controllers
 {
@@ -64,7 +63,6 @@ namespace MvcFox.Controllers
                     string filename = Path.GetFileName(FileData.FileName);
                     string ext = Path.GetExtension(FileData.FileName);
 
-                    string newTmpFileName = "_newTmp_" + fileId.ToString() + ext;
                     rawingFileName = "_raw_" + fileId.ToString() + ext;
 
                     string savePath = Request.MapPath("~/App_Data/UploadFiles/");
@@ -80,21 +78,22 @@ namespace MvcFox.Controllers
                     }
 
                     string rawingPath = Path.Combine(folderPath, rawingFileName);
+                    string newTmpFileName = "_newTmp_" + fileId.ToString() + ext;
                     newTmpFileName = Path.Combine(folderPath, newTmpFileName);
                     try
                     {
+                        if (System.IO.File.Exists(rawingPath))
+                        {
+                            System.IO.File.Delete(rawingPath);
+                        }
+
+                        //处理图片
                         if (System.IO.File.Exists(newTmpFileName))
                         {
                             System.IO.File.Delete(newTmpFileName);
                         }
                         FileData.SaveAs(newTmpFileName);
-
-                        //处理图片
                         Prc(newTmpFileName, rawingPath, maxWidth, maxHeight);
-                        if (System.IO.File.Exists(newTmpFileName))
-                        {
-                            System.IO.File.Delete(newTmpFileName);
-                        }
 
                         using (Bitmap rawImage = new Bitmap(rawingPath))
                         {
@@ -150,79 +149,60 @@ namespace MvcFox.Controllers
             return Json(new { success = true, fileid = fileId.ToString(), percent = nPercent, spercent = snPercent, hResolution = hResolution, vResolution = vResolution, width = newImageWidth, height = newImageHeight }, "text/html");
         }
 
-        private void Prc(string sourceFilePath, string targetFile, float maxWidth, float maxHeight)
+        /// <summary>
+        /// 图片旋转
+        /// </summary>
+        public ActionResult Rotate(Guid folder, Guid fileid, int angle, int maxWidth, int maxHeight)
         {
-            using (Bitmap rawImage = new Bitmap(sourceFilePath))
+            string savePath = Request.MapPath("~/App_Data/UploadFiles/");
+            DirectoryInfo dif = new DirectoryInfo(Path.Combine(savePath, folder.ToString()));
+            FileInfo[] files = dif.GetFiles("_raw_" + fileid.ToString() + "*", SearchOption.TopDirectoryOnly);
+
+            int up_width = 0;
+            int up_height = 0;
+            float nPercent = 0;
+            if (files.Count() == 1)
             {
-                int sourceWidth = rawImage.Width;
-                int sourceHeight = rawImage.Height;
+                string rawPath = files[0].FullName;
+                string spath = string.Format("{0}\\{1}\\_thumbnail_{2}{3}", savePath, folder, fileid, files[0].Extension);
+                string tmp = string.Format("{0}\\{1}\\_tmp_{2}{3}", savePath, folder, fileid, files[0].Extension);
 
-                float sPercent = (float)sourceWidth / (float)sourceHeight;
-                float mPercent = (float)maxWidth / (float)maxHeight;
-
-                //Console.WriteLine("{0}/{1}={2}", sourceWidth, sourceHeight, sPercent);
-                //Console.WriteLine("{0}/{1}={2}", maxWidth, maxHeight, mPercent);
-
-                int newW = 0;
-                int newH = 0;
-
-                if (sPercent > mPercent)
+                if (System.IO.File.Exists(spath))
                 {
-                    newW = sourceWidth;
-                    newH = (int)(sourceWidth / mPercent);
-                }
-                else
-                {
-                    newW = (int)(sourceHeight * mPercent);
-                    newH = sourceHeight;
+                    System.IO.File.Delete(spath);
                 }
 
-                //Console.WriteLine("{0}/{1}={2}", newW, newH, (float)newW / (float)newH);
+                ImageHelper.Rotate(rawPath, angle, tmp);
 
-                using (Bitmap b = new Bitmap(newW, newH))
-                using (Graphics g = Graphics.FromImage((Image)b))
+                using (Bitmap tbmp = new Bitmap(tmp))
                 {
-                    g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    // 指定高质量、低速度呈现。 
-                    g.SmoothingMode = SmoothingMode.HighQuality;
-                    g.Clear(Color.White);
+                    float sourceWidth = tbmp.Width;
+                    float sourceHeight = tbmp.Height;
 
-                    RectangleF srcRect = new RectangleF(0, 0, sourceWidth, sourceHeight);
-                    RectangleF destRect = new RectangleF(0, 0, newW, newH);
+                    float nPercentW = (maxWidth / (float)sourceWidth);
+                    float nPercentH = (maxHeight / (float)sourceHeight);
 
-                    if (sPercent > mPercent)
-                    {
-                        destRect = new RectangleF(0, (newH - sourceHeight) / 2, sourceWidth, sourceHeight);
-                    }
+                    if (nPercentH < nPercentW)
+                        nPercent = nPercentH;
                     else
-                    {
-                        destRect = new RectangleF((newW - sourceWidth) / 2, 0, sourceWidth, sourceHeight);
-                    }
+                        nPercent = nPercentW;
+                }
 
-                    g.DrawImage(rawImage, destRect, srcRect, GraphicsUnit.Pixel);
-                    g.Dispose();
+                ImageHelper.Resize(tmp, maxWidth, maxHeight, spath);
 
-                    //关键质量控制
-                    //获取系统编码类型数组,包含了jpeg,bmp,png,gif,tiff
-                    ImageCodecInfo[] icis = ImageCodecInfo.GetImageEncoders();
-                    ImageCodecInfo ici = null;
-                    foreach (ImageCodecInfo i in icis)
-                    {
-                        if (i.MimeType == "image/jpeg" || i.MimeType == "image/bmp" || i.MimeType == "image/png" || i.MimeType == "image/gif")
-                        {
-                            ici = i;
-                        }
-                    }
-                    EncoderParameters ep = new EncoderParameters(1);
-                    ep.Param[0] = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, (long)100);
+                System.IO.File.Delete(tmp);
 
-                    b.Save(targetFile, ici, ep);
+                using (Bitmap bmp = new Bitmap(spath))
+                {
+                    up_width = bmp.Width;
+                    up_height = bmp.Height;
                 }
             }
+            return Json(new { success = true, width = up_width, height = up_height, percent = nPercent });
         }
 
         /// <summary>
-        /// 上传后下载缩略图
+        /// 显示缩略图
         /// </summary>
         public ActionResult DownloadThumbnail(Guid folder, Guid fileid)
         {
@@ -240,7 +220,7 @@ namespace MvcFox.Controllers
         }
 
         /// <summary>
-        /// 保存草稿
+        /// 图片截取
         /// </summary>
         public ActionResult SaveImage(Guid fileid, Guid folder, double percent, double x, double y, double w, double h, int angle, float maxWidth, float maxHeight, int _double)
         {
@@ -330,6 +310,27 @@ namespace MvcFox.Controllers
             return Json(new { success = false });
         }
 
+        /// <summary>
+        /// 显示图片
+        /// </summary>
+        public ActionResult ShowImage(Guid folder, Guid fileid)
+        {
+            string savePath = Request.MapPath("~/App_Data/UploadFiles/");
+            savePath = Path.Combine(savePath, folder.ToString());
+            DirectoryInfo dif = new DirectoryInfo(savePath);
+            if (dif.Exists)
+            {
+                FileInfo[] files = dif.GetFiles("_new_" + fileid.ToString() + "*", SearchOption.TopDirectoryOnly);
+
+                if (files.Count() == 1)
+                {
+                    return File(files[0].FullName, "application/octet-stream", "draft");
+                }
+            }
+
+            return Content("");
+        }
+
         public ActionResult ClearImage(Guid openid, Guid folder, int count)
         {
             string savePath = Request.MapPath("~/App_Data/UploadFiles/");
@@ -355,75 +356,77 @@ namespace MvcFox.Controllers
             return Json(new { success = true });
         }
 
-        /// <summary>
-        /// 显示草稿图，或真实图片
-        /// </summary>
-        public ActionResult ShowImage(Guid folder, Guid fileid)
+        private void Prc(string sourceFilePath, string targetFile, float maxWidth, float maxHeight)
         {
-            string savePath = Request.MapPath("~/App_Data/UploadFiles/");
-            savePath = Path.Combine(savePath, folder.ToString());
-            DirectoryInfo dif = new DirectoryInfo(savePath);
-            if (dif.Exists)
+            using (Bitmap rawImage = new Bitmap(sourceFilePath))
             {
-                FileInfo[] files = dif.GetFiles("_new_" + fileid.ToString() + "*", SearchOption.TopDirectoryOnly);
+                int sourceWidth = rawImage.Width;
+                int sourceHeight = rawImage.Height;
 
-                if (files.Count() == 1)
+                float sPercent = (float)sourceWidth / (float)sourceHeight;
+                float mPercent = (float)maxWidth / (float)maxHeight;
+
+                //Console.WriteLine("{0}/{1}={2}", sourceWidth, sourceHeight, sPercent);
+                //Console.WriteLine("{0}/{1}={2}", maxWidth, maxHeight, mPercent);
+
+                int newW = 0;
+                int newH = 0;
+
+                if (sPercent > mPercent)
                 {
-                    return File(files[0].FullName, "application/octet-stream", "draft");
+                    newW = sourceWidth;
+                    newH = (int)(sourceWidth / mPercent);
                 }
-            }
-
-            return Content("");
-        }
-
-        public ActionResult Rotate(Guid folder, Guid fileid, int angle, int maxWidth, int maxHeight)
-        {
-            string savePath = Request.MapPath("~/App_Data/UploadFiles/");
-            DirectoryInfo dif = new DirectoryInfo(Path.Combine(savePath, folder.ToString()));
-            FileInfo[] files = dif.GetFiles("_raw_" + fileid.ToString() + "*", SearchOption.TopDirectoryOnly);
-
-            int up_width = 0;
-            int up_height = 0;
-            float nPercent = 0;
-            if (files.Count() == 1)
-            {
-                string rawPath = files[0].FullName;
-                string spath = string.Format("{0}\\{1}\\_thumbnail_{2}{3}", savePath, folder, fileid, files[0].Extension);
-                string tmp = string.Format("{0}\\{1}\\_tmp_{2}{3}", savePath, folder, fileid, files[0].Extension);
-
-                if (System.IO.File.Exists(spath))
+                else
                 {
-                    System.IO.File.Delete(spath);
+                    newW = (int)(sourceHeight * mPercent);
+                    newH = sourceHeight;
                 }
 
-                ImageHelper.Rotate(rawPath, angle, tmp);
+                //Console.WriteLine("{0}/{1}={2}", newW, newH, (float)newW / (float)newH);
 
-                using (Bitmap tbmp = new Bitmap(tmp))
+                using (Bitmap b = new Bitmap(newW, newH))
+                using (Graphics g = Graphics.FromImage((Image)b))
                 {
-                    float sourceWidth = tbmp.Width;
-                    float sourceHeight = tbmp.Height;
+                    g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    // 指定高质量、低速度呈现。 
+                    g.SmoothingMode = SmoothingMode.HighQuality;
+                    g.Clear(Color.White);
 
-                    float nPercentW = (maxWidth / (float)sourceWidth);
-                    float nPercentH = (maxHeight / (float)sourceHeight);
+                    RectangleF srcRect = new RectangleF(0, 0, sourceWidth, sourceHeight);
+                    RectangleF destRect = new RectangleF(0, 0, newW, newH);
 
-                    if (nPercentH < nPercentW)
-                        nPercent = nPercentH;
+                    if (sPercent > mPercent)
+                    {
+                        destRect = new RectangleF(0, (newH - sourceHeight) / 2, sourceWidth, sourceHeight);
+                    }
                     else
-                        nPercent = nPercentW;
-                }
+                    {
+                        destRect = new RectangleF((newW - sourceWidth) / 2, 0, sourceWidth, sourceHeight);
+                    }
 
-                ImageHelper.Resize(tmp, maxWidth, maxHeight, spath);
+                    g.DrawImage(rawImage, destRect, srcRect, GraphicsUnit.Pixel);
+                    g.Dispose();
 
-                System.IO.File.Delete(tmp);
+                    //关键质量控制
+                    //获取系统编码类型数组,包含了jpeg,bmp,png,gif,tiff
+                    ImageCodecInfo[] icis = ImageCodecInfo.GetImageEncoders();
+                    ImageCodecInfo ici = null;
+                    foreach (ImageCodecInfo i in icis)
+                    {
+                        if (i.MimeType == "image/jpeg" || i.MimeType == "image/bmp" || i.MimeType == "image/png" || i.MimeType == "image/gif")
+                        {
+                            ici = i;
+                        }
+                    }
+                    EncoderParameters ep = new EncoderParameters(1);
+                    ep.Param[0] = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, (long)100);
 
-                using (Bitmap bmp = new Bitmap(spath))
-                {
-                    up_width = bmp.Width;
-                    up_height = bmp.Height;
+                    b.Save(targetFile, ici, ep);
                 }
             }
-            return Json(new { success = true, width = up_width, height = up_height, percent = nPercent });
         }
+
     }
 
 }
