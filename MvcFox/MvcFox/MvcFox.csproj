@@ -169,6 +169,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assets\imagecut.js" />
     <Content Include="assets\jquery-ext.js" />
     <Content Include="assets\jquery-ui-1.11.4\external\jquery\jquery.js" />
     <Content Include="assets\jquery-ui-1.11.4\images\ui-bg_diagonals-thick_18_b81900_40x40.png" />
@@ -310,6 +311,7 @@
     <Content Include="Views\Error\ServerError.cshtml" />
     <Content Include="Views\TestError\Index.cshtml" />
     <Content Include="Views\TestForm\TestErrorMsg.cshtml" />
+    <Content Include="Views\HeadEdit2\HeadImage2EditView2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Code\" />

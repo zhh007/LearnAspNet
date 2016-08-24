@@ -21,7 +21,7 @@
     </ul>
 </div>   
 
-@{Html.RenderPartial("HeadImage2EditView", new MvcFox.Models.ImageEditViewModel { ButtonId = "imgHead", JSCallback = "imgHeadCallback", ImageWidth = 145, ImageHeight = 145 });}
+@{Html.RenderPartial("HeadImage2EditView2", new MvcFox.Models.ImageEditViewModel { ButtonId = "imgHead", JSCallback = "imgHeadCallback", ImageWidth = 145, ImageHeight = 145 });}
 
 <script type="text/javascript">
     function imgHeadCallback(folder, fileid, imgUrl) {
@@ -29,5 +29,8 @@
         $("input[name='headFileId']").val(fileid);
         $("input[name='headFolderId']").val(folder);
         $("#imgHead").html("<img id='target' src=" + imgUrl + " />");
+    }
+    function imgHead_Count() {
+        return 0;
     }
 </script>
