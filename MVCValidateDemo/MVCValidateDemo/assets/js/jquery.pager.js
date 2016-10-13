@@ -91,7 +91,7 @@
         if (idx < 1) {
             obj.prop('class', 'disabled');
         }
-        var link = getUrl($this, idx, '<span aria-hidden="true">&laquo;</span>', idx > 1);
+        var link = getUrl($this, idx, '<span aria-hidden="true">&laquo;</span>', $this.index > 1);
         obj.append(link).appendTo(el);
     }
 
@@ -101,7 +101,7 @@
         if (idx > $this.count) {
             obj.prop('class', 'disabled');
         }
-        var link = getUrl($this, idx, '<span aria-hidden="true">&raquo;</span>', idx < $this.count);
+        var link = getUrl($this, idx, '<span aria-hidden="true">&raquo;</span>', $this.index < $this.count);
         obj.append(link).appendTo(el);
     }
 
@@ -146,8 +146,8 @@
         this.size = this.options.pagesize;
         this.total = this.options.total;
         this.count = parseInt((this.total + this.size - 1) / this.size, 10);
-        console.log(this.index);
-        if (this.index > this.count || this.index < 1) {
+        
+        if (this.index > this.count || this.index < 1 || this.count <= 1) {
             this.$element.hide();
             return;
         }
