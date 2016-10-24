@@ -6,7 +6,7 @@
  * 用法：
  * <div id="pager1" class="row text-center" data-pagesize="10" data-total="250" data-arg="page"></div>
  * or
- * <div id="pager1" class="row text-center" data-pagesize="10" data-total="250" data-pagefunc="query"></div>
+ * <div id="pager1" class="row text-center" data-pagesize="10" data-total="250" date-pageindex="1" data-pagefunc="query"></div>
  * $("#pager1").pager();
  */
 
