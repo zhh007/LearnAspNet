@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazorGenerator.Mvc", "RazorGenerator.Mvc\RazorGenerator.Mvc.csproj", "{D0F950C2-D4CA-442B-AF2D-DF859D92C1ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "WebApp\WebApp.csproj", "{2CBDF995-4FAF-43D7-A5AD-C26C091A516E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminCenter", "AdminCenter\AdminCenter.csproj", "{7CB27749-C03A-47FF-BBE5-D742EB369892}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D0F950C2-D4CA-442B-AF2D-DF859D92C1ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0F950C2-D4CA-442B-AF2D-DF859D92C1ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0F950C2-D4CA-442B-AF2D-DF859D92C1ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0F950C2-D4CA-442B-AF2D-DF859D92C1ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CBDF995-4FAF-43D7-A5AD-C26C091A516E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CBDF995-4FAF-43D7-A5AD-C26C091A516E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CBDF995-4FAF-43D7-A5AD-C26C091A516E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CBDF995-4FAF-43D7-A5AD-C26C091A516E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CB27749-C03A-47FF-BBE5-D742EB369892}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CB27749-C03A-47FF-BBE5-D742EB369892}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CB27749-C03A-47FF-BBE5-D742EB369892}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CB27749-C03A-47FF-BBE5-D742EB369892}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
